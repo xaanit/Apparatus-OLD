@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.objects.enums.Level;
 import me.xaanit.apparatus.objects.enums.LogType;
+import me.xaanit.apparatus.util.MessageUtil;
 import me.xaanit.apparatus.util.Util;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.util.EmbedBuilder;
@@ -28,8 +29,7 @@ public class Logger {
 		em.withDesc(str);
 		em.withFooterText(Util.getCurrentTime());
 		IChannel log = GlobalVars.sponseredGuild.getChannelByID(Long.parseLong("290740717792526346"));
-
-
+		MessageUtil.sendMessage(log, em.build());
 	}
 
 	public void log(LogType type, String str, Level level) {

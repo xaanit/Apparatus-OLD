@@ -1,8 +1,20 @@
 package me.xaanit.apparatus.objects.interfaces;
 
-/**
- * Created by Jacob on 4/21/2017.
- */
+import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.obj.Permissions;
+
 public interface ICommand {
 
+	String getName();
+
+	Permissions getNeededPermission();
+
+	void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message,
+			String[] args);
+
 }
+
+
