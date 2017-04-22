@@ -1,5 +1,6 @@
 package me.xaanit.apparatus.objects.listeners;
 
+import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.objects.commands.Apply;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
 import sx.blah.discord.api.events.EventSubscriber;
@@ -16,8 +17,10 @@ public class ReadyListener {
 
 
 	private void initCommands() {
-		ICommand commands = new ICommand[] {new Apply()};
-		for(ICommand command : commands){}
+		ICommand[] commands = new ICommand[] {new Apply()};
+		for(ICommand command : commands) {
+			GlobalVars.commands.putIfAbsent(command.getName().toLowerCase(), command);
+		}
 
 	}
 
