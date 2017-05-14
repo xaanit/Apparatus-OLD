@@ -1,39 +1,48 @@
 package me.xaanit.apparatus.util;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Jacob on 4/19/2017.
  */
 public class ChannelUtil {
 
-	public static IChannel getChannel(String toLookFor, IMessage message, IGuild guild) {
+    /**
+     * Gets a channel from mention, or from a String
+     *
+     * @param toLookFor The String to look at
+     * @param message The message, incase of mention
+     * @return The channel if found, otherwise null
+     */
+    public static IChannel getChannel(String toLookFor, IMessage message) {
+        IGuild guild = message.getGuild();
+        toLookFor = toLookFor.trim();
+        final String lower = toLookFor.toLowerCase();
+        if (!message.getChannelMentions().isEmpty()) {
+            return message.getChannelMentions().get(0);
+        }
 
-		toLookFor = toLookFor.trim();
-		final String lower = toLookFor.toLowerCase();
-		if(!message.getChannelMentions().isEmpty()) {
-			return message.getChannelMentions().get(0);
-		}
+        if (toLookFor.replaceAll("[0-9]", "").isEmpty()) {
+            IChannel exists = guild.getChannelByID(Long.parseLong(toLookFor));
+            if (exists != null) {
+                return exists;
+            }
+        }
 
-		if(toLookFor.replaceAll("[0-9]", "").isEmpty()) {
-			IChannel exists = guild.getChannelByID(Long.parseLong(toLookFor));
-			if(exists != null) {
-				return exists;
-			}
-		}
+        List<IChannel> channels = new ArrayList<>();
+        List<IChannel> cs = guild.getChannels();
+        channels.addAll(cs.stream().filter(c -> c.getName().equalsIgnoreCase(lower)).collect(Collectors.toList()));
+        channels.addAll(cs.stream().filter(c -> c.getName().toLowerCase().contains(lower)).collect(Collectors.toList()));
+        if (!channels.isEmpty()) {
+            return channels.get(0);
+        }
 
-		List<IChannel> channels = guild.getChannels().stream().filter(
-				c -> c.getName().contains(lower) || c.getName().equalsIgnoreCase(lower) || c.getStringID()
-						.equals(lower)).collect(Collectors.toList());
-
-		if(!channels.isEmpty()) {
-			return channels.get(0);
-		}
-
-		return null;
-	}
+        return null;
+    }
 }

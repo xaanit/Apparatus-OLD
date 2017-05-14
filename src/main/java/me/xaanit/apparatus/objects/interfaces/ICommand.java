@@ -1,20 +1,73 @@
 package me.xaanit.apparatus.objects.interfaces;
 
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
+import me.xaanit.apparatus.objects.enums.CmdType;
+import sx.blah.discord.api.internal.json.objects.EmbedObject;
+import sx.blah.discord.handle.obj.*;
+
+import java.util.EnumSet;
 
 public interface ICommand {
 
-	String getName();
+    /**
+     * The name of the command
+     *
+     * @return The name
+     */
+    String getName();
 
-	Permissions getNeededPermission();
+    /**
+     * All the aliases for the command
+     *
+     * @return The aliases
+     */
+    String[] getAliases();
 
-	void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message,
-			String[] args);
+    /**
+     * Gets the command type
+     *
+     * @return The type.
+     */
+    CmdType getType();
+
+    /**
+     * The required permissions for this command
+     *
+     * @return
+     */
+    EnumSet<Permissions> getNeededPermission();
+
+    /**
+     * Gets the needed permissions for the user
+     *
+     * @return The permission
+     */
+    Permissions getUserPerm();
+
+    /**
+     * The help embed for this command
+     *
+     * @param user The user who requested it
+     * @return The built EmbedObject
+     */
+    EmbedObject getHelp(IUser user);
+
+    /**
+     * The info text for this command
+     *
+     * @return The info string
+     */
+    String getInfo();
+
+    /**
+     * Runs the command
+     *
+     * @param user    The user who ran
+     * @param channel The channel it was ran in
+     * @param guild   The guild it was ran in
+     * @param message The message
+     * @param args    The arguments associated with it
+     */
+    void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args);
 
 }
-
 
