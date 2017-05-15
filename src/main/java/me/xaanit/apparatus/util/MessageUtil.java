@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Jacob on 4/21/2017.
  */
-public class MessageUtil {
+public class MessageUtil extends GuildUtil {
 
     /**
      * Gets a message by the ID

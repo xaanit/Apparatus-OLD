@@ -3,58 +3,50 @@ package me.xaanit.apparatus.objects.commands;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
 import me.xaanit.apparatus.util.GuildUtil;
-import me.xaanit.apparatus.util.PermissionsUtil;
 import me.xaanit.apparatus.util.Util;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
-import sx.blah.discord.handle.obj.*;
+import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
 
 import java.util.Arrays;
-import java.util.EnumSet;
 
 /**
- * Created by Jacob on 5/13/2017.
+ * Created by Jacob on 5/14/2017.
  */
-public class Ban implements ICommand {
+public class Reload implements ICommand {
     @Override
     public String getName() {
-        return "ban";
+        return "reload";
     }
 
     @Override
     public String[] getAliases() {
-        return new String[]{getName(), "banish"};
+        return new String[]{getName(), "restart"};
     }
 
     @Override
     public CmdType getType() {
-        return CmdType.MODERATION;
-    }
-
-    @Override
-    public EnumSet<Permissions> getNeededPermission() {
-        return PermissionsUtil.makePermissions(PermissionsUtil.basicPermissions(), Permissions.BAN);
-    }
-
-    @Override
-    public Permissions getUserPerm() {
-        return Permissions.BAN;
+        return CmdType.DEV;
     }
 
     @Override
     public EmbedObject getHelp(IUser user, IGuild guild) {
-        EmbedBuilder em = Util.addToHelpEmbed(this, user, new String[]{GuildUtil.getGuild(guild).getPrefix(), getName() + " <user> [reason]"}, new String[]{Arrays.toString(getAliases())
+        EmbedBuilder em = Util.addToHelpEmbed(this, user, new String[]{GuildUtil.getGuild(guild).getPrefix(), getName() + " <section>"}, new String[]{Arrays.toString(getAliases())
                 .replaceAll(getName() + ",\\s", "")});
         return em.build();
     }
 
     @Override
     public String getInfo() {
-        return "Bans a user from the server.";
+        return "Reloads a specific section of the bot";
     }
 
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
-        PermissionsUtil.allChecks(user, guild, this, channel);
+        Util.allChecks(user, guild, this, channel);
+
     }
 }

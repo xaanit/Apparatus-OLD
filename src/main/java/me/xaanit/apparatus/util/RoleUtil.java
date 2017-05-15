@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class RoleUtil {
+public class RoleUtil extends PermissionsUtil{
 
     /**
      * Grabs a role based on a string, or mention

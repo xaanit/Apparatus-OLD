@@ -1,6 +1,7 @@
 package me.xaanit.apparatus.objects.interfaces;
 
 import me.xaanit.apparatus.objects.enums.CmdType;
+import me.xaanit.apparatus.util.Util;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.*;
 
@@ -34,22 +35,27 @@ public interface ICommand {
      *
      * @return
      */
-    EnumSet<Permissions> getNeededPermission();
+    default EnumSet<Permissions> getNeededPermission() {
+        return Util.basicPermissions();
+    }
 
     /**
      * Gets the needed permissions for the user
      *
      * @return The permission
      */
-    Permissions getUserPerm();
+   default Permissions getUserPerm() {
+       return null;
+   }
 
     /**
      * The help embed for this command
      *
-     * @param user The user who requested it
+     * @param user  The user who requested it
+     * @param guild The guild it was run it
      * @return The built EmbedObject
      */
-    EmbedObject getHelp(IUser user);
+    EmbedObject getHelp(IUser user, IGuild guild);
 
     /**
      * The info text for this command

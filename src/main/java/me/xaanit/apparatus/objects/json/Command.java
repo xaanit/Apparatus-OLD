@@ -13,7 +13,7 @@ public class Command {
     private boolean whitelist = true;
     private List<Long> roles;
 
-    public Command(String name) {
+    protected Command(String name) {
         this.name = name;
         this.roles = new ArrayList<>();
     }
@@ -44,12 +44,16 @@ public class Command {
     }
 
     public void addRole(IRole role) {
-        if(roles.stream().filter(r -> r == role.getLongID()).count() != 1)
+        if (roles.stream().filter(r -> r == role.getLongID()).count() != 1)
             roles.add(role.getLongID());
     }
 
     public void removeRole(IRole role) {
-        if(roles.stream().filter(r -> r == role.getLongID()).count() == 1)
-            roles.remove(role.getLongID());
+        removeRole(role.getLongID());
+    }
+
+    public void removeRole(long role) {
+        if (roles.stream().filter(r -> r == role).count() == 1)
+            roles.remove(role);
     }
 }

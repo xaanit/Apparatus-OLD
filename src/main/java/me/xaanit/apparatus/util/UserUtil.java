@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Jacob on 4/19/2017.
  */
-public class UserUtil {
+public class UserUtil extends RoleUtil{
 
     /**
      * Gets the username and descriminator combo for a user.
@@ -38,7 +38,7 @@ public class UserUtil {
             return message.getMentions().get(0);
         }
 
-        if (toLookFor.replaceAll("[0-9]]", "").isEmpty()) {
+        if (toLookFor.replaceAll("[0-9]", "").isEmpty()) {
             IUser exists = guild.getUserByID(Long.parseLong(toLookFor));
             if (exists != null) {
                 return exists;

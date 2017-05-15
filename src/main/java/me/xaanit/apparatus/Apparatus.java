@@ -15,6 +15,7 @@ import static me.xaanit.apparatus.GlobalVars.logger;
  */
 public class Apparatus {
 
+
     public static void main(String[] args) {
         GlobalVars.gson = new GsonBuilder().create();
         GlobalVars.client = new ClientBuilder().withRecommendedShardCount()
@@ -31,9 +32,9 @@ public class Apparatus {
         reflections.getSubTypesOf(IListener.class).forEach(subclass -> {
             try {
                 GlobalVars.client.getDispatcher().registerListener(subclass.newInstance());
-                // Some logging here that it was registered
+                logger.log("Registered listener " + subclass.getSimpleName(), Level.INFO);
             } catch (InstantiationException | IllegalAccessException e) {
-                // Some logging here that it failed
+                logger.log("Could not register listener " + subclass.getSimpleName(), Level.CRITICAL);
             }
         });
     }
