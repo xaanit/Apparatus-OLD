@@ -13,8 +13,12 @@ public enum CmdType {
     public static String format(CmdType type) {
         String[] args = type.toString().split("_");
         String res = "";
-        for(int i =0 ;i < args.length; i++)
-            res += args[i].charAt(0) + args[i].substring(1).toLowerCase() + " ";
-        return res.trim();
+        for (int i = 0; i < args.length; i++)
+            res += args[i].charAt(0) + args[i].substring(1).toLowerCase() + "_";
+        return res.trim().substring(0, res.length() - 1);
+    }
+
+    public static CmdType[] getTypes() {
+        return new CmdType[]{UTIL, FUN, DEV, MODERATION, BOT_INFO};
     }
 }
