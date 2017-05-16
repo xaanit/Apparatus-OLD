@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Jacob on 4/19/2017.
  */
+@SuppressWarnings("unused")
 public class UserUtil extends RoleUtil{
 
     /**
@@ -81,7 +82,7 @@ public class UserUtil extends RoleUtil{
     public static String formatPresence(IPresence arg) {
         String res = "";
         Optional<String> playingo = arg.getPlayingText();
-        String playing = "";
+        String playing;
 
         if (playingo.isPresent()) {
             playing = playingo.toString().replace("Optional[", "").replace("]", "");
@@ -90,7 +91,7 @@ public class UserUtil extends RoleUtil{
         }
 
         Optional<String> streamingo = arg.getStreamingUrl();
-        String streaming = "";
+        String streaming;
         if (streamingo.isPresent()) {
             streaming = streamingo.toString().replace("Optional[", "").replace("]", "");
         } else {
@@ -110,16 +111,17 @@ public class UserUtil extends RoleUtil{
      * @param roles The role list
      * @return The formatted string
      */
+    @SuppressWarnings("unused")
     public static String compactRoles(List<IRole> roles) {
-        String res = "";
+        StringBuilder res = new StringBuilder();
         if (roles.isEmpty()) {
             return "No roles have been added";
         }
         roles.get(0).getPosition();
-        for (int i = 0; i < roles.size(); i++) {
-            res += roles.get(i).isEveryoneRole() ? "" : roles.get(i).getName() + ", ";
+        for (IRole role : roles) {
+            res.append(role.isEveryoneRole() ? "" : role.getName() + ", ");
         }
-        return res.substring(0, res.lastIndexOf(','));
+        return res.substring(0, res.toString().lastIndexOf(','));
     }
 
 

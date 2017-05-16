@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Jacob on 4/21/2017.
  */
+@SuppressWarnings("unused")
 public class MessageUtil extends GuildUtil {
 
     /**
@@ -36,13 +37,15 @@ public class MessageUtil extends GuildUtil {
      * @param em      The {@link EmbedObject} to send
      * @return The message
      */
-    public static IMessage sendMessage(IChannel channel, String str, EmbedObject em) {
+    private static IMessage sendMessage(IChannel channel, String str, EmbedObject em) {
         return RequestBuffer.request(() -> {
             try {
                 return channel.sendMessage(str, em);
             } catch (DiscordException ex) {
                 if (!channel.isPrivate()) {
                     sendMessage(channel, str, em);
+                } else {
+                    ex.printStackTrace();
                 }
             }
             return null;
@@ -56,7 +59,7 @@ public class MessageUtil extends GuildUtil {
      * @param str     The string to send
      * @return The message
      */
-    public static IMessage sendMessage(IChannel channel, String str) {
+    static IMessage sendMessage(IChannel channel, String str) {
         return sendMessage(channel, str, null);
     }
 
@@ -77,13 +80,15 @@ public class MessageUtil extends GuildUtil {
      * @param message The message to delete
      * @param channel The channel it's in, to avoid infinite recursion.
      */
-    public static void deleteMessage(IMessage message, IChannel channel) {
+    private static void deleteMessage(IMessage message, IChannel channel) {
         RequestBuffer.request(() -> {
             try {
                 message.delete();
             } catch (DiscordException ex) {
                 if (!channel.isPrivate()) {
                     deleteMessage(message, channel);
+                } else {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -98,13 +103,15 @@ public class MessageUtil extends GuildUtil {
      * @reutn The IMessage, for chaining.
      */
 
-    public static IMessage editMessage(IMessage message, String str, EmbedObject e) {
+    private static IMessage editMessage(IMessage message, String str, EmbedObject e) {
         return RequestBuffer.request(() -> {
             try {
                 return message.edit(str, e);
             } catch (DiscordException ex) {
                 if (message.getAuthor().getLongID() == GlobalVars.client.getOurUser().getLongID()) {
                     editMessage(message, str, e);
+                } else {
+                    ex.printStackTrace();
                 }
             }
             return null;

@@ -10,6 +10,7 @@ import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.EmbedBuilder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -25,8 +26,7 @@ public class PermissionsUtil extends MessageUtil {
     }*/
 
     public static EnumSet<Permissions> makePermissions(EnumSet<Permissions> basic, Permissions... p) {
-        for (Permissions perm : p)
-            basic.add(perm);
+        Collections.addAll(basic, p);
         return basic;
     }
 
@@ -38,7 +38,7 @@ public class PermissionsUtil extends MessageUtil {
         return perms;
     }
 
-    public static EnumSet<Permissions>[] getPermissions(IGuild guild, ICommand command) {
+    private static EnumSet[] getPermissions(IGuild guild, ICommand command) {
         EnumSet<Permissions> has = EnumSet.noneOf(Permissions.class);
         EnumSet<Permissions> needs = EnumSet.noneOf(Permissions.class);
         EnumSet<Permissions> guildPerms = GlobalVars.client.getOurUser().getPermissionsForGuild(guild);
@@ -51,26 +51,26 @@ public class PermissionsUtil extends MessageUtil {
         return new EnumSet[]{has, needs};
     }
 
-    public static boolean hasPerms(IGuild guild, ICommand command) {
+    private static boolean hasPerms(IGuild guild, ICommand command) {
         return getPermissions(guild, command)[1].isEmpty();
     }
 
-    public static String getMissingPermissions(IGuild guild, ICommand command) {
+    private static String getMissingPermissions(IGuild guild, ICommand command) {
         StringBuilder res = new StringBuilder();
-        res.append("```diff\nI am missing some permissions on the guild " + guild.getName() + " (in red). Please contact the server admins to make sure I have these permissions.\n\n");
+        res.append("```diff\nI am missing some permissions on the guild ").append(guild.getName()).append(" (in red). Please contact the server admins to make sure I have these permissions.\n\n");
         EnumSet[] perms = getPermissions(guild, command);
-        perms[0].forEach(p -> res.append("+" + p.toString() + "\n"));
-        perms[1].forEach(p -> res.append("-" + p.toString() + "\n"));
-        return res.append("```\n\nYou are receiving this message due to trying to execute the `" + command.getName() + "` command.").toString();
+        perms[0].forEach(p -> res.append("+").append(p.toString()).append("\n"));
+        perms[1].forEach(p -> res.append("-").append(p.toString()).append("\n"));
+        return res.append("```\n\nYou are receiving this message due to trying to execute the `").append(command.getName()).append("` command.").toString();
     }
 
-    public static boolean checkUserPerm(IUser user, IGuild guild, ICommand command) {
+    private static boolean checkUserPerm(IUser user, IGuild guild, ICommand command) {
         if (command.getType() == CmdType.DEV)
-            return user.getLongID() == 233611560545812480L;
+            return user.getStringID().equals("233611560545812480");
         if (guild.getOwnerLongID() == user.getLongID())
             return true;
         if (!GuildUtil.getGuild(guild).getCommand(command.getName()).isRole())
-            return command.getUserPerm() == null ? true : user.getPermissionsForGuild(guild).contains(command.getUserPerm());
+            return command.getUserPerm() == null || (user.getPermissionsForGuild(guild).contains(command.getUserPerm()) || user.getPermissionsForGuild(guild).contains(Permissions.ADMINISTRATOR));
         for (IRole r : guild.getRolesForUser(user)) {
             for (long l : GuildUtil.getGuild(guild).getCommand(command.getName()).getRoles()) {
                 if (l == r.getLongID())
@@ -91,19 +91,20 @@ public class PermissionsUtil extends MessageUtil {
             throw new PermissionsException();
         }
 
-        if (command.getType() == CmdType.DEV) {
-            logger.log("User [" + Util.getNameAndDescrim(user) + "] tried to use developer command [" + command.getName() + "] on guild [" + guild.getName() + "]", Level.MEDIUM);
-            EmbedBuilder em = new EmbedBuilder();
-            em.withTitle("Error!");
-            em.withDesc("This is a developer command, it can only be run by xaanit.");
-            em.withFooterIcon(user.getAvatarURL());
-            em.withFooterText("Requested By: " + UserUtil.getNameAndDescrim(user));
-            em.withColor(Util.hexToColor(CColors.ERROR));
-            MessageUtil.sendMessage(channel, em.build());
-            throw new PermissionsException();
-        }
-
         if (!checkUserPerm(user, guild, command)) {
+
+            if (command.getType() == CmdType.DEV) {
+                logger.log("User [" + Util.getNameAndDescrim(user) + "] tried to use developer command [" + command.getName() + "] on guild [" + guild.getName() + "]", Level.MEDIUM);
+                EmbedBuilder em = new EmbedBuilder();
+                em.withTitle("Error!");
+                em.withDesc("This is a developer command, it can only be run by xaanit.");
+                em.withFooterIcon(user.getAvatarURL());
+                em.withFooterText("Requested By: " + UserUtil.getNameAndDescrim(user));
+                em.withColor(Util.hexToColor(CColors.ERROR));
+                MessageUtil.sendMessage(channel, em.build());
+                throw new PermissionsException();
+            }
+
             logger.log("User [" + user.getName() + "] doesn't have correct permissions or role for command [" + command.getName() + "] in guild [" + guild.getName() + "]", Level.LOW);
             EmbedBuilder em = new EmbedBuilder();
             em.withTitle("Error!");

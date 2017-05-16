@@ -19,6 +19,7 @@ buildNumber.properties
 # User-specific stuff:
 .idea/**/tasks.xml
 .idea/dictionaries
+guilds/
 
 # Sensitive or high-churn files:
 .idea/**/dataSources/
@@ -43,6 +44,7 @@ buildNumber.properties
 
 # IntelliJ
 /out/
+
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/

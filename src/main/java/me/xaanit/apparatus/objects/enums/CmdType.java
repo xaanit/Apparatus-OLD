@@ -7,7 +7,8 @@ public enum CmdType {
     UTIL,
     FUN,
     DEV,
-    MODERATION;
+    MODERATION,
+    BOT_INFO;
 
     public static String format(CmdType type) {
         String[] args = type.toString().split("_");

@@ -6,7 +6,7 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-
+@SuppressWarnings("unused")
 public class Util extends UserUtil{
 
 
@@ -18,7 +18,7 @@ public class Util extends UserUtil{
      */
     public static String getCurrentTime() {
         LocalDateTime date = LocalDateTime.now();
-        LocalTime time = date.toLocalTime().now(Clock.systemUTC());
+        LocalTime time = LocalTime.now(Clock.systemUTC());
         return (date.getDayOfWeek().toString().charAt(0)
                 + date.getDayOfWeek().toString().substring(1).toLowerCase())
                 + ", "
@@ -31,7 +31,7 @@ public class Util extends UserUtil{
 
     public static String formatRoleList(List<IRole> list) {
         StringBuilder builder = new StringBuilder();
-        list.forEach(r -> builder.append(r.getName() + ", "));
+        list.forEach(r -> builder.append(r.getName()).append(", "));
         return builder.toString().substring(0, builder.toString().indexOf(","));
     }
 

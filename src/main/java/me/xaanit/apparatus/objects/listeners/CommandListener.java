@@ -3,6 +3,7 @@ package me.xaanit.apparatus.objects.listeners;
 import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.objects.exceptions.PermissionsException;
 import me.xaanit.apparatus.objects.interfaces.IListener;
+import me.xaanit.apparatus.util.Util;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IChannel;
@@ -26,13 +27,13 @@ public class CommandListener implements IListener {
         if (content.isEmpty()) {
             return;
         }
-        if (!content.startsWith("+")) {
+        if (!content.startsWith(Util.getGuild(guild).getPrefix())) {
             return;
         }
         String[] args = content.split(" ");
         try {
-            if (GlobalVars.commands.containsKey(args[0].substring(1).toLowerCase()))
-                GlobalVars.commands.get(args[0].substring(1).toLowerCase())
+            if (GlobalVars.commands.containsKey(args[0].substring(Util.getGuild(guild).getPrefix().length()).toLowerCase()))
+                GlobalVars.commands.get(args[0].substring(Util.getGuild(guild).getPrefix().length()).toLowerCase())
                         .runCommand(user, channel, guild, message, args);
         } catch (PermissionsException ex) {
 

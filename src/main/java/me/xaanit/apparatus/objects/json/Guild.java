@@ -15,23 +15,28 @@ public class Guild {
 
     private long id;
 
-    private int deleteAfter;
+    private String welcomeMessage;
+
+    private long welcomeChannel;
 
     private String prefix;
 
     private List<Command> commands;
 
+    private List<Modlog> modlogs;
+
     public Guild() {
-        this.deleteAfter = -1;
         this.prefix = "+";
         this.commands = new ArrayList<>();
+        this.modlogs = new ArrayList<>();
+
     }
 
     public Guild(IGuild guild) {
         this.id = guild.getLongID();
-        this.deleteAfter = -1;
         this.prefix = "+";
         this.commands = new ArrayList<>();
+        this.modlogs = new ArrayList<>();
 
     }
 
@@ -78,13 +83,32 @@ public class Guild {
 
     }
 
-    public int getDeleteAfter() {
-        return deleteAfter;
+    public List<Modlog> getModlogs() {
+        return modlogs;
     }
 
-    public void setDeleteAfter(int deleteAfter) {
-        this.deleteAfter = deleteAfter;
+    public void addModlog(String name) {
+        if (modlogs.stream().filter(c -> c.getName().equalsIgnoreCase(name)).count() == 0)
+            this.modlogs.add(new Modlog(name));
     }
+
+    private void addModlog(Modlog m) {
+        if (modlogs.stream().filter(c -> c.getName().equalsIgnoreCase(m.getName())).count() == 0)
+            this.modlogs.add(m);
+    }
+
+    public Modlog getModlog(String name) {
+        Modlog command = null;
+        List<Modlog> cs = modlogs.stream().filter(c -> c.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
+        if (cs.isEmpty()) {
+            command = new Modlog(name);
+            addModlog(command);
+        } else {
+            command = cs.get(0);
+        }
+        return command;
+    }
+
 
     public Command getCommand(String name) {
         Command command = null;
@@ -96,5 +120,21 @@ public class Guild {
             command = cs.get(0);
         }
         return command;
+    }
+
+    public String getWelcomeMessage() {
+        return welcomeMessage;
+    }
+
+    public void setWelcomeMessage(String welcomeMessage) {
+        this.welcomeMessage = welcomeMessage;
+    }
+
+    public long getWelcomeChannel() {
+        return welcomeChannel;
+    }
+
+    public void setWelcomeChannel(long welcomeChannel) {
+        this.welcomeChannel = welcomeChannel;
     }
 }

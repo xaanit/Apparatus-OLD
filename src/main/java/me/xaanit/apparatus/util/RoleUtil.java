@@ -7,7 +7,7 @@ import sx.blah.discord.handle.obj.IRole;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@SuppressWarnings("unused")
 public class RoleUtil extends PermissionsUtil{
 
     /**
@@ -50,9 +50,9 @@ public class RoleUtil extends PermissionsUtil{
      * @return The formatted string
      */
     public static String formatRoleList(List<IRole> roles) {
-        String res = "";
+        StringBuilder res = new StringBuilder();
         for (IRole role : roles) {
-            res += role.getName() + ", ";
+            res.append(role.getName()).append(", ");
         }
         return res.substring(0, res.length() - 2);
     }

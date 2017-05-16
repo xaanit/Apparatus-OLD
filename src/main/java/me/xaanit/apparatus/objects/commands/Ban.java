@@ -55,6 +55,6 @@ public class Ban implements ICommand {
 
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
-        PermissionsUtil.allChecks(user, guild, this, channel);
+        Util.allChecks(user, guild, this, channel);
     }
 }
