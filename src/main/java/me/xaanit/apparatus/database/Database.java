@@ -20,7 +20,7 @@ public class Database {
 
     public static Config loadConfig() {
         try {
-            File file = new File(System.getProperty("user.dir") + "\\config.json");
+            File file = new File(GlobalVars.PATH + "config.json");
             if (!file.exists()) {
                 file.createNewFile();
                 return new Config(true);
@@ -35,7 +35,7 @@ public class Database {
 
     public static boolean saveConfig() {
         try {
-            String path = System.getProperty("user.dir") + "\\config.json";
+            String path = GlobalVars.PATH + "config.json";
             File file = new File(path);
             if (!file.exists())
                 file.createNewFile();
@@ -56,7 +56,7 @@ public class Database {
 
     public static boolean saveGuild(Guild guild) {
         try {
-            String path = System.getProperty("user.dir") + "\\guilds";
+            String path = GlobalVars.PATH + "guilds";
             new File(path).mkdirs();
             File file = new File(path + "\\" + guild.getId() + ".json");
             if (!file.exists())
@@ -74,7 +74,7 @@ public class Database {
 
     public static Guild loadGuild(IGuild guild) {
         try {
-            String path = System.getProperty("user.dir") + "\\guilds";
+            String path =GlobalVars.PATH + "guilds";
             File file = new File(path + "\\" + guild.getStringID() + ".json");
             if (!file.exists()) {
                 logger.log("Creating new Guild object for guild [ " + guild.getName() + " ] with ID [ " + guild.getStringID() + " ]", Level.INFO);

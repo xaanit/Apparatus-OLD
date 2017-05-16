@@ -18,6 +18,8 @@ public class GlobalVars {
 
     public static final String VERISON = "3.0.0 STABLE";
 
+    public static final String PATH = "C:\\Users\\Jacob\\Desktop\\ApparatusInfo\\";
+
     public static Map<String, ICommand> commands = new HashMap<>();
 
     public static Map<Long, Guild> guilds = new HashMap<>();

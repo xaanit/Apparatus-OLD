@@ -171,6 +171,6 @@ public class MessageUtil extends GuildUtil {
         for (int i = start; i < end; i++) {
             res += args[i] + " ";
         }
-        return res;
+        return res.trim();
     }
 }

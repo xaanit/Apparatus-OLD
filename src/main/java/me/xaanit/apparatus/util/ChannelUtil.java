@@ -21,6 +21,7 @@ public class ChannelUtil {
      * @return The channel if found, otherwise null
      */
     public static IChannel getChannel(String toLookFor, IMessage message) {
+        toLookFor = toLookFor.trim();
         IGuild guild = message.getGuild();
         toLookFor = toLookFor.trim();
         final String lower = toLookFor.toLowerCase();

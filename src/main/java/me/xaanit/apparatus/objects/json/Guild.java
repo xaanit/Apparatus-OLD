@@ -17,6 +17,10 @@ public class Guild {
 
     private String welcomeMessage;
 
+    private List<Long> autoRoles;
+
+    private List<Long> assignableRoles;
+
     private long welcomeChannel;
 
     private String prefix;
@@ -29,7 +33,8 @@ public class Guild {
         this.prefix = "+";
         this.commands = new ArrayList<>();
         this.modlogs = new ArrayList<>();
-
+        this.autoRoles = new ArrayList<>();
+        this.assignableRoles = new ArrayList<>();
     }
 
     public Guild(IGuild guild) {
@@ -37,7 +42,8 @@ public class Guild {
         this.prefix = "+";
         this.commands = new ArrayList<>();
         this.modlogs = new ArrayList<>();
-
+        this.autoRoles = new ArrayList<>();
+        this.assignableRoles = new ArrayList<>();
     }
 
 
@@ -83,6 +89,44 @@ public class Guild {
 
     }
 
+    public List<Long> getAutoRoles() {
+        return autoRoles;
+    }
+
+    private void addAutorole(long l) {
+        if (autoRoles.stream().filter(c -> c == l).count() == 0)
+            this.autoRoles.add(l);
+    }
+
+    public void removeAutorole(long l) {
+        for (int i = 0; i < autoRoles.size(); i++) {
+            if (autoRoles.get(i) == l) {
+                autoRoles.remove(i);
+                return;
+            }
+        }
+
+    }
+
+    public List<Long> getAssignableRoles() {
+        return assignableRoles;
+    }
+
+
+    private void addAssignableRole(long l) {
+        if (assignableRoles.stream().filter(c -> c == l).count() == 0)
+            this.assignableRoles.add(l);
+    }
+
+    public void removeAssignableRole(long l) {
+        for (int i = 0; i < assignableRoles.size(); i++) {
+            if (assignableRoles.get(i) == l) {
+                assignableRoles.remove(i);
+                return;
+            }
+        }
+
+    }
     public List<Modlog> getModlogs() {
         return modlogs;
     }
@@ -137,4 +181,5 @@ public class Guild {
     public void setWelcomeChannel(long welcomeChannel) {
         this.welcomeChannel = welcomeChannel;
     }
+
 }

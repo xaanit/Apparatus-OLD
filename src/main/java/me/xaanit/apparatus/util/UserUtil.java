@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  * Created by Jacob on 4/19/2017.
  */
 @SuppressWarnings("unused")
-public class UserUtil extends RoleUtil{
+public class UserUtil extends RoleUtil {
 
     /**
      * Gets the username and descriminator combo for a user.
@@ -34,7 +34,7 @@ public class UserUtil extends RoleUtil{
      * @return The user if found, null otherwise
      */
     public static IUser getUser(String toLookFor, IMessage message, IGuild guild) {
-
+        toLookFor = toLookFor.trim();
         if (!message.getMentions().isEmpty()) {
             return message.getMentions().get(0);
         }

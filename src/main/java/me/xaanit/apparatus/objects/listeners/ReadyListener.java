@@ -32,6 +32,7 @@ public class ReadyListener implements IListener {
                 RequestBuffer.request(() -> guild.leave());
             }
         }
+        RequestBuffer.request(() -> GlobalVars.client.online("dnd"));
         initCommands();
         logger.log("Bot ready!", Level.INFO);
     }

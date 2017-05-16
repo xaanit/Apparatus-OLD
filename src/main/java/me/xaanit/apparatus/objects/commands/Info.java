@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Jacob on 5/15/2017.
  */
-public class Info implements ICommand{
+public class Info implements ICommand {
     private String invite = "";
     int totalCommands = -1;
 
@@ -31,7 +31,7 @@ public class Info implements ICommand{
 
     @Override
     public String[] getAliases() {
-        return new String[] {getName()};
+        return new String[]{getName()};
     }
 
     @Override
@@ -53,12 +53,12 @@ public class Info implements ICommand{
 
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
-        if(args.length == 1) {
+        if (args.length == 1) {
             moduleHelp(user, channel, guild);
             return;
         }
         IMessage m = null;
-        switch(args[1].toLowerCase()) {
+        switch (args[1].toLowerCase()) {
             case "{channel}":
                 m = moduleChannel(user, channel, guild, channel);
                 break;
@@ -74,24 +74,24 @@ public class Info implements ICommand{
 
         }
 
-        if(m != null) {
+        if (m != null) {
             return;
         }
         String look = MessageUtil.combineArgs(args, 1, -1);
         IUser u = UserUtil.getUser(look, message, guild);
         IRole r = RoleUtil.getRole(look, message, guild);
         IChannel c = ChannelUtil.getChannel(look, message);
-        if(u != null) {
+        if (u != null) {
             m = moduleUser(user, channel, guild, u);
-        } else if(r != null) {
+        } else if (r != null) {
             m = moduleRole(user, channel, guild, r);
-        } else if(c != null) {
-            if(c.getUsersHere().contains(user)) {
+        } else if (c != null) {
+            if (c.getUsersHere().contains(user)) {
                 m = moduleChannel(user, channel, guild, c);
             }
         }
 
-        if(m != null) {
+        if (m != null) {
             return;
         }
         moduleHelp(user, channel, guild);
@@ -122,7 +122,7 @@ public class Info implements ICommand{
 
         em.withFooterIcon(user.getAvatarURL());
         em.withFooterText(
-                "Requested by: " + UserUtil.getNameAndDescrim(user) + " | Bug? Report it with +bug!");
+                "Requested by: " + UserUtil.getNameAndDescrim(user));
         return MessageUtil.sendMessage(channel, em.build());
 
     }
@@ -137,7 +137,7 @@ public class Info implements ICommand{
         em.appendField("Topic", c.getTopic() == null ? "None set" : c.getTopic(), false);
         em.withFooterIcon(user.getAvatarURL());
         em.withFooterText(
-                "Requested by: " + UserUtil.getNameAndDescrim(user) + " | Bug? Report it with +bug!");
+                "Requested by: " + UserUtil.getNameAndDescrim(user));
         return MessageUtil.sendMessage(channel, em.build());
     }
 
@@ -167,11 +167,10 @@ public class Info implements ICommand{
                 UserUtil.compactRoles(u.getRolesForGuild(guild)), true);
         em.appendField("Is bot?", u.isBot() + "", true);
         em.appendField("Shared servers on this shard", guild.getShard().getGuilds().stream().filter(
-                g -> g.getUsers().stream().filter(ur -> ur.getStringID().equalsIgnoreCase(u.getStringID()))
-                        .findAny().isPresent()).count() + "", false);
+                g -> g.getUsers().stream().anyMatch(ur -> ur.getStringID().equalsIgnoreCase(u.getStringID()))).count() + "", false);
         em.withFooterIcon(user.getAvatarURL());
         em.withFooterText(
-                "Requested by: " + UserUtil.getNameAndDescrim(user) + " | Bug? Report it with +bug!");
+                "Requested by: " + UserUtil.getNameAndDescrim(user));
         return MessageUtil.sendMessage(channel, em.build());
     }
 
@@ -255,14 +254,14 @@ public class Info implements ICommand{
                 .count(), true);
         em.withFooterIcon(user.getAvatarURL());
         em.withFooterText(
-                "Requested by: " + UserUtil.getNameAndDescrim(user) + " | Bug? Report it with +bug!");
+                "Requested by: " + UserUtil.getNameAndDescrim(user));
         return MessageUtil.sendMessage(channel, em.build());
 
     }
 
     private IMessage moduleRole(IUser user, IChannel channel, IGuild guild, IRole role) {
         String users = "";
-        for(IUser u : guild.getUsersByRole(role)) {
+        for (IUser u : guild.getUsersByRole(role)) {
             users += u.getName().replace("*", "\\*").replace("~", "\\~").replace("`", "\\`")
                     .replace("_", "\\_") + ", ";
         }
