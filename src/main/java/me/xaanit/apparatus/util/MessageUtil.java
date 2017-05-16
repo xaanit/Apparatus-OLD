@@ -59,7 +59,7 @@ public class MessageUtil extends GuildUtil {
      * @param str     The string to send
      * @return The message
      */
-    static IMessage sendMessage(IChannel channel, String str) {
+    public static IMessage sendMessage(IChannel channel, String str) {
         return sendMessage(channel, str, null);
     }
 

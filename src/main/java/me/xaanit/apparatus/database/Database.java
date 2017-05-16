@@ -1,7 +1,9 @@
 package me.xaanit.apparatus.database;
 
 import com.google.gson.Gson;
+import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.objects.enums.Level;
+import me.xaanit.apparatus.objects.json.Config;
 import me.xaanit.apparatus.objects.json.Guild;
 import sx.blah.discord.handle.obj.IGuild;
 
@@ -16,12 +18,36 @@ import static me.xaanit.apparatus.GlobalVars.logger;
  */
 public class Database {
 
-    static {
-        Gson gson = new Gson();
+    public static Config loadConfig() {
+        try {
+            File file = new File(System.getProperty("user.dir") + "\\config.json");
+            if (!file.exists()) {
+                file.createNewFile();
+                return new Config(true);
+            }
+            return new Gson().fromJson(new FileReader(file), Config.class);
+        } catch (Exception ex) {
+            System.exit(0);
+            return null;
+        }
     }
 
-    public static String getConfig() {
-        return "";
+
+    public static boolean saveConfig() {
+        try {
+            String path = System.getProperty("user.dir") + "\\config.json";
+            File file = new File(path);
+            if (!file.exists())
+                file.createNewFile();
+            FileWriter fw = new FileWriter(file);
+            String json = new Gson().toJson(GlobalVars.config);
+            fw.write(json);
+            fw.close();
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 
     public static boolean saveGuild(IGuild guild) {

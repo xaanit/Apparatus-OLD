@@ -24,6 +24,11 @@ public class CommandListener implements IListener {
         IGuild guild = event.getGuild();
         String content = message.getContent();
 
+
+        if(GlobalVars.config.getBlacklistedUsers().contains(user.getLongID())) {
+            return;
+        }
+
         if (content.isEmpty()) {
             return;
         }

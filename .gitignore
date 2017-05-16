@@ -19,7 +19,9 @@ buildNumber.properties
 # User-specific stuff:
 .idea/**/tasks.xml
 .idea/dictionaries
-guilds/
+guilds
+*.json
+
 
 # Sensitive or high-churn files:
 .idea/**/dataSources/
@@ -39,11 +41,13 @@ guilds/
 ## File-based project format:
 *.iws
 *.iml
+guilds/
 
 ## Plugin-specific files:
 
 # IntelliJ
 /out/
+/guilds
 
 
 # mpeltonen/sbt-idea plugin
@@ -59,6 +63,8 @@ crashlytics-build.properties
 fabric.properties
 
 .idea/
+/guilds/
+
 
 src/test/
 .gradle/

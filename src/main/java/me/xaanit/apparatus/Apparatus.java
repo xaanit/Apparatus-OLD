@@ -4,7 +4,6 @@ import com.google.gson.GsonBuilder;
 import me.xaanit.apparatus.database.Database;
 import me.xaanit.apparatus.objects.enums.Level;
 import me.xaanit.apparatus.objects.interfaces.IListener;
-import me.xaanit.apparatus.objects.json.Config;
 import org.reflections.Reflections;
 import sx.blah.discord.api.ClientBuilder;
 
@@ -18,8 +17,12 @@ public class Apparatus {
 
     public static void main(String[] args) {
         GlobalVars.gson = new GsonBuilder().create();
+        GlobalVars.config = Database.loadConfig();
+        GlobalVars.config.blacklistServer(167298338905915393L);
+        GlobalVars.config.blacklistServer(279366207495208961L);
+        Database.saveConfig();
         GlobalVars.client = new ClientBuilder().withRecommendedShardCount()
-                .withToken(loadConfig() == null ? "MzA1NDA3MjY0MDk5OTI2MDE2.C90wMA.6Wh-YYyiKrPHY2oBAYVQm9yu4nw" : GlobalVars.config.getToken()).build();
+                .withToken(GlobalVars.config.getToken()).build();
         initListeners();
         logger.log("Logging in...", Level.INFO);
         GlobalVars.client.login();
@@ -39,8 +42,5 @@ public class Apparatus {
         });
     }
 
-    public static Config loadConfig() {
-        return GlobalVars.gson.fromJson(Database.getConfig().isEmpty() ? null : Database.getConfig(), Config.class);
-    }
 
 }
