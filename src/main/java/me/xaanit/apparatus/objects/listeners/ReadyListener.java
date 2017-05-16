@@ -32,7 +32,9 @@ public class ReadyListener implements IListener {
                 RequestBuffer.request(() -> guild.leave());
             }
         }
-        RequestBuffer.request(() -> GlobalVars.client.online("dnd"));
+        RequestBuffer.request(() -> GlobalVars.client.streaming("@Apparatus prefix | " + GlobalVars.client.getGuilds().size() + " guild(s)", "https://www.twitch.tv"));
+        //RequestBuffer.request(() -> GlobalVars.client.changeAvatar(Image.forUrl("png", "https://cdn.discordapp.com/attachments/245615097559515136/313983485775708160/XanXan.png")));
+
         initCommands();
         logger.log("Bot ready!", Level.INFO);
     }

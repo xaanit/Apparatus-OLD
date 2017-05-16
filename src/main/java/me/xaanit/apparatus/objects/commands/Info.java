@@ -53,6 +53,7 @@ public class Info implements ICommand {
 
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
+        Util.allChecks(user, guild, this, channel);
         if (args.length == 1) {
             moduleHelp(user, channel, guild);
             return;

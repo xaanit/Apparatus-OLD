@@ -6,6 +6,7 @@ import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.*;
 
 import java.util.EnumSet;
+import java.util.Map;
 
 public interface ICommand {
 
@@ -37,6 +38,10 @@ public interface ICommand {
      */
     default EnumSet<Permissions> getNeededPermission() {
         return Util.basicPermissions();
+    }
+
+    default Map<Long, Integer> getPlaceInCommand(IUser user) {
+        return null;
     }
 
     /**

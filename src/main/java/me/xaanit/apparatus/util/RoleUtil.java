@@ -3,12 +3,14 @@ package me.xaanit.apparatus.util;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.IUser;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 @SuppressWarnings("unused")
-public class RoleUtil extends PermissionsUtil{
+public class RoleUtil extends PermissionsUtil {
 
     /**
      * Grabs a role based on a string, or mention
@@ -41,6 +43,21 @@ public class RoleUtil extends PermissionsUtil{
         }
 
         return null;
+    }
+
+    public static IRole getRole(String toLookFor, IMessage message) {
+        return getRole(toLookFor, message, message.getGuild());
+    }
+
+    public static IRole getHighestRole(IUser user, IGuild guild) {
+        List<IRole> roles = guild.getRoles();
+        roles.get(0).getPosition();
+        for (int i = roles.size() - 1; i >= 0; i--) {
+            final IRole role = roles.get(i);
+            if (user.getRolesForGuild(guild).stream().filter(r -> r.getLongID() == role.getLongID()).count() == 1)
+                return roles.get(i);
+        }
+        return guild.getEveryoneRole();
     }
 
     /**

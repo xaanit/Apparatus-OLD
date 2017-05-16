@@ -21,6 +21,7 @@ public class Database {
     public static Config loadConfig() {
         try {
             File file = new File(GlobalVars.PATH + "config.json");
+            System.out.println(file.getAbsolutePath());
             if (!file.exists()) {
                 file.createNewFile();
                 return new Config(true);

@@ -18,9 +18,8 @@ public class Apparatus {
     public static void main(String[] args) {
         GlobalVars.gson = new GsonBuilder().create();
         GlobalVars.config = Database.loadConfig();
-        GlobalVars.config.blacklistServer(167298338905915393L);
-        GlobalVars.config.blacklistServer(279366207495208961L);
         Database.saveConfig();
+        System.out.println(GlobalVars.config.getToken());
         GlobalVars.client = new ClientBuilder().withRecommendedShardCount()
                 .withToken(GlobalVars.config.getToken()).build();
         initListeners();

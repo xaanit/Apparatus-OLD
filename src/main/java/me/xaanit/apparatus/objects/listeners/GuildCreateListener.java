@@ -28,7 +28,8 @@ public class GuildCreateListener implements IListener {
         }
         IGuild guild = event.getGuild();
         GlobalVars.guilds.putIfAbsent(guild.getLongID(), Database.loadGuild(guild));
-        RequestBuffer.request(() -> GlobalVars.client.changePlayingText("+help | " + guild.getShard().getGuilds().size() + " guild(s)"));
+        RequestBuffer.request(() -> GlobalVars.client.streaming("@Apparatus prefix | " + GlobalVars.client.getGuilds().size() + " guild(s)", "https://www.twitch.tv"));
+
 
     }
 }

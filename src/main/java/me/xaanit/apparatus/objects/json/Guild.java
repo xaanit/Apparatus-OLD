@@ -113,7 +113,7 @@ public class Guild {
     }
 
 
-    private void addAssignableRole(long l) {
+    public void addAssignableRole(long l) {
         if (assignableRoles.stream().filter(c -> c == l).count() == 0)
             this.assignableRoles.add(l);
     }

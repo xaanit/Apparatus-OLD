@@ -12,6 +12,7 @@ import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
+import sx.blah.discord.util.RequestBuffer;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -26,7 +27,7 @@ public class Eval implements ICommand {
 
     @Override
     public String getName() {
-        return "eval";
+        RequestBuffer.request(() -> GlobalVars.client.streaming("@Apparatus prefix | " + GlobalVars.client.getGuilds().size() + " guild(s)", "https://www.twitch.tv/awdawdadwwd"));return "eval";
     }
 
     @Override
@@ -57,6 +58,18 @@ public class Eval implements ICommand {
 
         String input = message.getContent().substring((Util.getGuild(guild).getPrefix() + "eval").length()).replaceAll("`", "");
         Object o = null;
+        factory.put("guild", guild);
+        factory.put("user", user);
+        factory.put("message", message);
+        factory.put("command", this);
+        factory.put("client", GlobalVars.client);
+        try {
+            factory.eval("var imports = new JavaImporter(java.io, java.lang, java.util, Packages.sx.blah.discord.util, \"\n" +
+                    "                    + \"Packages.sx.blah.discord.handle.obj, sx.blah.discord.util.RequestBuffer, Packages.me.xaanit.apparatus.util);");
+        } catch (Exception ex) {
+
+        }
+
         try {
             o = factory.eval(input);
         } catch (Exception ex) {

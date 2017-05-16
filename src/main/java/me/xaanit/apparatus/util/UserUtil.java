@@ -2,6 +2,8 @@ package me.xaanit.apparatus.util;
 
 import me.xaanit.apparatus.GlobalVars;
 import sx.blah.discord.handle.obj.*;
+import sx.blah.discord.util.DiscordException;
+import sx.blah.discord.util.RequestBuffer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,27 @@ public class UserUtil extends RoleUtil {
         return user.getName() + "#" + user.getDiscriminator();
     }
 
+    public static void addRole(IUser user, IRole role) {
+        RequestBuffer.request(() -> {
+            try {
+                user.addRole(role);
+            } catch (DiscordException ex) {
+                if (!ex.getMessage().contains("cloudflare"))
+                    addRole(user, role);
+            }
+        });
+    }
+
+    public static void removeRole(IUser user, IRole role) {
+        RequestBuffer.request(() -> {
+            try {
+                user.removeRole(role);
+            } catch (DiscordException ex) {
+                if (!ex.getMessage().contains("cloudflare"))
+                    removeRole(user, role);
+            }
+        });
+    }
 
     /**
      * Grabs a user from a string, or mention

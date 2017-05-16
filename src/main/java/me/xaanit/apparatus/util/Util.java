@@ -6,9 +6,9 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-@SuppressWarnings("unused")
-public class Util extends UserUtil{
 
+@SuppressWarnings("unused")
+public class Util extends UserUtil {
 
 
     /**
@@ -32,10 +32,8 @@ public class Util extends UserUtil{
     public static String formatRoleList(List<IRole> list) {
         StringBuilder builder = new StringBuilder();
         list.forEach(r -> builder.append(r.getName()).append(", "));
-        return builder.toString().substring(0, builder.toString().indexOf(","));
+        return list.size() == 0 ? "None" : builder.toString().substring(0, builder.toString().lastIndexOf(","));
     }
-
-
 
 
 }

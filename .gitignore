@@ -21,7 +21,8 @@ buildNumber.properties
 .idea/dictionaries
 guilds
 *.json
-.github
+*.github
+MANIFEST.MF
 
 
 # Sensitive or high-churn files:
