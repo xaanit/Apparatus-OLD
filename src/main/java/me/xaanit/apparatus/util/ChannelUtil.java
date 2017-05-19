@@ -1,5 +1,6 @@
 package me.xaanit.apparatus.util;
 
+import me.xaanit.apparatus.GlobalVars;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Jacob on 4/19/2017.
  */
-public class ChannelUtil {
+public class ChannelUtil extends GlobalVars{
 
     /**
      * Gets a channel from mention, or from a String

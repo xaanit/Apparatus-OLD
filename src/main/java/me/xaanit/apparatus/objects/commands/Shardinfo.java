@@ -65,7 +65,7 @@ public class Shardinfo implements ICommand {
 
         EmbedBuilder em = new EmbedBuilder();
         em.withColor(Util.hexToColor(CColors.BASIC));
-        em.withAuthorIcon(GlobalVars.client.getOurUser().getAvatarURL());
+        em.withAuthorIcon(Util.botAva());
         em.withAuthorName("Shard info");
         em.withDesc(top + "\n" + res + "\n" + bottom);
         Util.sendMessage(channel, em.build());

@@ -14,7 +14,7 @@ public class Modlog {
 
     private CustomEmbed embed = new CustomEmbed();
 
-    private boolean useEmbed = false;
+    private boolean useEmbed = true;
 
     private String stringLog = "";
 

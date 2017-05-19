@@ -1,6 +1,5 @@
 package me.xaanit.apparatus.objects.commands;
 
-import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.objects.FailedRole;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
@@ -55,11 +54,6 @@ public class Role implements ICommand {
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
         Util.allChecks(user, guild, this, channel);
 
-        if (args[1].equalsIgnoreCase("add")) {
-            moduleAddRoles(user, channel, guild, message, args);
-            return;
-        }
-
         if (args.length == 1 || (args.length > 1 && args[1].equalsIgnoreCase("list"))) {
             List<IRole> roles = new ArrayList<>();
             for (long l : Util.getGuild(guild).getAssignableRoles()) {
@@ -75,7 +69,7 @@ public class Role implements ICommand {
             }
             EmbedBuilder em = new EmbedBuilder();
             em.withAuthorName("Self assignable roles");
-            em.withAuthorIcon(GlobalVars.client.getOurUser().getAvatarURL());
+            em.withAuthorIcon(Util.botAva());
             em.withColor(Util.hexToColor(CColors.BASIC));
             em.withDesc(Util.formatRoleList(roles));
             em.withFooterText("Requested by: " + Util.getNameAndDescrim(user));
@@ -84,6 +78,11 @@ public class Role implements ICommand {
             return;
         }
 
+
+        if (args[1].equalsIgnoreCase("add")) {
+            moduleAddRoles(user, channel, guild, message, args);
+            return;
+        }
 
         List<IRole> rolesAdded = new ArrayList<>();
         List<IRole> rolesRemoved = new ArrayList<>();
@@ -124,7 +123,7 @@ public class Role implements ICommand {
 
         EmbedBuilder em = new EmbedBuilder();
         em.withColor(Util.hexToColor(CColors.BASIC));
-        em.withAuthorIcon(GlobalVars.client.getOurUser().getAvatarURL());
+        em.withAuthorIcon(Util.botAva());
         em.withAuthorName("Added roles!");
         String res = "";
         res += "Roles added: " + Util.formatRoleList(rolesAdded) + "\n\nRoles removed: " + Util.formatRoleList(rolesRemoved) + "\n\nAll of these roles failed for one reason or another.";
@@ -188,7 +187,7 @@ public class Role implements ICommand {
 
         EmbedBuilder em = new EmbedBuilder();
         em.withAuthorName("Self assignable roles");
-        em.withAuthorIcon(GlobalVars.client.getOurUser().getAvatarURL());
+        em.withAuthorIcon(Util.botAva());
         em.withColor(Util.hexToColor(CColors.BASIC));
         String res = "";
         for (FailedRole r : rolesFailed) {

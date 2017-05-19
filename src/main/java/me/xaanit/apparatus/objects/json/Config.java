@@ -8,11 +8,13 @@ import java.util.List;
  */
 public class Config {
 
-    private String token;
+    private String token = "";
 
-    private List<Long> blacklistedUsers;
+    private List<Long> blacklistedUsers = new ArrayList<>();
 
-    private List<Long> blacklistedServers;
+    private List<Long> blacklistedServers = new ArrayList<>();
+
+    private List<String> apiKeys = new ArrayList<>();
 
     public Config() {
     }
@@ -55,5 +57,14 @@ public class Config {
     public void unBlacklistServer(long l) {
         if (blacklistedServers.stream().filter(u -> u == l).count() == 1)
             this.blacklistedServers.remove(l);
+    }
+
+    public List<String> getApiKeys() {
+        return apiKeys;
+    }
+
+    public String getApiKey(String type) {
+        final String lower = type.toLowerCase();
+        return apiKeys.stream().filter(k -> k.toLowerCase().startsWith(lower)).findFirst().orElse("");
     }
 }

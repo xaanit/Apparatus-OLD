@@ -23,7 +23,6 @@ public class ReadyListener implements IListener {
     @EventSubscriber
     public void onReady(ReadyEvent event) {
         ready = true;
-        GlobalVars.sponseredGuild = GlobalVars.client.getGuildByID(283076860936454144L);
         logger.log("Ready event start...", Level.INFO);
         for (long l : GlobalVars.config.getBlacklistedServers()) {
             IGuild guild = GlobalVars.client.getGuildByID(l);
@@ -34,7 +33,6 @@ public class ReadyListener implements IListener {
         }
         RequestBuffer.request(() -> GlobalVars.client.streaming("@Apparatus prefix | " + GlobalVars.client.getGuilds().size() + " guild(s)", "https://www.twitch.tv"));
         //RequestBuffer.request(() -> GlobalVars.client.changeAvatar(Image.forUrl("png", "https://cdn.discordapp.com/attachments/245615097559515136/313983485775708160/XanXan.png")));
-
         initCommands();
         logger.log("Bot ready!", Level.INFO);
     }
@@ -49,11 +47,13 @@ public class ReadyListener implements IListener {
                 if (command.getAliases().length != 0) {
                     for (String str : command.getAliases()) {
                         GlobalVars.commands.putIfAbsent(str.toLowerCase(), command);
-                        logger.log("Logged command \"" + command.getName() + "\" with alias \"" + str + "\"", Level.INFO);
+                        logger.log("Loaded command \"" + command.getName() + "\" with alias \"" + str + "\"", Level.INFO);
                     }
                 }
             } catch (InstantiationException | IllegalAccessException e) {
-                // Some logging here about how it couldn't register
+                logger.log(subclass.getName() + " failed to load!", Level.CRITICAL);
+                logger.log("[" + e.getMessage() + "]", Level.CRITICAL);
+
             }
         });
         logger.log("Commands initialised!", Level.INFO);

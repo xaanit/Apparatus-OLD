@@ -67,7 +67,7 @@ public class Save implements ICommand {
             }
             EmbedBuilder em = new EmbedBuilder();
             em.withColor(Util.hexToColor(CColors.BASIC));
-            em.withAuthorIcon(GlobalVars.client.getOurUser().getAvatarURL());
+            em.withAuthorIcon(Util.botAva());
             em.withAuthorName("Save");
             em.withDesc("Saved [ " + s + " ] guild(s).\nFailed to save [ " + f + " ] guild(s)");
             long diff = System.currentTimeMillis() - now;

@@ -2,6 +2,7 @@ package me.xaanit.apparatus.objects.json;
 
 import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
+import me.xaanit.apparatus.objects.json.embeds.CustomEmbed;
 import sx.blah.discord.handle.obj.IGuild;
 
 import java.util.ArrayList;
@@ -13,37 +14,44 @@ import java.util.stream.Collectors;
  */
 public class Guild {
 
-    private long id;
+    private long id = 0;
 
-    private String welcomeMessage;
+    public boolean whitelistedGuild = false;
 
-    private List<Long> autoRoles;
+    private boolean devOverride = false;
+    private boolean crashReports = true;
 
-    private List<Long> assignableRoles;
+    private String welcomeMessage = "";
+    private String goodbyeMessage = "";
+    private CustomEmbed welcomeEmbed = new CustomEmbed();
+    private CustomEmbed goodbyeEmbed = new CustomEmbed();
 
-    private long welcomeChannel;
+    private boolean useWelcomeEmbed = false;
+    private boolean useGoodbyeEmbed = false;
 
-    private String prefix;
+    private List<Autorole> autoRoles = new ArrayList<>();
 
-    private List<Command> commands;
+    private List<Long> assignableRoles = new ArrayList<>();
 
-    private List<Modlog> modlogs;
+    private long welcomeChannel = 0;
+
+    private boolean welcomeOn = false;
+    private boolean goodbyeOn = false;
+
+    private String prefix = "+";
+
+    private List<Command> commands = new ArrayList<>();
+
+    private List<Modlog> modlogs = new ArrayList<>();
 
     public Guild() {
         this.prefix = "+";
-        this.commands = new ArrayList<>();
-        this.modlogs = new ArrayList<>();
-        this.autoRoles = new ArrayList<>();
-        this.assignableRoles = new ArrayList<>();
+        updateCommands();
     }
 
     public Guild(IGuild guild) {
         this.id = guild.getLongID();
-        this.prefix = "+";
-        this.commands = new ArrayList<>();
-        this.modlogs = new ArrayList<>();
-        this.autoRoles = new ArrayList<>();
-        this.assignableRoles = new ArrayList<>();
+        updateCommands();
     }
 
 
@@ -89,18 +97,18 @@ public class Guild {
 
     }
 
-    public List<Long> getAutoRoles() {
+    public List<Autorole> getAutoRoles() {
         return autoRoles;
     }
 
-    private void addAutorole(long l) {
-        if (autoRoles.stream().filter(c -> c == l).count() == 0)
-            this.autoRoles.add(l);
+    private void addAutorole(long l, boolean val) {
+        if (autoRoles.stream().filter(c -> c.getID() == l).count() == 0)
+            this.autoRoles.add(new Autorole(val, l));
     }
 
     public void removeAutorole(long l) {
         for (int i = 0; i < autoRoles.size(); i++) {
-            if (autoRoles.get(i) == l) {
+            if (autoRoles.get(i).getID() == l) {
                 autoRoles.remove(i);
                 return;
             }
@@ -127,6 +135,7 @@ public class Guild {
         }
 
     }
+
     public List<Modlog> getModlogs() {
         return modlogs;
     }
@@ -182,4 +191,11 @@ public class Guild {
         this.welcomeChannel = welcomeChannel;
     }
 
+    public boolean isWelcomeOn() {
+        return welcomeOn;
+    }
+
+    public void setWelcomeOn(boolean welcomeOn) {
+        this.welcomeOn = welcomeOn;
+    }
 }

@@ -12,6 +12,8 @@ import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 
+import static me.xaanit.apparatus.GlobalVars.commands;
+
 /**
  * Created by Jacob on 5/14/2017.
  */
@@ -38,8 +40,9 @@ public class CommandListener implements IListener {
         }
         String[] args = content.split(" ");
         try {
-            if (GlobalVars.commands.containsKey(args[0].substring(Util.getGuild(guild).getPrefix().length()).toLowerCase()))
-                GlobalVars.commands.get(args[0].substring(Util.getGuild(guild).getPrefix().length()).toLowerCase())
+            String look = args[0].substring(Util.getGuild(guild).getPrefix().length()).toLowerCase();
+            if (commands.containsKey(look))
+                commands.get(look)
                         .runCommand(user, channel, guild, message, args);
         } catch (PermissionsException ex) {
 

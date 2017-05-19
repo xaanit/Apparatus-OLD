@@ -59,7 +59,7 @@ public class Help implements ICommand {
                 EmbedBuilder em = new EmbedBuilder();
                 em.withColor(Util.hexToColor(CColors.BASIC));
                 em.withAuthorName("Help - Types");
-                em.withAuthorIcon(GlobalVars.client.getOurUser().getAvatarURL());
+                em.withAuthorIcon(Util.botAva());
                 String res = "Categories:\n\n";
                 for (CmdType type : CmdType.getTypes()) {
                     res += "**" + CmdType.format(type) + "**\n";
@@ -73,7 +73,7 @@ public class Help implements ICommand {
 
         if (args.length == 2) {
             for (CmdType type : CmdType.getTypes()) {
-                if (type.toString().equalsIgnoreCase(args[1])) {
+                if (type.toString().replaceAll("_", "").equalsIgnoreCase(args[1].replaceAll("_", ""))) {
                     List<ICommand> commandsFound = new ArrayList<>();
                     for (String key : GlobalVars.commands.keySet()) {
                         ICommand command = GlobalVars.commands.get(key);
@@ -83,7 +83,7 @@ public class Help implements ICommand {
                     EmbedBuilder em = new EmbedBuilder();
                     em.withColor(Util.hexToColor(CColors.BASIC));
                     em.withAuthorName("Help - " + CmdType.format(type));
-                    em.withAuthorIcon(GlobalVars.client.getOurUser().getAvatarURL());
+                    em.withAuthorIcon(Util.botAva());
                     List<ICommand> commandsForType = commandsFound.stream().filter(c -> c.getType() == type).collect(Collectors.toList());
                     for (ICommand c : commandsForType) {
                         em.appendField(c.getName() + " " + Arrays.toString(c.getAliases()).replaceAll(c.getName() + ", ", ""), c.getInfo(), false);
@@ -103,7 +103,7 @@ public class Help implements ICommand {
                 EmbedBuilder em = new EmbedBuilder();
                 em.withColor(Util.hexToColor(CColors.ERROR));
                 em.withAuthorName("Help - Error");
-                em.withAuthorIcon(GlobalVars.client.getOurUser().getAvatarURL());
+                em.withAuthorIcon(Util.botAva());
                 em.withDesc("I can't seem to find the command " + args[1] + "in my database. Are you sure you typed it correctly?\n\n*Deletes after 15 seconds*");
                 em.withFooterText(user.getAvatarURL());
                 em.withFooterText("Requested by: " + Util.getNameAndDescrim(user));

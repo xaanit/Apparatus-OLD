@@ -24,6 +24,7 @@ import java.util.Arrays;
 public class Eval implements ICommand {
 
     private ScriptEngine factory = new ScriptEngineManager().getEngineByName("nashorn");
+    private Util util = new Util();
 
     @Override
     public String getName() {
@@ -59,6 +60,11 @@ public class Eval implements ICommand {
         String input = message.getContent().substring((Util.getGuild(guild).getPrefix() + "eval").length()).replaceAll("`", "");
         Object o = null;
         factory.put("guild", guild);
+        factory.put("channel", channel);
+        factory.put("commands", GlobalVars.commands);
+        factory.put("guilds", GlobalVars.guilds);
+        factory.put("gson", GlobalVars.gson);
+        factory.put("util", util);
         factory.put("user", user);
         factory.put("message", message);
         factory.put("command", this);
@@ -74,7 +80,7 @@ public class Eval implements ICommand {
             o = factory.eval(input);
         } catch (Exception ex) {
             EmbedBuilder em = new EmbedBuilder();
-            em.withAuthorIcon(GlobalVars.client.getOurUser().getAvatarURL());
+            em.withAuthorIcon(Util.botAva());
             em.withAuthorName("Error");
             em.withColor(Util.hexToColor(CColors.ERROR));
             em.withDesc(ex.getMessage());
@@ -83,12 +89,12 @@ public class Eval implements ICommand {
             return;
         }
         EmbedBuilder em = new EmbedBuilder();
-        em.withAuthorIcon(GlobalVars.client.getOurUser().getAvatarURL());
+        em.withAuthorIcon(Util.botAva());
         em.withAuthorName("Success!");
         em.withColor(Util.hexToColor(CColors.BASIC));
         em.withTitle("Evaluation output.");
         em.withDesc(o == null ? "No output, object is null" : o.toString());
-        em.appendField("Input", "```kotlin\n" + input + "\n```", false);
+        em.appendField("Input", "```js\n" + input + "\n```", false);
         em.withFooterText("Eval successful!");
         Util.sendMessage(channel, em.build());
     }

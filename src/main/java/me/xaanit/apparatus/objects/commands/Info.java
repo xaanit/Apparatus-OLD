@@ -41,7 +41,7 @@ public class Info implements ICommand {
 
     @Override
     public EmbedObject getHelp(IUser user, IGuild guild) {
-        EmbedBuilder em = Util.addToHelpEmbed(this, user, new String[]{GuildUtil.getGuild(guild).getPrefix(), getName() + "[arg]"}, new String[]{Arrays.toString(getAliases())
+        EmbedBuilder em = Util.addToHelpEmbed(this, user, new String[]{GuildUtil.getGuild(guild).getPrefix(), getName() + " [arg]"}, new String[]{Arrays.toString(getAliases())
                 .replaceAll(getName() + ",\\s", "")});
         return em.build();
     }
@@ -72,7 +72,9 @@ public class Info implements ICommand {
             case "{bot}":
                 m = moduleBot(user, channel, guild);
                 break;
-
+            case "{dev}":
+                m = moduleDev(user, guild, channel);
+                break;
         }
 
         if (m != null) {
@@ -104,7 +106,7 @@ public class Info implements ICommand {
         em.withAuthorIcon(guild.getIconURL());
         em.withAuthorName("Info | Help");
         em.withDesc(
-                "Hey there! This was triggered because either you were **missing arguments** or **I couldn't find what you requested**. If this is a bug please report with the bug command!!\n");
+                "Hey there! This was triggered because either you were **missing arguments** or **I couldn't find what you requested**. If this is a bug please report in the bugs channel on the Support server.\n");
         em.appendField("What can I do with this command?",
                 "Well info is a command to get you... well info about some stuff! There's a few ways to do this.\n"
                         +
@@ -119,13 +121,30 @@ public class Info implements ICommand {
                         +
                         "-> `{guild}` - To get info about the guild you're in!\n" +
                         "-> `{me}` - Gets the info about YOU!\n" +
-                        "-> `{bot}` - Gets some info about me!", false);
+                        "-> `{bot}` - Gets some info about me!\n" +
+                        "-> {dev} - Gets some info on the dev!", false);
 
         em.withFooterIcon(user.getAvatarURL());
         em.withFooterText(
                 "Requested by: " + UserUtil.getNameAndDescrim(user));
         return MessageUtil.sendMessage(channel, em.build());
 
+    }
+
+    private IMessage moduleDev(IUser user, IGuild guild, IChannel channel) {
+        EmbedBuilder em = new EmbedBuilder();
+        IUser xaanit = GlobalVars.client.getUserByID(Long.parseUnsignedLong("233611560545812480"));
+        em.withAuthorIcon(xaanit.getAvatarURL());
+        em.withAuthorName("The Developer");
+        em.withDesc("Hey there! I'm a Java developer who's been doing Java for a couple years now. I made Apparatus with one goal in mind. Make the bot" +
+                " for the people who couldn't code. It's main purpose is to be super customisable.");
+        em.appendField("Patreon", "You can support me [here!](https://www.patreon.com/xaanit)", false);
+        em.withFooterIcon(user.getAvatarURL());
+        em.withFooterText(
+                "Requested by: " + UserUtil.getNameAndDescrim(user));
+        em.withColor(Util.hexToColor(CColors.BASIC));
+        IMessage m = Util.sendMessage(channel, em.build());
+        return m;
     }
 
     private IMessage moduleChannel(IUser user, IChannel channel, IGuild guild, IChannel c) {
@@ -135,7 +154,7 @@ public class Info implements ICommand {
         em.withAuthorName("Info | Channel");
         em.appendField("Name", c.getName(), false);
         em.appendField("ID", c.getStringID(), false);
-        em.appendField("Topic", c.getTopic() == null ? "None set" : c.getTopic(), false);
+        em.appendField("Topic", c.getTopic() == null || c.getTopic().isEmpty() ? "None set" : c.getTopic(), false);
         em.withFooterIcon(user.getAvatarURL());
         em.withFooterText(
                 "Requested by: " + UserUtil.getNameAndDescrim(user));
@@ -179,7 +198,7 @@ public class Info implements ICommand {
         if (invite.isEmpty()) {
             BotInviteBuilder builder = new BotInviteBuilder(GlobalVars.client);
             builder.withClientID(GlobalVars.client.getOurUser().getStringID());
-            builder.withPermissions(Util.makePermissions(Util.basicPermissions(), Permissions.BAN, Permissions.KICK, Permissions.CHANGE_NICKNAME));
+            builder.withPermissions(Util.makePermissions(Util.basicPermissions(), Permissions.BAN, Permissions.KICK, Permissions.CHANGE_NICKNAME, Permissions.USE_EXTERNAL_EMOJIS));
             invite = builder.build();
         }
 
@@ -199,7 +218,7 @@ public class Info implements ICommand {
         EmbedBuilder em = new EmbedBuilder();
         em.withColor(Util.hexToColor(CColors.BASIC));
         em.withAuthorName("Bot info");
-        em.withAuthorIcon(GlobalVars.client.getOurUser().getAvatarURL());
+        em.withAuthorIcon(Util.botAva());
         em.withDesc("Hey there! I'm Apparatus. I'm made by <@!233611560545812480>.\n\nMy version is **" + GlobalVars.VERISON + "**\nI run on [Discord4J, version 2.8.1](https://github.com/austinv11/Discord4J)\n\nI am on " + GlobalVars.client.getGuilds().size() + " guild(s).\nI serve " + GlobalVars.client.getUsers().size() + " user(s).\nIn " + channels + " channel(s).\nI have a total of " + totalCommands + " command(s).\n\nYou can invite me with [this](" + invite + "}) link [BROKEN ATM]\nYou can join my support server [here.](https://discord.gg/SHTbdnJ)");
         em.withFooterIcon(user.getAvatarURL());
         em.withFooterText("Requested by: " + Util.getNameAndDescrim(user));

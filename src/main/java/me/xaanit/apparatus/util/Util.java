@@ -1,5 +1,6 @@
 package me.xaanit.apparatus.util;
 
+import me.xaanit.apparatus.GlobalVars;
 import sx.blah.discord.handle.obj.IRole;
 
 import java.time.Clock;
@@ -35,5 +36,9 @@ public class Util extends UserUtil {
         return list.size() == 0 ? "None" : builder.toString().substring(0, builder.toString().lastIndexOf(","));
     }
 
+
+    public static String botAva() {
+        return GlobalVars.client.getOurUser().getAvatarURL();
+    }
 
 }
