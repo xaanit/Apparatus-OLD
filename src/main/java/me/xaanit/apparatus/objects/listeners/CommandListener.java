@@ -1,23 +1,26 @@
 package me.xaanit.apparatus.objects.listeners;
 
+import com.michaelwflaherty.cleverbotapi.CleverBotQuery;
 import me.xaanit.apparatus.GlobalVars;
+import me.xaanit.apparatus.database.Database;
 import me.xaanit.apparatus.objects.exceptions.PermissionsException;
 import me.xaanit.apparatus.objects.interfaces.IListener;
 import me.xaanit.apparatus.util.Util;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MentionEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.obj.*;
+
+import java.io.IOException;
 
 import static me.xaanit.apparatus.GlobalVars.commands;
 
-/**
- * Created by Jacob on 5/14/2017.
- */
+
 public class CommandListener implements IListener {
+
+    private CleverBotQuery query = null;
+    private String key = GlobalVars.config.getApiKey("cleverbot").split(":::")[1];
+
 
     @EventSubscriber
     public void onCommand(MessageReceivedEvent event) {
@@ -60,6 +63,7 @@ public class CommandListener implements IListener {
 
 
         String[] oldArgs = content.split("\\s");
+        if (!channel.getModifiedPermissions(GlobalVars.client.getOurUser()).contains(Permissions.SEND_MESSAGES)) return;
         if (!oldArgs[0].replaceAll("<@(!)?305407264099926016>", "").isEmpty()) return;
         if (oldArgs.length == 1) return;
         String[] args = copy(oldArgs, 1);
@@ -72,6 +76,9 @@ public class CommandListener implements IListener {
             if (GlobalVars.commands.containsKey(args[0].toLowerCase()))
                 GlobalVars.commands.get(args[0].toLowerCase())
                         .runCommand(user, channel, guild, message, args);
+            else {
+                Util.sendMessage(channel, user.mention() + " | " + getCleverbotResponse(Util.combineArgs(args, 0, args.length)));
+            }
         } catch (PermissionsException ex) {
 
         }
@@ -85,5 +92,25 @@ public class CommandListener implements IListener {
             j++;
         }
         return arr;
+    }
+
+
+    public String getCleverbotResponse(String str) {
+        int calls = GlobalVars.config.getCleverbotCalls();
+        if (calls >= 4980) {
+            return "Sorry! I have hit my maximum cleverbot API calls for this month! Please try again next month.";
+        } else {
+            calls++;
+            GlobalVars.config.setCleverbotCalls(calls);
+            Database.saveConfig();
+        }
+        query = new CleverBotQuery(key, str);
+        try {
+            query.sendRequest();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return "Sorry! I couldn't get a response from cleverbot.";
+        }
+        return query.getResponse();
     }
 }

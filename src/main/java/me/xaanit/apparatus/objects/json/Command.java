@@ -9,12 +9,14 @@ import java.util.List;
 
 public class Command {
 
-    private String name;
+    private String name = "";
     private boolean role = false;
+    private boolean modRole = false;
     private boolean whitelist = true;
     private boolean channelsWhitelist = false;
-    private List<Long> channels;
-    private List<Long> roles;
+    private List<Long> channels = new ArrayList<>();
+    private List<Long> roles = new ArrayList<>();
+    private List<Long> modRoles = new ArrayList<>();
 
     protected Command(String name) {
         this.name = name;
@@ -60,6 +62,24 @@ public class Command {
             roles.remove(role);
     }
 
+    public List<Long> getModRoles() {
+        return modRoles;
+    }
+
+    public void addModRole(IRole role) {
+        if (modRoles.stream().filter(r -> r == role.getLongID()).count() != 1)
+            modRoles.add(role.getLongID());
+    }
+
+    public void removeModRole(IRole role) {
+        removeModRole(role.getLongID());
+    }
+
+    public void removeModRole(long role) {
+        if (modRoles.stream().filter(r -> r == role).count() == 1)
+            modRoles.remove(role);
+    }
+
     public boolean isChannelsWhitelist() {
         return channelsWhitelist;
     }
@@ -84,5 +104,13 @@ public class Command {
     public void removeChannel(long role) {
         if (roles.stream().filter(r -> r == role).count() == 1)
             roles.remove(role);
+    }
+
+    public boolean isModRole() {
+        return modRole;
+    }
+
+    public void setModRole(boolean modRole) {
+        this.modRole = modRole;
     }
 }

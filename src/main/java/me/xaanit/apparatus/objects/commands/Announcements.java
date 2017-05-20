@@ -55,7 +55,7 @@ public class Announcements implements ICommand {
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
         Util.allChecks(user, guild, this, channel);
 
-        if (announcements == null || updates == null || todo == null) {
+       while (announcements == null || updates == null || todo == null) {
             announcements = GlobalVars.client.getChannelByID(Long.parseUnsignedLong("313745078340419585"));
             updates = GlobalVars.client.getChannelByID(Long.parseUnsignedLong("313745091619454979"));
             todo =  GlobalVars.client.getChannelByID(Long.parseUnsignedLong("313812891939635240"));
@@ -72,9 +72,10 @@ public class Announcements implements ICommand {
         em.withColor(Util.hexToColor(CColors.BASIC));
         em.withAuthorName("Announcements!");
         em.withAuthorIcon(Util.botAva());
-        em.appendField("Announcements", ams, false);
-        em.appendField("Updates", ums, false);
-        em.appendField("TODO", toms, false);
+        em.appendField("Announcements", ams.length() > 1024 ? ams.substring(0, 1021) + "..." : ams, false);
+        em.appendField("Updates", ums.length() > 1024 ? ums.substring(0, 1021) + "..." : ums, false);
+        em.appendField("TODO", toms.length() > 1024 ? toms.substring(0, 1021) + "..." : toms, false);
+        em.withDesc("Things cut off? Join the support server [here!](https://discord.gg/SHTbdnJ)");
         em.withFooterIcon(user.getAvatarURL());
         em.withFooterText("Requested by: " + Util.getNameAndDescrim(user));
         Util.sendMessage(channel, em.build());

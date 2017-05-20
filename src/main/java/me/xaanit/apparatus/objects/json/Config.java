@@ -16,6 +16,8 @@ public class Config {
 
     private List<String> apiKeys = new ArrayList<>();
 
+    private int cleverbotCalls = 1;
+
     public Config() {
     }
 
@@ -66,5 +68,13 @@ public class Config {
     public String getApiKey(String type) {
         final String lower = type.toLowerCase();
         return apiKeys.stream().filter(k -> k.toLowerCase().startsWith(lower)).findFirst().orElse("");
+    }
+
+    public int getCleverbotCalls() {
+        return cleverbotCalls;
+    }
+
+    public void setCleverbotCalls(int cleverbotCalls) {
+        this.cleverbotCalls = cleverbotCalls;
     }
 }

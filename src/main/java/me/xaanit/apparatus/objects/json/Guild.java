@@ -21,6 +21,8 @@ public class Guild {
     private boolean devOverride = false;
     private boolean crashReports = true;
 
+    private List<BuyableRole> buyableRoles = new ArrayList<>();
+
     private String welcomeMessage = "";
     private String goodbyeMessage = "";
     private CustomEmbed welcomeEmbed = new CustomEmbed();

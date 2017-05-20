@@ -62,6 +62,10 @@ public interface ICommand {
      */
     EmbedObject getHelp(IUser user, IGuild guild);
 
+    default Permissions getModPerm() {
+        return null;
+    }
+
     /**
      * The info text for this command
      *
