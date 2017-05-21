@@ -17,6 +17,8 @@ public class GlobalVars {
 
     public static final String VERISON = "3.0.1 STABLE";
 
+    public static final int EXIT_CODE = 0;
+
     public static final String PATH = "C:\\Users\\Jacob\\Desktop\\ApparatusInfo\\";
 
     public static Map<String, ICommand> commands = new HashMap<>();

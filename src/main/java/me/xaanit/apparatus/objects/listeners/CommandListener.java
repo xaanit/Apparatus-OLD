@@ -30,6 +30,8 @@ public class CommandListener implements IListener {
         IGuild guild = event.getGuild();
         String content = message.getContent();
 
+        if (user.isBot())
+            return;
 
         if (GlobalVars.config.getBlacklistedUsers().contains(user.getLongID())) {
             return;
@@ -62,6 +64,9 @@ public class CommandListener implements IListener {
         String content = message.getContent();
 
 
+        if (user.isBot())
+            return;
+
         String[] oldArgs = content.split("\\s");
         if (!channel.getModifiedPermissions(GlobalVars.client.getOurUser()).contains(Permissions.SEND_MESSAGES)) return;
         if (!oldArgs[0].replaceAll("<@(!)?305407264099926016>", "").isEmpty()) return;
@@ -70,6 +75,7 @@ public class CommandListener implements IListener {
 
         if (args[0].equalsIgnoreCase("prefix")) {
             Util.sendMessage(channel, user.mention() + " | The prefix for this guild is `" + Util.getGuild(guild).getPrefix() + "`");
+            return;
         }
 
         try {

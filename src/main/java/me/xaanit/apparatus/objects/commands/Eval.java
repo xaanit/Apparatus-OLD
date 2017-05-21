@@ -28,7 +28,8 @@ public class Eval implements ICommand {
 
     @Override
     public String getName() {
-        RequestBuffer.request(() -> GlobalVars.client.streaming("@Apparatus prefix | " + GlobalVars.client.getGuilds().size() + " guild(s)", "https://www.twitch.tv/awdawdadwwd"));return "eval";
+        RequestBuffer.request(() -> GlobalVars.client.streaming("@Apparatus prefix | " + GlobalVars.client.getGuilds().size() + " guild(s)", "https://www.twitch.tv/awdawdadwwd"));
+        return "eval";
     }
 
     @Override
@@ -94,7 +95,7 @@ public class Eval implements ICommand {
         em.withColor(Util.hexToColor(CColors.BASIC));
         em.withTitle("Evaluation output.");
         em.withDesc(o == null ? "No output, object is null" : o.toString());
-        em.appendField("Input", "```js\n" + input + "\n```", false);
+        em.appendField("Input", "```java\n" + input + "\n```", false);
         em.withFooterText("Eval successful!");
         Util.sendMessage(channel, em.build());
     }
