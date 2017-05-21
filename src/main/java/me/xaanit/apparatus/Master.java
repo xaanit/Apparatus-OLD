@@ -11,11 +11,12 @@ import java.io.IOException;
 public class Master extends GlobalVars {
 
     private static final String JAR_PATH = Master.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+    private static Process slave;
 
     public static void main(String[] args) {
         try {
-            Process slave;
             do {
+                logger.log("Creating slave... ", Level.INFO);
                 slave = createSlave();
             } while (slave.waitFor() != EXIT_CODE);
         } catch (InterruptedException ex) {
@@ -24,9 +25,17 @@ public class Master extends GlobalVars {
         }
     }
 
+    public static Process getSlave() {
+        return slave;
+    }
+
+    public static String getJar() {
+        return JAR_PATH;
+    }
+
     public static Process createSlave() {
         try {
-            return new ProcessBuilder("java", "-cp", JAR_PATH, "com.xaanit.apparatus.SlaveJava").inheritIO().start();
+            return new ProcessBuilder("java", "-cp", JAR_PATH, "me.xaanit.apparatus.Slave").inheritIO().start();
         } catch (IOException ex) {
             logger.log("Slave creation failed....", Level.CRITICAL);
             System.exit(0);

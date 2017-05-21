@@ -28,7 +28,7 @@ public class Reload implements ICommand {
 
     @Override
     public String[] getAliases() {
-        return new String[]{getName(), "restart"};
+        return new String[]{getName()};
     }
 
     @Override
