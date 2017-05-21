@@ -1,7 +1,5 @@
 package me.xaanit.apparatus;
 
-import com.google.gson.GsonBuilder;
-import me.xaanit.apparatus.database.Database;
 import me.xaanit.apparatus.objects.enums.Level;
 
 import java.io.IOException;
@@ -15,17 +13,20 @@ public class Master extends GlobalVars {
     private static final String JAR_PATH = Master.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 
     public static void main(String[] args) {
-        gson = new GsonBuilder().create();
-        config = Database.loadConfig();
-        Database.saveConfig();
-        do {
-            Slave slave = create
-        } while (slave.waitFor() != EXIT_CODE)
+        try {
+            Process slave;
+            do {
+                slave = createSlave();
+            } while (slave.waitFor() != EXIT_CODE);
+        } catch (InterruptedException ex) {
+            logger.log("Slave inturrupted! Shutting down...", Level.CRITICAL);
+            System.exit(0);
+        }
     }
 
-    public static Slave createSlave(String token) {
+    public static Process createSlave() {
         try {
-            return new ProcessBuilder("java", "-cp", JAR_PATH, "com.austinv11.d4j.bot.SlaveKt").inheritIO().start();
+            return new ProcessBuilder("java", "-cp", JAR_PATH, "com.xaanit.apparatus.SlaveJava").inheritIO().start();
         } catch (IOException ex) {
             logger.log("Slave creation failed....", Level.CRITICAL);
             System.exit(0);

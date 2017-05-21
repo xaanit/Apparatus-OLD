@@ -1,5 +1,7 @@
 package me.xaanit.apparatus;
 
+import com.google.gson.GsonBuilder;
+import me.xaanit.apparatus.database.Database;
 import me.xaanit.apparatus.objects.enums.Level;
 import me.xaanit.apparatus.objects.interfaces.IListener;
 import org.reflections.Reflections;
@@ -14,6 +16,9 @@ public class Slave {
 
 
     public static void main(String[] args) {
+        GlobalVars.gson = new GsonBuilder().create();
+        GlobalVars.config = Database.loadConfig();
+        Database.saveConfig();
         GlobalVars.client = new ClientBuilder().withRecommendedShardCount()
                 .withToken(GlobalVars.config.getToken()).build();
         initListeners();
