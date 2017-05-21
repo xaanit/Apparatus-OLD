@@ -1,7 +1,6 @@
 package me.xaanit.apparatus.objects.commands;
 
 import me.xaanit.apparatus.GlobalVars;
-import me.xaanit.apparatus.Master;
 import me.xaanit.apparatus.database.Database;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
@@ -66,6 +65,6 @@ public class Logout implements ICommand {
         em.withFooterText("Took me [ " + (System.currentTimeMillis() - begin) + " ms ] to save [ " + GlobalVars.guilds.size() +" ] guilds.");
         Util.editMessage(m, em.build());
         guild.getShard().logout();
-        Master.getSlave().destroy();
+       System.exit(0);
     }
 }

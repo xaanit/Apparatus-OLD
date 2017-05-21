@@ -12,12 +12,13 @@ import sx.blah.discord.util.EmbedBuilder;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import static me.xaanit.apparatus.GlobalVars.logger;
 
 public class Update {
 
-    private static final String DOWNLOAD_URL = "https://jitpack.io/com/github/austinv11/D4JBot/-SNAPSHOT/D4JBot--SNAPSHOT-all.jar";
+    private static final String DOWNLOAD_URL = "https://jitpack.io/com/github/xaanit/apparatus/-SNAPSHOT/apparatus--SNAPSHOT-all.jar";
 
     public static void execute(IUser user, IChannel channel, IMessage message) {
 
@@ -34,7 +35,7 @@ public class Update {
         File currJar = new File(Master.getJar());
         File temp;
         try {
-           temp =  File.createTempFile("bot", ".jar");
+            temp = File.createTempFile("bot", ".jar");
         } catch (IOException ex) {
             ex.printStackTrace();
             System.exit(0);
@@ -45,11 +46,19 @@ public class Update {
 
         boolean success = false;
         try {
-          //  ProcessBuilder.
+            new ProcessBuilder("wget", DOWNLOAD_URL).inheritIO().start().waitFor(5, TimeUnit.MINUTES);
             success = true;
         } catch (Exception ex) {
+            channel.toggleTypingStatus();
+            temp.renameTo(currJar);
             ex.printStackTrace();
         }
+        if (success) {
+            Util.editMessage(m, em.withDesc("Updated!").build());
+            temp.delete();
+        } else {
+            Util.editMessage(m, em.withDesc("Failed to update!").build()); }
+        System.exit(22);
 
     }
 }

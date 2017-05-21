@@ -1,5 +1,7 @@
 package me.xaanit.apparatus.objects.commands;
 
+import me.xaanit.apparatus.objects.Update;
+import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
 import me.xaanit.apparatus.util.GuildUtil;
@@ -48,6 +50,20 @@ public class Restart implements ICommand {
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
         Util.allChecks(user, guild, this, channel);
 
+        if(args.length > 1)
+            Update.execute(user, channel, message);
 
+        long start = System.currentTimeMillis();
+        EmbedBuilder em = new EmbedBuilder();
+        em.withColor(Util.hexToColor(CColors.BASIC));
+        em.withAuthorIcon(Util.botAva());
+        em.withAuthorName("Restart!!");
+        em.withFooterIcon(user.getAvatarURL());
+        em.withFooterText("Requested by: " + Util.getNameAndDescrim(user));
+        em.withDesc("Restarting the bot... Please wait...");
+        IMessage m = Util.sendMessage(channel, em.build());
+        System.exit(22);
+        em.withDesc("Restarted! Took " + (System.currentTimeMillis() - start) + "ms");
+        Util.editMessage(m, em.build());
     }
 }
