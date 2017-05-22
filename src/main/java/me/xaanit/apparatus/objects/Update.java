@@ -20,7 +20,7 @@ public class Update {
 
     private static final String DOWNLOAD_URL = "https://jitpack.io/com/github/xaanit/apparatus/-SNAPSHOT/apparatus--SNAPSHOT-all.jar";
 
-    public static void execute(IUser user, IChannel channel, IMessage message) {
+    public static boolean execute(IUser user, IChannel channel, IMessage message) {
 
         logger.log("Updating....", Level.INFO);
         EmbedBuilder em = new EmbedBuilder();
@@ -39,14 +39,14 @@ public class Update {
         } catch (IOException ex) {
             ex.printStackTrace();
             System.exit(0);
-            return;
+            return false;
         }
 
         currJar.renameTo(temp);
 
         boolean success = false;
         try {
-            new ProcessBuilder("wget", DOWNLOAD_URL).inheritIO().start().waitFor(5, TimeUnit.MINUTES);
+            new ProcessBuilder("C:\\Users\\Jacob\\Desktop\\wget.exe", DOWNLOAD_URL).inheritIO().start().waitFor(5, TimeUnit.MINUTES);
             success = true;
         } catch (Exception ex) {
             channel.toggleTypingStatus();
@@ -54,11 +54,13 @@ public class Update {
             ex.printStackTrace();
         }
         if (success) {
-            Util.editMessage(m, em.withDesc("Updated!").build());
+            Util.editMessage(m, em.withDesc("Updated! Restarting...").build());
             temp.delete();
+            System.exit(22);
+            return true;
         } else {
-            Util.editMessage(m, em.withDesc("Failed to update!").build()); }
-        System.exit(22);
-
+            Util.editMessage(m, em.withDesc("Failed to update!").build());
+            return false;
+        }
     }
 }

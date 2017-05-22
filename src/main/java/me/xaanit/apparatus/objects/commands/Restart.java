@@ -50,8 +50,9 @@ public class Restart implements ICommand {
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
         Util.allChecks(user, guild, this, channel);
 
-        if(args.length > 1)
-            Update.execute(user, channel, message);
+        if (args.length > 1)
+            if (!Update.execute(user, channel, message))
+                return;
 
         long start = System.currentTimeMillis();
         EmbedBuilder em = new EmbedBuilder();
