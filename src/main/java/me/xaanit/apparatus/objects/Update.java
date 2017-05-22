@@ -46,7 +46,7 @@ public class Update {
 
         boolean success = false;
         try {
-            new ProcessBuilder("C:\\Users\\Jacob\\Desktop\\wget.exe", DOWNLOAD_URL).inheritIO().start().waitFor(5, TimeUnit.MINUTES);
+            new ProcessBuilder("C:\\Users\\Jacob\\Desktop\\wget.exe", DOWNLOAD_URL).inheritIO().start().waitFor(5, TimeUnit.SECONDS);
             success = true;
         } catch (Exception ex) {
             channel.toggleTypingStatus();
