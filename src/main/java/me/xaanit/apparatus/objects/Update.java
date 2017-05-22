@@ -35,6 +35,7 @@ public class Update {
             m = Util.sendMessage(channel, em.build());
         channel.toggleTypingStatus();
         File currJar = new File(Master.getJar());
+        String name = currJar.getName();
         File temp;
         try {
             temp = File.createTempFile("bot", ".jar");
@@ -52,7 +53,7 @@ public class Update {
             success = true;
         } catch (Exception ex) {
             channel.toggleTypingStatus();
-            temp.renameTo(currJar);
+            temp.renameTo(new File(name));
             ex.printStackTrace();
         }
         if (success) {

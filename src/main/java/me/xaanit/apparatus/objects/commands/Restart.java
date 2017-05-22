@@ -43,14 +43,14 @@ public class Restart implements ICommand {
 
     @Override
     public String getInfo() {
-        return "Restarts the bot (and updates it)";
+        return "Restarts the bot (and can update it)";
     }
 
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
         Util.allChecks(user, guild, this, channel);
 
-        if (args.length > 1)
+        if (args[0].toLowerCase().contains("update"))
             if (!Update.execute(user, channel, message))
                 return;
 
@@ -64,7 +64,5 @@ public class Restart implements ICommand {
         em.withDesc("Restarting the bot... Please wait...");
         IMessage m = Util.sendMessage(channel, em.build());
         System.exit(22);
-        em.withDesc("Restarted! Took " + (System.currentTimeMillis() - start) + "ms");
-        Util.editMessage(m, em.build());
     }
 }

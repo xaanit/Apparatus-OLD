@@ -27,7 +27,7 @@ public class Logout implements ICommand {
 
     @Override
     public String[] getAliases() {
-        return new String[] {getName(), "shutdown"};
+        return new String[]{getName(), "shutdown"};
     }
 
     @Override
@@ -58,13 +58,13 @@ public class Logout implements ICommand {
         em.withColor(Util.hexToColor(CColors.BASIC));
         IMessage m = Util.sendMessage(channel, em.build());
         long begin = System.currentTimeMillis();
-        for(long key : GlobalVars.guilds.keySet()) {
+        for (long key : GlobalVars.guilds.keySet()) {
             Database.saveGuild(GlobalVars.guilds.get(key));
         }
         em.withDesc("Guilds saved!");
-        em.withFooterText("Took me [ " + (System.currentTimeMillis() - begin) + " ms ] to save [ " + GlobalVars.guilds.size() +" ] guilds.");
+        em.withFooterText("Took me [ " + (System.currentTimeMillis() - begin) + " ms ] to save [ " + GlobalVars.guilds.size() + " ] guilds.");
         Util.editMessage(m, em.build());
         guild.getShard().logout();
-       System.exit(0);
+        System.exit(GlobalVars.EXIT_CODE);
     }
 }
