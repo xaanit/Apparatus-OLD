@@ -18,9 +18,9 @@ import static me.xaanit.apparatus.GlobalVars.logger;
 
 public class Update {
 
-    private static final String DOWNLOAD_URL = "https://jitpack.io/com/github/xaanit/apparatus/-SNAPSHOT/apparatus--SNAPSHOT-all.jar";
+    private static final String DOWNLOAD_URL = "https://jitpack.io/com/github/xaanit/apparatus/-SNAPSHOT/apparatus--SNAPSHOT.jar";
 
-    public static boolean execute(IUser user, IChannel channel, IMessage message) {
+    public static boolean execute(IUser user, IChannel channel, IMessage message, boolean send) {
 
         logger.log("Updating....", Level.INFO);
         EmbedBuilder em = new EmbedBuilder();
@@ -30,7 +30,9 @@ public class Update {
         em.withFooterIcon(user.getAvatarURL());
         em.withFooterText("Requested by: " + Util.getNameAndDescrim(user));
         em.withDesc("Updating the bot... Please wait...");
-        IMessage m = Util.sendMessage(channel, em.build());
+        IMessage m = null;
+        if (send)
+            m = Util.sendMessage(channel, em.build());
         channel.toggleTypingStatus();
         File currJar = new File(Master.getJar());
         File temp;
@@ -54,13 +56,19 @@ public class Update {
             ex.printStackTrace();
         }
         if (success) {
-            Util.editMessage(m, em.withDesc("Updated! Restarting...").build());
+            if (send)
+                Util.editMessage(m, em.withDesc("Updated! Restarting...").build());
             temp.delete();
             System.exit(22);
             return true;
         } else {
-            Util.editMessage(m, em.withDesc("Failed to update!").build());
+            if (send)
+                Util.editMessage(m, em.withDesc("Failed to update!").build());
             return false;
         }
+    }
+
+    public static boolean execute(IUser user, IChannel channel, IMessage message) {
+        return execute(user, channel, message, true);
     }
 }
