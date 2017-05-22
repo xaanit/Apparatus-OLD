@@ -62,6 +62,7 @@
             <plugin>  <!-- Create sources.jar -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -84,6 +85,11 @@
         </repository>
     </repositories>
     <dependencies>
+        <!--    <dependency>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-source-plugin</artifactId>
+               <version>3.0.1</version>
+           </dependency> -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
