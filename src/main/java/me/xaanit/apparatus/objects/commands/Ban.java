@@ -55,6 +55,6 @@ public class Ban implements ICommand {
 
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
-        Util.sendMessage(channel, "This is an update!");
+        Util.sendMessage(channel, "If you see this, updating worked.");
     }
 }
