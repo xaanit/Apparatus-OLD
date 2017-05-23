@@ -64,7 +64,7 @@ public class Logout implements ICommand {
         em.withDesc("Guilds saved!");
         em.withFooterText("Took me [ " + (System.currentTimeMillis() - begin) + " ms ] to save [ " + GlobalVars.guilds.size() + " ] guilds.");
         Util.editMessage(m, em.build());
-        guild.getShard().logout();
-        System.exit(GlobalVars.EXIT_CODE);
+        GlobalVars.client.logout();
+        System.exit(0);
     }
 }

@@ -14,16 +14,9 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
-import static me.xaanit.apparatus.GlobalVars.logger;
-
 
 public class PermissionsUtil extends MessageUtil {
 
-    /* private static EnumSet<Permissions> makePermissions(Permissions... p) {
-        EnumSet<Permissions> perms = EnumSet.noneOf(Permissions.class);
-        Arrays.asList(p).forEach(perm -> perms.add(perm));
-        return perms;
-    }*/
 
     public static EnumSet<Permissions> makePermissions(EnumSet<Permissions> basic, Permissions... p) {
         Collections.addAll(basic, p);
@@ -35,6 +28,7 @@ public class PermissionsUtil extends MessageUtil {
         perms.add(Permissions.READ_MESSAGES);
         perms.add(Permissions.READ_MESSAGE_HISTORY);
         perms.add(Permissions.EMBED_LINKS);
+        perms.add(Permissions.USE_EXTERNAL_EMOJIS);
         return perms;
     }
 
@@ -66,7 +60,7 @@ public class PermissionsUtil extends MessageUtil {
 
     private static boolean checkUserPerm(IUser user, IGuild guild, ICommand command) {
         if (command.getType() == CmdType.DEV)
-            return user.getStringID().equals("233611560545812480");
+            return GlobalVars.users.containsKey(user.getLongID()) && GlobalVars.users.get(user.getLongID()).isDev();
         if (guild.getOwnerLongID() == user.getLongID())
             return true;
         if (!GuildUtil.getGuild(guild).getCommand(command.getName()).isRole())
@@ -97,7 +91,7 @@ public class PermissionsUtil extends MessageUtil {
                 logger.log("User [" + Util.getNameAndDescrim(user) + "] tried to use developer command [" + command.getName() + "] on guild [" + guild.getName() + "]", Level.MEDIUM);
                 EmbedBuilder em = new EmbedBuilder();
                 em.withTitle("Error!");
-                em.withDesc("This is a developer command, it can only be run by xaanit.");
+                em.withDesc("This is a developer command, it can only be run by a developer..");
                 em.withFooterIcon(user.getAvatarURL());
                 em.withFooterText("Requested By: " + UserUtil.getNameAndDescrim(user));
                 em.withColor(Util.hexToColor(CColors.ERROR));

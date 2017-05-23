@@ -12,7 +12,7 @@ import static me.xaanit.apparatus.GlobalVars.logger;
 /**
  * Created by Jacob on 4/21/2017.
  */
-public class Slave {
+public class Apparatus {
 
 
     public static void main(String[] args) {

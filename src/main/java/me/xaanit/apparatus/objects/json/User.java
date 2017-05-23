@@ -29,4 +29,9 @@ public class User {
     public PatronLevel getLevel() {
         return level;
     }
+
+    @Override
+    public String toString() {
+        return String.format("[id=%s[dev=%s[patronLevel=%s]]]", id, isDev, level.toString());
+    }
 }

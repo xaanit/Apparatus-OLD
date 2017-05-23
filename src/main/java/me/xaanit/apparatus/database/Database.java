@@ -1,10 +1,10 @@
 package me.xaanit.apparatus.database;
 
-import com.google.gson.Gson;
 import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.objects.enums.Level;
 import me.xaanit.apparatus.objects.json.Config;
 import me.xaanit.apparatus.objects.json.Guild;
+import me.xaanit.apparatus.objects.json.User;
 import sx.blah.discord.handle.obj.IGuild;
 
 import java.io.File;
@@ -26,7 +26,7 @@ public class Database {
                 file.createNewFile();
                 return new Config(true);
             }
-            return new Gson().fromJson(new FileReader(file), Config.class);
+            return GlobalVars.gson.fromJson(new FileReader(file), Config.class);
         } catch (Exception ex) {
             System.exit(0);
             return null;
@@ -41,7 +41,7 @@ public class Database {
             if (!file.exists())
                 file.createNewFile();
             FileWriter fw = new FileWriter(file);
-            String json = new Gson().toJson(GlobalVars.config);
+            String json = GlobalVars.gson.toJson(GlobalVars.config);
             fw.write(json);
             fw.close();
             return true;
@@ -63,7 +63,7 @@ public class Database {
             if (!file.exists())
                 file.createNewFile();
             FileWriter fw = new FileWriter(file);
-            String json = new Gson().toJson(guild);
+            String json = GlobalVars.gson.toJson(guild);
             fw.write(json);
             fw.close();
             return true;
@@ -75,7 +75,7 @@ public class Database {
 
     public static Guild loadGuild(IGuild guild) {
         try {
-            String path =GlobalVars.PATH + "guilds";
+            String path = GlobalVars.PATH + "guilds";
             File file = new File(path + "\\" + guild.getStringID() + ".json");
             if (!file.exists()) {
                 logger.log("Creating new Guild object for guild [ " + guild.getName() + " ] with ID [ " + guild.getStringID() + " ]", Level.INFO);
@@ -83,7 +83,37 @@ public class Database {
             }
             logger.log("Loading guild object for guild [ " + guild.getName() + " ] with ID [ " + guild.getStringID() + " ]", Level.INFO);
 
-            return new Gson().fromJson(new FileReader(file), Guild.class);
+            return GlobalVars.gson.fromJson(new FileReader(file), Guild.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static boolean saveUser(User user) {
+        try {
+            String path = GlobalVars.PATH + "users";
+            new File(path).mkdirs();
+            File file = new File(path + "\\" + user.getId() + ".json");
+            if (!file.exists())
+                file.createNewFile();
+            FileWriter fw = new FileWriter(file);
+            String json = GlobalVars.gson.toJson(user);
+            fw.write(json);
+            fw.close();
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public static User loadUser(long id) {
+        try {
+            String path = GlobalVars.PATH + "users";
+            File file = new File(path + "\\" + id + ".json");
+            User user = GlobalVars.gson.fromJson(new FileReader(file), User.class);
+            logger.log("Loading user object: " + user.toString(), Level.INFO);
+            return user;
         } catch (Exception ex) {
             return null;
         }

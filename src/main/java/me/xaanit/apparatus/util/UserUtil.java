@@ -85,6 +85,10 @@ public class UserUtil extends RoleUtil {
         return null;
     }
 
+    public static IUser getUser(String toLookFor, IMessage message) {
+        return getUser(toLookFor, message, message.getGuild());
+    }
+
 
     /**
      * Returns whether or not the user in question is the bot

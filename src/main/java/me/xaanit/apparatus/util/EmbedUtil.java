@@ -3,6 +3,7 @@ package me.xaanit.apparatus.util;
 import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
+import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
 
@@ -74,5 +75,15 @@ public class EmbedUtil extends ChannelUtil {
                 String.format(Util.BASIC_ALIAS, secondFormat[0]),
                 false);
         return em;
+    }
+
+    public static EmbedObject argumentsError(IUser user) {
+        EmbedBuilder em = new EmbedBuilder();
+        em.withAuthorIcon(Util.botAva());
+        em.withAuthorName("Error");
+        em.withColor(Util.hexToColor(CColors.ERROR));
+        em.withDesc("You need to provide arguments.");
+        em.withFooterText("Requested by: " + Util.getNameAndDescrim(user));
+        return em.build();
     }
 }
