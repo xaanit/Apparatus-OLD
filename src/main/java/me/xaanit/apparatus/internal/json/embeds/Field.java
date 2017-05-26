@@ -1,4 +1,4 @@
-package me.xaanit.apparatus.objects.json.embeds;
+package me.xaanit.apparatus.internal.json.embeds;
 
 /**
  * Created by Jacob on 5/15/2017.
@@ -7,6 +7,14 @@ public class Field {
     private String fieldTitle = "";
     private String fieldValue = "";
     private boolean inline = false;
+
+    public Field() {}
+
+    public Field(String title, String value, boolean inline) {
+        this.fieldTitle = title;
+        this.fieldValue = value;
+        this.inline = inline;
+    }
 
     public String getFieldTitle() {
         return fieldTitle;

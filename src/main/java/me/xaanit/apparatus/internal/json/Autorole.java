@@ -1,4 +1,4 @@
-package me.xaanit.apparatus.objects.json;
+package me.xaanit.apparatus.internal.json;
 
 /**
  * Created by Jacob on 5/17/2017.

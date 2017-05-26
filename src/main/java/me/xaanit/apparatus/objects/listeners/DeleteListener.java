@@ -21,7 +21,7 @@ public class DeleteListener implements IListener {
         IUser user = event.getAuthor();
         IChannel channel = event.getChannel();
 
-        logger.log("User [ " + user.getName() + " ] deleted a message in guild [ " + guild.getName() + " ] in channel [ " + channel.getName() + " ] with content [ " + (event.getMessage().getContent() == null ? "Embed/Attachment" : event.getMessage().getContent()) + " ] ", Level.INFO);
+        logger.log("User [ " + user.getName() + " ] deleted a message in guild [ " + guild == null ? "DM" : guild.getName() + " ] in channel [ " + channel.getName() + " ] with content [ " + (event.getMessage().getContent() == null ? "Embed/Attachment" : event.getMessage().getContent()) + " ] ", Level.INFO);
 
     }
 }

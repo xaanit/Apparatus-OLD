@@ -17,6 +17,7 @@ import java.util.List;
 
 public class PermissionsUtil extends MessageUtil {
 
+    private static IGuild devGuild = null;
 
     public static EnumSet<Permissions> makePermissions(EnumSet<Permissions> basic, Permissions... p) {
         Collections.addAll(basic, p);
@@ -59,8 +60,14 @@ public class PermissionsUtil extends MessageUtil {
     }
 
     private static boolean checkUserPerm(IUser user, IGuild guild, ICommand command) {
-        if (command.getType() == CmdType.DEV)
-            return GlobalVars.users.containsKey(user.getLongID()) && GlobalVars.users.get(user.getLongID()).isDev();
+        if (getGuild(guild).isDevOverride())
+            if (isDev(user))
+                return true;
+        if (command.getType() == CmdType.DEV) {
+            return isDev(user);
+        }
+        if (command.requiresPatron())
+            return isPatron(user);
         if (guild.getOwnerLongID() == user.getLongID())
             return true;
         if (!GuildUtil.getGuild(guild).getCommand(command.getName()).isRole())
@@ -73,6 +80,17 @@ public class PermissionsUtil extends MessageUtil {
         }
         return false;
     }
+
+    public static boolean isDev(IUser user) {
+        if (devGuild == null)
+            devGuild = GlobalVars.client.getGuildByID(Long.parseUnsignedLong("313732137792569344"));
+        return user.getRolesForGuild(devGuild).stream().filter(r -> r.getLongID() == Long.parseUnsignedLong("313732279258185730")).count() > 0;
+    }
+
+    private static boolean isPatron(IUser user) {
+        return isDev(user) || user.getRolesForGuild(devGuild).stream().filter(r -> Util.equalsAny(r, 313909639161053185L, 313909493060861952L, 313909773546291203L, 313909405982916610L)).count() > 0;
+    }
+
 
     public static void allChecks(IUser user, IGuild guild, ICommand command, IChannel channel) {
         logger.log("Doing all checks on command [" + command.getName()

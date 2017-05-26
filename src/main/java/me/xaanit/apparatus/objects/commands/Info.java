@@ -295,7 +295,7 @@ public class Info implements ICommand {
         em.appendField("Hoisted", role.isHoisted() + "", true);
         em.appendField("Mentionable", role.isMentionable() + "", true);
         em.appendField("Permissions", role.getPermissions() + "", true);
-        em.appendField("Users", users.substring(0, users.length() - 2), true);
+        em.appendField("Users", users.length() == 0 ? "No Users" : users.substring(0, users.length() - 2), true);
         return MessageUtil.sendMessage(channel, em.build());
 
 

@@ -67,6 +67,15 @@ public interface ICommand {
     }
 
     /**
+     * Gets if the command requires a Patron role or not.
+     *
+     * @return {@code true} if it does; otherwise {@code false}
+     */
+    default boolean requiresPatron() {
+        return false;
+    }
+
+    /**
      * The info text for this command
      *
      * @return The info string

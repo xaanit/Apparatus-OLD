@@ -2,9 +2,9 @@ package me.xaanit.apparatus.database;
 
 import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.objects.enums.Level;
-import me.xaanit.apparatus.objects.json.Config;
-import me.xaanit.apparatus.objects.json.Guild;
-import me.xaanit.apparatus.objects.json.User;
+import me.xaanit.apparatus.internal.json.Config;
+import me.xaanit.apparatus.internal.json.Guild;
+import me.xaanit.apparatus.internal.json.User;
 import sx.blah.discord.handle.obj.IGuild;
 
 import java.io.File;

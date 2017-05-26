@@ -2,6 +2,7 @@ package me.xaanit.apparatus.util;
 
 import me.xaanit.apparatus.GlobalVars;
 import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.IUser;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -36,9 +37,25 @@ public class Util extends UserUtil {
         return list.size() == 0 ? "None" : builder.toString().substring(0, builder.toString().lastIndexOf(","));
     }
 
+    public static String getShipName(IUser user, IUser user1) {
+        String s1 = user1.getName();
+        String s2 = user.getName();
+        String s11 = s1.substring(0, (int) Math.floor(s1.length() / 2));
+        String s22 = s2.substring((int) Math.floor(s2.length() / 2), s2.length());
+        String newName = s11 + s22;
+        return newName;
+    }
+
 
     public static String botAva() {
         return GlobalVars.client.getOurUser().getAvatarURL();
+    }
+
+    public static boolean equalsAny(IRole role, long... id) {
+        for (long l : id)
+            if (l == role.getLongID())
+                return true;
+        return false;
     }
 
 }

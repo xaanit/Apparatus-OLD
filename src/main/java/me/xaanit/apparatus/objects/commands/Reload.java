@@ -5,7 +5,7 @@ import me.xaanit.apparatus.database.Database;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
-import me.xaanit.apparatus.objects.json.Guild;
+import me.xaanit.apparatus.internal.json.Guild;
 import me.xaanit.apparatus.util.GuildUtil;
 import me.xaanit.apparatus.util.Util;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;

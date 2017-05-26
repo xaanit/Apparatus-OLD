@@ -3,16 +3,20 @@ package me.xaanit.apparatus.objects.listeners;
 import com.michaelwflaherty.cleverbotapi.CleverBotQuery;
 import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.database.Database;
+import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.exceptions.PermissionsException;
 import me.xaanit.apparatus.objects.interfaces.IListener;
 import me.xaanit.apparatus.util.Util;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MentionEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessageUpdateEvent;
 import sx.blah.discord.handle.obj.*;
+import sx.blah.discord.util.EmbedBuilder;
 
 import java.io.IOException;
 
+import static me.xaanit.apparatus.GlobalVars.client;
 import static me.xaanit.apparatus.GlobalVars.commands;
 
 
@@ -30,20 +34,42 @@ public class CommandListener implements IListener {
         IGuild guild = event.getGuild();
         String content = message.getContent();
 
+        if (content.isEmpty()) {
+            return;
+        }
+        String[] args = content.split(" ");
+
         if (user.isBot())
             return;
+
 
         if (GlobalVars.config.getBlacklistedUsers().contains(user.getLongID())) {
             return;
         }
+        if (content.startsWith("❌")) {
+            if (!Util.isDev(user))
+                return;
+            if (args.length != 1) {
+                IMessage m = null;
+                try {
+                    m = client.getMessageByID(Long.parseUnsignedLong(args[1]));
+                } catch (NumberFormatException ex) {
+                    return;
+                }
 
-        if (content.isEmpty()) {
-            return;
+                if (m == null)
+                    return;
+                Util.deleteMessage(m);
+                EmbedBuilder em = Util.basicEmbed(user, "Message Deletion", CColors.BASIC);
+                em.withDesc("Deleted message by Apparatus with ID " + args[1]);
+                Util.sendMessage(channel, em.build());
+                return;
+            }
         }
+
         if (!content.startsWith(Util.getGuild(guild).getPrefix())) {
             return;
         }
-        String[] args = content.split(" ");
         try {
             String look = args[0].substring(Util.getGuild(guild).getPrefix().length()).toLowerCase();
             if (commands.containsKey(look))
@@ -88,6 +114,14 @@ public class CommandListener implements IListener {
         } catch (PermissionsException ex) {
 
         }
+    }
+
+    @EventSubscriber
+    public void onCommand(MessageUpdateEvent event) {
+        if(!Util.isDev(event.getAuthor()))
+            return;
+
+        event.getClient().getDispatcher().dispatch(new MessageReceivedEvent(event.getNewMessage()));
     }
 
     public String[] copy(String[] args, int start) {

@@ -1,6 +1,6 @@
-package me.xaanit.apparatus.objects.json;
+package me.xaanit.apparatus.internal.json;
 
-import me.xaanit.apparatus.objects.json.embeds.CustomEmbed;
+import me.xaanit.apparatus.internal.json.embeds.CustomEmbed;
 
 import java.util.ArrayList;
 import java.util.List;

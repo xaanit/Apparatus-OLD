@@ -1,7 +1,6 @@
 package me.xaanit.apparatus.objects.listeners;
 
 import me.xaanit.apparatus.GlobalVars;
-import me.xaanit.apparatus.database.Database;
 import me.xaanit.apparatus.objects.enums.Level;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
 import me.xaanit.apparatus.objects.interfaces.IListener;
@@ -11,8 +10,6 @@ import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.util.RequestBuffer;
-
-import java.io.File;
 
 import static me.xaanit.apparatus.GlobalVars.logger;
 
@@ -37,17 +34,9 @@ public class ReadyListener implements IListener {
         RequestBuffer.request(() -> GlobalVars.client.streaming("@Apparatus prefix | " + GlobalVars.client.getGuilds().size() + " guild(s)", "https://www.twitch.tv"));
         //RequestBuffer.request(() -> GlobalVars.client.changeAvatar(Image.forUrl("png", "https://cdn.discordapp.com/attachments/245615097559515136/313983485775708160/XanXan.png")));
         initCommands();
-        initUsers();
         logger.log("Bot ready!", Level.INFO);
     }
 
-
-    private void initUsers() {
-        for(File file : new File(GlobalVars.PATH + "users").listFiles()) {
-            long id = Long.parseUnsignedLong(file.getName().replace(".json", ""));
-            GlobalVars.users.put(id, Database.loadUser(id));
-        }
-    }
 
     private void initCommands() {
         logger.log("Initialising commands....", Level.INFO);
@@ -58,6 +47,9 @@ public class ReadyListener implements IListener {
                 if (command.getAliases().length != 0) {
                     for (String str : command.getAliases()) {
                         GlobalVars.commands.putIfAbsent(str.toLowerCase(), command);
+                        String lol = str + ":" + command.getName();
+                        if(!GlobalVars.commandNames.contains(lol))
+                            GlobalVars.commandNames.add(lol);
                         logger.log("Loaded command \"" + command.getName() + "\" with alias \"" + str + "\"", Level.INFO);
                     }
                 }

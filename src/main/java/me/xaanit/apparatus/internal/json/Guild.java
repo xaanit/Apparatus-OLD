@@ -1,8 +1,8 @@
-package me.xaanit.apparatus.objects.json;
+package me.xaanit.apparatus.internal.json;
 
 import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
-import me.xaanit.apparatus.objects.json.embeds.CustomEmbed;
+import me.xaanit.apparatus.internal.json.embeds.CustomEmbed;
 import sx.blah.discord.handle.obj.IGuild;
 
 import java.util.ArrayList;
@@ -199,5 +199,21 @@ public class Guild {
 
     public void setWelcomeOn(boolean welcomeOn) {
         this.welcomeOn = welcomeOn;
+    }
+
+    public boolean isDevOverride() {
+        return devOverride;
+    }
+
+    public void setDevOverride(boolean devOverride) {
+        this.devOverride = devOverride;
+    }
+
+    public boolean isCrashReports() {
+        return crashReports;
+    }
+
+    public void setCrashReports(boolean crashReports) {
+        this.crashReports = crashReports;
     }
 }

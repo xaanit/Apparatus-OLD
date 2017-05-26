@@ -1,4 +1,4 @@
-package me.xaanit.apparatus.objects.json.embeds;
+package me.xaanit.apparatus.internal.json.embeds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +21,24 @@ public class CustomEmbed {
     private String footerText = "";
     private boolean includeTimestamp = false;
 
+    public CustomEmbed() {
+    }
+
+    public CustomEmbed(String authorIcon, String authorName, String authorURL, String thumbnail, String title, String titleURL, String desc, List<Field> fields, String image, String colorHex, String footerIcon, String footerText, boolean includeTimestamp) {
+        this.authorIcon = authorIcon;
+        this.authorName = authorName;
+        this.authorURL = authorURL;
+        this.thumbnail = thumbnail;
+        this.title = title;
+        this.titleURL = titleURL;
+        this.desc = desc;
+        this.fields.addAll(fields);
+        this.image = image;
+        this.colorHex = colorHex;
+        this.footerIcon = footerIcon;
+        this.footerText = footerText;
+        this.includeTimestamp = includeTimestamp;
+    }
 
     public String getAuthorIcon() {
         return authorIcon;

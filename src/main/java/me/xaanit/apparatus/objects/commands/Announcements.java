@@ -24,6 +24,7 @@ public class Announcements implements ICommand {
     private IChannel announcements = null;
     private IChannel updates = null;
     private IChannel todo = null;
+
     @Override
     public String getName() {
         return "announcements";
@@ -41,7 +42,7 @@ public class Announcements implements ICommand {
 
     @Override
     public EmbedObject getHelp(IUser user, IGuild guild) {
-        EmbedBuilder em = Util.addToHelpEmbed(this, user, new String[]{GuildUtil.getGuild(guild).getPrefix(), getName()}, new String[]{Arrays.toString(getAliases())
+        EmbedBuilder em = Util.addToHelpEmbed(this, user, new String[]{GuildUtil.getGuild(guild).getPrefix(), getName() + " [all]"}, new String[]{Arrays.toString(getAliases())
                 .replaceAll(getName() + ",\\s", "")});
         return em.build();
     }
@@ -55,11 +56,26 @@ public class Announcements implements ICommand {
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
         Util.allChecks(user, guild, this, channel);
 
-       while (announcements == null || updates == null || todo == null) {
+        while (announcements == null || updates == null || todo == null) {
             announcements = GlobalVars.client.getChannelByID(Long.parseUnsignedLong("313745078340419585"));
             updates = GlobalVars.client.getChannelByID(Long.parseUnsignedLong("313745091619454979"));
-            todo =  GlobalVars.client.getChannelByID(Long.parseUnsignedLong("313812891939635240"));
+            todo = GlobalVars.client.getChannelByID(Long.parseUnsignedLong("313812891939635240"));
         }
+
+        boolean sendA = false;
+        boolean sendB = false;
+        boolean sendT = false;
+        if (args.length > 1) {
+            sendA = true;
+            sendT = sendB = sendA;
+        }
+
+        if (args[0].toLowerCase().contains("announce"))
+            sendA = true;
+        else if (args[0].toLowerCase().contains("update"))
+            sendB = true;
+        else
+            sendT = true;
 
         List<IMessage> am = announcements.getMessageHistoryFrom(LocalDateTime.now(), 1);
         String ams = am.isEmpty() ? "No current announcements." : am.get(0).getContent();
@@ -72,8 +88,11 @@ public class Announcements implements ICommand {
         em.withColor(Util.hexToColor(CColors.BASIC));
         em.withAuthorName("Announcements!");
         em.withAuthorIcon(Util.botAva());
+        if(sendA)
         em.appendField("Announcements", ams.length() > 1024 ? ams.substring(0, 1021) + "..." : ams, false);
+        if(sendB)
         em.appendField("Updates", ums.length() > 1024 ? ums.substring(0, 1021) + "..." : ums, false);
+        if(sendT)
         em.appendField("TODO", toms.length() > 1024 ? toms.substring(0, 1021) + "..." : toms, false);
         em.withDesc("Things cut off? Join the support server [here!](https://discord.gg/SHTbdnJ)");
         em.withFooterIcon(user.getAvatarURL());

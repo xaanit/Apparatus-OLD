@@ -3,7 +3,7 @@ package me.xaanit.apparatus.objects.listeners;
 import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.database.Database;
 import me.xaanit.apparatus.objects.interfaces.IListener;
-import me.xaanit.apparatus.objects.json.Guild;
+import me.xaanit.apparatus.internal.json.Guild;
 import me.xaanit.apparatus.util.Util;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.guild.GuildCreateEvent;

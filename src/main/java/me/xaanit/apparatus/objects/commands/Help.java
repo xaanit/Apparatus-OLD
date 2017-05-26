@@ -67,7 +67,7 @@ public class Help implements ICommand {
                 em.withDesc(res + "\nTo view a catagory do " + Util.getGuild(guild).getPrefix() + "help [type]");
                 this.typeList = em.build();
             }
-            Util.sendMessage(channel, this.typeList);
+            Util.sendMessage(user, this.typeList);
             return;
         }
 
@@ -90,7 +90,7 @@ public class Help implements ICommand {
                     }
                     em.withFooterText(user.getAvatarURL());
                     em.withFooterText("Requested by: " + Util.getNameAndDescrim(user));
-                    Util.sendMessage(channel, em.build());
+                    Util.sendMessage(user, em.build());
                     return;
                 }
             }
@@ -104,10 +104,10 @@ public class Help implements ICommand {
                 em.withColor(Util.hexToColor(CColors.ERROR));
                 em.withAuthorName("Help - Error");
                 em.withAuthorIcon(Util.botAva());
-                em.withDesc("I can't seem to find the command " + args[1] + "in my database. Are you sure you typed it correctly?\n\n*Deletes after 15 seconds*");
+                em.withDesc("I can't seem to find the command " + args[1] + " in my database. Are you sure you typed it correctly?\n\n*Deletes after 15 seconds*");
                 em.withFooterText(user.getAvatarURL());
                 em.withFooterText("Requested by: " + Util.getNameAndDescrim(user));
-                IMessage m = Util.sendMessage(channel, em.build());
+                IMessage m = Util.sendMessage(user, em.build());
                 Util.deleteCommand(m, 15);
                 return;
             }

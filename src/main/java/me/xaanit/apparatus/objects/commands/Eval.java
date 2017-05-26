@@ -4,8 +4,7 @@ import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
-import me.xaanit.apparatus.util.GuildUtil;
-import me.xaanit.apparatus.util.Util;
+import me.xaanit.apparatus.util.*;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
@@ -25,6 +24,13 @@ public class Eval implements ICommand {
 
     private ScriptEngine factory = new ScriptEngineManager().getEngineByName("nashorn");
     private Util util = new Util();
+    private UserUtil userUtil = new UserUtil();
+    private RoleUtil roleUtil = new RoleUtil();
+    private PermissionsUtil permUtil = new PermissionsUtil();
+    private MessageUtil messageUtil = new MessageUtil();
+    private GuildUtil guildUtil = new GuildUtil();
+    private EmbedUtil embedUtil = new EmbedUtil();
+    private ChannelUtil channelUtil = new ChannelUtil();
 
     @Override
     public String getName() {
@@ -66,18 +72,23 @@ public class Eval implements ICommand {
         factory.put("guilds", GlobalVars.guilds);
         factory.put("gson", GlobalVars.gson);
         factory.put("util", util);
+        factory.put("userUtil", userUtil);
+        factory.put("roleUtil", roleUtil);
+        factory.put("permUtil", permUtil);
+        factory.put("messageUtil", messageUtil);
+        factory.put("guildUtil", guildUtil);
+        factory.put("embedUtil", embedUtil);
+        factory.put("channelUtil", channelUtil);
+        factory.put("users", GlobalVars.users);
         factory.put("user", user);
         factory.put("message", message);
         factory.put("command", this);
         factory.put("client", GlobalVars.client);
-        try {
-            factory.eval("var imports = new JavaImporter(java.io, java.lang, java.util, Packages.sx.blah.discord.util, \"\n" +
-                    "                    + \"Packages.sx.blah.discord.handle.obj, sx.blah.discord.util.RequestBuffer, Packages.me.xaanit.apparatus.util);");
-        } catch (Exception ex) {
-
-        }
+        factory.put("commandnames", GlobalVars.commandNames);
 
         try {
+            String imports = "var imports = new JavaImporter(java.io, java.lang, java.util, \"Packages.sx.blah.discord.handle.obj\", \"Packages.sx.blah.discord.util\", \"Packages.me.xaanit.apparatus.util\");";
+            factory.eval(imports);
             o = factory.eval(input);
         } catch (Exception ex) {
             EmbedBuilder em = new EmbedBuilder();

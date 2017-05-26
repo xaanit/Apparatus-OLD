@@ -49,32 +49,13 @@ public class Shardinfo implements ICommand {
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
         Util.allChecks(user, guild, this, channel);
-
-        String top = "+--------------------------------------------------------+";
-        String res = "";
-        String bottom = top;
-        int count = 0;
+        EmbedBuilder em = Util.basicEmbed(user, "Shard info!", CColors.BASIC);
         for (IShard shard : GlobalVars.client.getShards()) {
             String temp = "";
-            temp += "| Shard #" + shard.getInfo()[0] + " | " + shard.getGuilds().size() + " guild(s) | " + shard.getUsers().size() + " user(s) | " + shard.getChannels().size() + " channel(s)";
-            temp += spacesPadding((top.length() - temp.length()) - 1);
-            temp += "|" + (count == GlobalVars.client.getShardCount() - 1 ? "" : "\n");
-            res += temp;
-            count++;
+            temp += " Shard #" + shard.getInfo()[0] + " | " + shard.getGuilds().size() + " guild(s) | " + shard.getUsers().size() + " user(s) | " + shard.getChannels().size() + " channel(s)";
+            em.appendDesc(temp + "\n");
         }
-
-        EmbedBuilder em = new EmbedBuilder();
-        em.withColor(Util.hexToColor(CColors.BASIC));
-        em.withAuthorIcon(Util.botAva());
-        em.withAuthorName("Shard info");
-        em.withDesc(top + "\n" + res + "\n" + bottom);
         Util.sendMessage(channel, em.build());
     }
 
-    public static String spacesPadding(int length) {
-        String res = "";
-        for (int i = 0; i < length; i++)
-            res += " ";
-        return res;
-    }
 }

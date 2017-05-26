@@ -7,24 +7,23 @@ import me.xaanit.apparatus.objects.interfaces.IListener;
 import org.reflections.Reflections;
 import sx.blah.discord.api.ClientBuilder;
 
-import static me.xaanit.apparatus.GlobalVars.logger;
-
 /**
  * Created by Jacob on 4/21/2017.
  */
-public class Apparatus {
+public class Apparatus extends GlobalVars{
 
 
     public static void main(String[] args) {
-        GlobalVars.gson = new GsonBuilder().create();
-        GlobalVars.config = Database.loadConfig();
-        Database.saveConfig();
-        GlobalVars.client = new ClientBuilder().withRecommendedShardCount()
-                .withToken(GlobalVars.config.getToken()).build();
-        initListeners();
-        logger.log("Logging in...", Level.INFO);
-        GlobalVars.client.login();
-        logger.log("Logged in!", Level.INFO);
+            gson = new GsonBuilder().create();
+            config = Database.loadConfig();
+            Database.saveConfig();
+            client = new ClientBuilder().withRecommendedShardCount()
+                    .withToken(GlobalVars.config.getToken()).build();
+            initListeners();
+            logger.log("Logging in...", Level.INFO);
+            client.login();
+            logger.log("Logged in!", Level.INFO);
+
 
     }
 

@@ -1,4 +1,4 @@
-package me.xaanit.apparatus.objects.json;
+package me.xaanit.apparatus.internal.json;
 
 import me.xaanit.apparatus.objects.enums.PatronLevel;
 import sx.blah.discord.handle.obj.IUser;

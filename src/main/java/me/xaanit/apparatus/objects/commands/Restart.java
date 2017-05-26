@@ -1,10 +1,12 @@
 package me.xaanit.apparatus.objects.commands;
 
+import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
 import me.xaanit.apparatus.util.GuildUtil;
 import me.xaanit.apparatus.util.Util;
+import sx.blah.discord.api.IShard;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
@@ -61,6 +63,32 @@ public class Restart implements ICommand {
             return;
         }
 
+        int shard = -1;
+        try {
+            shard = Integer.parseInt(args[1]);
+        } catch (NumberFormatException ex) {
+            EmbedBuilder em = new EmbedBuilder();
+            em.withColor(Util.hexToColor(CColors.ERROR));
+            em.withAuthorIcon(Util.botAva());
+            em.withAuthorName("Restart!!");
+            em.withFooterIcon(user.getAvatarURL());
+            em.withFooterText("Requested by: " + Util.getNameAndDescrim(user));
+            em.withDesc("You must provide a valid number!");
+            Util.sendMessage(channel, em.build());
+            return;
+        }
+        if(shard >= GlobalVars.client.getShardCount()) {
+            EmbedBuilder em = new EmbedBuilder();
+            em.withColor(Util.hexToColor(CColors.ERROR));
+            em.withAuthorIcon(Util.botAva());
+            em.withAuthorName("Restart!!");
+            em.withFooterIcon(user.getAvatarURL());
+            em.withFooterText("Requested by: " + Util.getNameAndDescrim(user));
+            em.withDesc("Said shard doesn't exist!");
+            Util.sendMessage(channel, em.build());
+            return;
+        }
+
         long start = System.currentTimeMillis();
         EmbedBuilder em = new EmbedBuilder();
         em.withColor(Util.hexToColor(CColors.BASIC));
@@ -68,7 +96,12 @@ public class Restart implements ICommand {
         em.withAuthorName("Restart!!");
         em.withFooterIcon(user.getAvatarURL());
         em.withFooterText("Requested by: " + Util.getNameAndDescrim(user));
-        em.withDesc("Restarting the bot... Please wait...");
+        em.withDesc("Restarting shard " + shard + "...");
         IMessage m = Util.sendMessage(channel, em.build());
+        IShard s = GlobalVars.client.getShards().get(shard);
+        s.logout();
+        s.login();
+        em.withDesc("Shard restarted! Took " + (System.currentTimeMillis() - start) + "ms");
+        Util.editMessage(m, em.build());
     }
 }

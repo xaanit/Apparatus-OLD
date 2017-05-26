@@ -1,4 +1,4 @@
-package me.xaanit.apparatus.objects.json;
+package me.xaanit.apparatus.internal.json;
 
 import java.util.ArrayList;
 import java.util.List;
