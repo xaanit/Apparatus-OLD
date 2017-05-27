@@ -97,6 +97,7 @@ public class CommandListener implements IListener {
         if (!channel.getModifiedPermissions(GlobalVars.client.getOurUser()).contains(Permissions.SEND_MESSAGES)) return;
         if (!oldArgs[0].replaceAll("<@(!)?305407264099926016>", "").isEmpty()) return;
         if (oldArgs.length == 1) return;
+        if (GlobalVars.config.getBlacklistedUsers().contains(user.getLongID())) return;
         String[] args = copy(oldArgs, 1);
 
         if (args[0].equalsIgnoreCase("prefix")) {
@@ -118,7 +119,7 @@ public class CommandListener implements IListener {
 
     @EventSubscriber
     public void onCommand(MessageUpdateEvent event) {
-        if(!Util.isDev(event.getAuthor()))
+        if (!Util.isDev(event.getAuthor()))
             return;
 
         event.getClient().getDispatcher().dispatch(new MessageReceivedEvent(event.getNewMessage()));

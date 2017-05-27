@@ -149,14 +149,14 @@ public class EmbedUtil extends ChannelUtil {
                 case "authoricon": {
                     if (!res.isEmpty()) {
                         authorIcon = res;
-                        break;
                     }
+                    break;
                 }
                 case "authorname": {
                     if (!res.isEmpty()) {
                         authorName = res;
-                        break;
                     }
+                    break;
                 }
                 case "authorurl": {
                     if (!res.isEmpty()) {
@@ -167,20 +167,20 @@ public class EmbedUtil extends ChannelUtil {
                 case "thumbnail": {
                     if (!res.isEmpty()) {
                         thumbnail = res;
-                        break;
                     }
+                    break;
                 }
                 case "title": {
                     if (!res.isEmpty()) {
                         title = res;
-                        break;
                     }
+                    break;
                 }
                 case "titleurl": {
                     if (!res.isEmpty()) {
                         titleURL = res;
-                        break;
                     }
+                    break;
                 }
                 case "description": {
                     if (!res.isEmpty()) {
@@ -188,8 +188,8 @@ public class EmbedUtil extends ChannelUtil {
                             throw new IllegalArgumentException(
                                     "The Description can only be a max of 2048 chars! Yours is " + res.length());
                         description = res;
-                        break;
                     }
+                    break;
                 }
                 case "fieldtitle": {
                     if (!res.isEmpty()) {

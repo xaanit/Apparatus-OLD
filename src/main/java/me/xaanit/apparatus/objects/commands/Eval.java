@@ -17,6 +17,8 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.util.Arrays;
 
+import static me.xaanit.apparatus.util.Util.*;
+
 /**
  * Created by Jacob on 5/15/2017.
  */
@@ -50,7 +52,7 @@ public class Eval implements ICommand {
 
     @Override
     public EmbedObject getHelp(IUser user, IGuild guild) {
-        EmbedBuilder em = Util.addToHelpEmbed(this, user, new String[]{GuildUtil.getGuild(guild).getPrefix(), getName() + " <expression>"}, new String[]{Arrays.toString(getAliases())
+        EmbedBuilder em = addToHelpEmbed(this, user, new String[]{getGuild(guild).getPrefix(), getName() + " <expression>"}, new String[]{Arrays.toString(getAliases())
                 .replaceAll(getName() + ",\\s", "")});
         return em.build();
     }
@@ -62,9 +64,9 @@ public class Eval implements ICommand {
 
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
-        Util.allChecks(user, guild, this, channel);
+        allChecks(user, guild, this, channel);
 
-        String input = message.getContent().substring((Util.getGuild(guild).getPrefix() + "eval").length()).replaceAll("`", "");
+        String input = message.getContent().substring((getGuild(guild).getPrefix() + "eval").length()).replaceAll("`", "");
         Object o = null;
         factory.put("guild", guild);
         factory.put("channel", channel);
@@ -92,22 +94,22 @@ public class Eval implements ICommand {
             o = factory.eval(input);
         } catch (Exception ex) {
             EmbedBuilder em = new EmbedBuilder();
-            em.withAuthorIcon(Util.botAva());
+            em.withAuthorIcon(botAva());
             em.withAuthorName("Error");
-            em.withColor(Util.hexToColor(CColors.ERROR));
+            em.withColor(hexToColor(CColors.ERROR));
             em.withDesc(ex.getMessage());
             em.withFooterText("Eval failed");
-            Util.sendMessage(channel, em.build());
+            sendMessage(channel, em.build());
             return;
         }
         EmbedBuilder em = new EmbedBuilder();
-        em.withAuthorIcon(Util.botAva());
+        em.withAuthorIcon(botAva());
         em.withAuthorName("Success!");
-        em.withColor(Util.hexToColor(CColors.BASIC));
+        em.withColor(hexToColor(CColors.BASIC));
         em.withTitle("Evaluation output.");
         em.withDesc(o == null ? "No output, object is null" : o.toString());
         em.appendField("Input", "```java\n" + input + "\n```", false);
         em.withFooterText("Eval successful!");
-        Util.sendMessage(channel, em.build());
+        sendMessage(channel, em.build());
     }
 }

@@ -3,8 +3,6 @@ package me.xaanit.apparatus.objects.commands;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
-import me.xaanit.apparatus.util.GuildUtil;
-import me.xaanit.apparatus.util.Util;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
@@ -14,6 +12,8 @@ import sx.blah.discord.util.EmbedBuilder;
 
 import java.time.ZoneOffset;
 import java.util.Arrays;
+
+import static me.xaanit.apparatus.util.Util.*;
 
 /**
  * Created by Jacob on 5/21/2017.
@@ -36,7 +36,7 @@ public class Ping implements ICommand {
 
     @Override
     public EmbedObject getHelp(IUser user, IGuild guild) {
-        EmbedBuilder em = Util.addToHelpEmbed(this, user, new String[]{GuildUtil.getGuild(guild).getPrefix(), getName()}, new String[]{Arrays.toString(getAliases())
+        EmbedBuilder em = addToHelpEmbed(this, user, new String[]{getGuild(guild).getPrefix(), getName()}, new String[]{Arrays.toString(getAliases())
                 .replaceAll(getName() + ",\\s", "")});
         return em.build();
     }
@@ -48,18 +48,18 @@ public class Ping implements ICommand {
 
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
-        Util.allChecks(user, guild, this, channel);
+        allChecks(user, guild, this, channel);
 
-        IMessage m = Util.sendMessage(channel, "Pong!");
+        IMessage m = sendMessage(channel, "Pong!");
 
         long diff = m.getTimestamp().toInstant(ZoneOffset.UTC).toEpochMilli() - message.getTimestamp().toInstant(ZoneOffset.UTC).toEpochMilli();
         EmbedBuilder em = new EmbedBuilder();
-        em.withAuthorIcon(Util.botAva());
-        em.withColor(Util.hexToColor(CColors.BASIC));
+        em.withAuthorIcon(botAva());
+        em.withColor(hexToColor(CColors.BASIC));
         em.withAuthorName("Ping! Stats");
         em.withDesc("Time in between messages: " + diff + "ms.\nTime it took the Rest API to get back to me: " + guild.getShard().getResponseTime() + "ms");
         em.withFooterIcon(user.getAvatarURL());
-        em.withFooterText("Requested by: " + Util.getNameAndDescrim(user));
-        Util.editMessage(m, em.build());
+        em.withFooterText("Requested by: " + getNameAndDescrim(user));
+        editMessage(m, em.build());
     }
 }

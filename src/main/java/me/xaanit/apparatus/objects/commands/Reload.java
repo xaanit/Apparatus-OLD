@@ -6,8 +6,6 @@ import me.xaanit.apparatus.internal.json.Guild;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
-import me.xaanit.apparatus.util.GuildUtil;
-import me.xaanit.apparatus.util.Util;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
@@ -17,6 +15,8 @@ import sx.blah.discord.util.EmbedBuilder;
 
 import java.io.File;
 import java.util.Arrays;
+
+import static me.xaanit.apparatus.util.Util.*;
 
 /**
  * Created by Jacob on 5/14/2017.
@@ -39,7 +39,7 @@ public class Reload implements ICommand {
 
     @Override
     public EmbedObject getHelp(IUser user, IGuild guild) {
-        EmbedBuilder em = Util.addToHelpEmbed(this, user, new String[]{GuildUtil.getGuild(guild).getPrefix(), getName() + " <section>"}, new String[]{Arrays.toString(getAliases())
+        EmbedBuilder em = addToHelpEmbed(this, user, new String[]{getGuild(guild).getPrefix(), getName() + " <section>"}, new String[]{Arrays.toString(getAliases())
                 .replaceAll(getName() + ",\\s", "")});
         return em.build();
     }
@@ -51,12 +51,12 @@ public class Reload implements ICommand {
 
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
-        Util.allChecks(user, guild, this, channel);
+        allChecks(user, guild, this, channel);
 
         if (args.length == 1) {
-            EmbedBuilder em = Util.basicEmbed(user, "Error", CColors.ERROR);
+            EmbedBuilder em = basicEmbed(user, "Error", CColors.ERROR);
             em.withDesc("Please add an argument.");
-            Util.sendMessage(channel, em.build());
+            sendMessage(channel, em.build());
             return;
         }
 
@@ -75,13 +75,13 @@ public class Reload implements ICommand {
                 }
             }
             EmbedBuilder em = new EmbedBuilder();
-            em.withColor(Util.hexToColor(CColors.BASIC));
-            em.withAuthorIcon(Util.botAva());
+            em.withColor(hexToColor(CColors.BASIC));
+            em.withAuthorIcon(botAva());
             em.withAuthorName("Reload");
             em.withDesc("Reloaded [ " + s + " ] guilds, removed [ " + f + " ].");
             long diff = System.currentTimeMillis() - now;
             em.withFooterText("Took " + (diff / 1000.0) + " second(s) to attempt to save [ " + GlobalVars.guilds.size() + " ] guilds.");
-            Util.sendMessage(channel, em.build());
+            sendMessage(channel, em.build());
             return;
         }
 
@@ -93,9 +93,9 @@ public class Reload implements ICommand {
                     pruned++;
                 }
             }
-            EmbedBuilder em = Util.basicEmbed(user, "Prune", CColors.BASIC);
+            EmbedBuilder em = basicEmbed(user, "Prune", CColors.BASIC);
             em.withDesc("Pruned [ " + pruned + " ] guilds.");
-            Util.sendMessage(channel, em.build());
+            sendMessage(channel, em.build());
         }
 
         if (args[1].equalsIgnoreCase("gcommands")) {
@@ -107,13 +107,13 @@ public class Reload implements ICommand {
                 GlobalVars.guilds.put(key, g);
             }
             EmbedBuilder em = new EmbedBuilder();
-            em.withColor(Util.hexToColor(CColors.BASIC));
-            em.withAuthorIcon(Util.botAva());
+            em.withColor(hexToColor(CColors.BASIC));
+            em.withAuthorIcon(botAva());
             em.withAuthorName("Reload");
             em.withDesc("Reloaded commands for all guilds.");
             long diff = System.currentTimeMillis() - now;
             em.withFooterText("Took " + (diff / 1000.0) + " second(s) to reload all commands for all guilds.");
-            Util.sendMessage(channel, em.build());
+            sendMessage(channel, em.build());
         }
 
 

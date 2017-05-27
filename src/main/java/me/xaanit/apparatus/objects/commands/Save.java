@@ -6,7 +6,6 @@ import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.enums.Level;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
-import me.xaanit.apparatus.util.Util;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
@@ -17,6 +16,7 @@ import sx.blah.discord.util.EmbedBuilder;
 import java.util.Arrays;
 
 import static me.xaanit.apparatus.GlobalVars.logger;
+import static me.xaanit.apparatus.util.Util.*;
 
 /**
  * Created by Jacob on 5/15/2017.
@@ -39,7 +39,7 @@ public class Save implements ICommand {
 
     @Override
     public EmbedObject getHelp(IUser user, IGuild guild) {
-        EmbedBuilder em = Util.addToHelpEmbed(this, user, new String[]{Util.getGuild(guild).getPrefix(), getName() + "[guildID]"}, new String[]{Arrays.toString(getAliases())
+        EmbedBuilder em = addToHelpEmbed(this, user, new String[]{getGuild(guild).getPrefix(), getName() + "[guildID]"}, new String[]{Arrays.toString(getAliases())
                 .replaceAll(getName() + ",\\s", "")});
         return em.build();
     }
@@ -51,7 +51,7 @@ public class Save implements ICommand {
 
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
-        Util.allChecks(user, guild, this, channel);
+        allChecks(user, guild, this, channel);
         long now = System.currentTimeMillis();
         if (args.length == 1) {
             int s = 0;
@@ -66,14 +66,14 @@ public class Save implements ICommand {
                 }
             }
             EmbedBuilder em = new EmbedBuilder();
-            em.withColor(Util.hexToColor(CColors.BASIC));
-            em.withAuthorIcon(Util.botAva());
+            em.withColor(hexToColor(CColors.BASIC));
+            em.withAuthorIcon(botAva());
             em.withAuthorName("Save");
             em.withDesc("Saved [ " + s + " ] guild(s).\nFailed to save [ " + f + " ] guild(s)");
             long diff = System.currentTimeMillis() - now;
 
             em.withFooterText("Took " + (diff / 1000.0) + " second(s) to attempt to save [ " + (s + f) + " ] guilds.");
-            Util.sendMessage(channel, em.build());
+            sendMessage(channel, em.build());
             return;
         } else {
             IGuild g;
@@ -81,30 +81,30 @@ public class Save implements ICommand {
                  g = GlobalVars.client.getGuildByID(Long.parseUnsignedLong(args[1]));
             } catch (NumberFormatException ex) {
                 EmbedBuilder em = new EmbedBuilder();
-                em.withColor(Util.hexToColor(CColors.ERROR));
+                em.withColor(hexToColor(CColors.ERROR));
                 em.withAuthorIcon(GlobalVars.client.getApplicationIconURL());
                 em.withAuthorName("Error");
                 em.withDesc("That is not a valid ID");
-                Util.sendMessage(channel, em.build());
+                sendMessage(channel, em.build());
                 return;
             }
             if (g == null) {
                 EmbedBuilder em = new EmbedBuilder();
-                em.withColor(Util.hexToColor(CColors.ERROR));
+                em.withColor(hexToColor(CColors.ERROR));
                 em.withAuthorIcon(GlobalVars.client.getApplicationIconURL());
                 em.withAuthorName("Error");
                 em.withDesc("Guild does not exist.");
                 em.withFooterText("No guild with the ID " + args[1]);
-                Util.sendMessage(channel, em.build());
+                sendMessage(channel, em.build());
                 return;
             }
             EmbedBuilder em = new EmbedBuilder();
-            em.withColor(Util.hexToColor(CColors.BASIC));
+            em.withColor(hexToColor(CColors.BASIC));
             em.withAuthorIcon(GlobalVars.client.getApplicationIconURL());
             em.withAuthorName("Save");
             em.withDesc(Database.saveGuild(g) ? "Guild [ " + g.getName() + " ] saved successfully." : "Failed to save guild [ " + g.getName() + "].");
             em.withFooterText("Saved the guild with the ID " + args[1]);
-            Util.sendMessage(channel, em.build());
+            sendMessage(channel, em.build());
             return;
         }
     }

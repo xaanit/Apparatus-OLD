@@ -4,8 +4,6 @@ import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
-import me.xaanit.apparatus.util.GuildUtil;
-import me.xaanit.apparatus.util.Util;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
@@ -16,6 +14,8 @@ import sx.blah.discord.util.EmbedBuilder;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+
+import static me.xaanit.apparatus.util.Util.*;
 
 /**
  * Created by Jacob on 5/17/2017.
@@ -42,7 +42,7 @@ public class Announcements implements ICommand {
 
     @Override
     public EmbedObject getHelp(IUser user, IGuild guild) {
-        EmbedBuilder em = Util.addToHelpEmbed(this, user, new String[]{GuildUtil.getGuild(guild).getPrefix(), getName() + " [all]"}, new String[]{Arrays.toString(getAliases())
+        EmbedBuilder em = addToHelpEmbed(this, user, new String[]{getGuild(guild).getPrefix(), getName() + " [all]"}, new String[]{Arrays.toString(getAliases())
                 .replaceAll(getName() + ",\\s", "")});
         return em.build();
     }
@@ -54,7 +54,7 @@ public class Announcements implements ICommand {
 
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
-        Util.allChecks(user, guild, this, channel);
+        allChecks(user, guild, this, channel);
 
         while (announcements == null || updates == null || todo == null) {
             announcements = GlobalVars.client.getChannelByID(Long.parseUnsignedLong("313745078340419585"));
@@ -85,9 +85,9 @@ public class Announcements implements ICommand {
         String toms = tom.isEmpty() ? "No current TODO." : tom.get(0).getContent();
 
         EmbedBuilder em = new EmbedBuilder();
-        em.withColor(Util.hexToColor(CColors.BASIC));
+        em.withColor(hexToColor(CColors.BASIC));
         em.withAuthorName("Announcements!");
-        em.withAuthorIcon(Util.botAva());
+        em.withAuthorIcon(botAva());
         if(sendA)
         em.appendField("Announcements", ams.length() > 1024 ? ams.substring(0, 1021) + "..." : ams, false);
         if(sendB)
@@ -96,7 +96,7 @@ public class Announcements implements ICommand {
         em.appendField("TODO", toms.length() > 1024 ? toms.substring(0, 1021) + "..." : toms, false);
         em.withDesc("Things cut off? Join the support server [here!](https://discord.gg/SHTbdnJ)");
         em.withFooterIcon(user.getAvatarURL());
-        em.withFooterText("Requested by: " + Util.getNameAndDescrim(user));
-        Util.sendMessage(channel, em.build());
+        em.withFooterText("Requested by: " + getNameAndDescrim(user));
+        sendMessage(channel, em.build());
     }
 }

@@ -12,13 +12,13 @@ import sx.blah.discord.util.EmbedBuilder;
 
 import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.Random;
+
+import static me.xaanit.apparatus.util.Util.*;
 
 /**
  * Created by Jacob on 5/13/2017.
  */
 public class Ban implements ICommand {
-    private Random random = new Random();
 
     @Override
     public String getName() {
@@ -59,12 +59,12 @@ public class Ban implements ICommand {
 
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
-        Util.allChecks(user, guild, this, channel);
+        allChecks(user, guild, this, channel);
 
         if (args.length == 1) {
-            EmbedBuilder em = Util.basicEmbed(user, "Missing arguments", CColors.ERROR);
+            EmbedBuilder em = basicEmbed(user, "Missing arguments", CColors.ERROR);
             em.withDesc("Please provide a user and an optional reason.");
-            Util.sendMessage(channel, em.build());
+            sendMessage(channel, em.build());
             return;
         }
 
@@ -72,7 +72,19 @@ public class Ban implements ICommand {
         if (args.length == 2) {
             reason = "None provided";
         } else {
-            reason = Util.combineArgs(args, 2, args.length);
+            reason = combineArgs(args, 2, args.length);
         }
+
+        IUser u = getUser(args[1], message);
+        if (u == null) {
+            EmbedBuilder em = basicEmbed(user, "Error", CColors.ERROR);
+            em.withDesc("I could not find the user based on your input.");
+            sendMessage(channel, em.build());
+            return;
+        }
+
+
+
+        
     }
 }

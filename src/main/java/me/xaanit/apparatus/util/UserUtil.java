@@ -31,20 +31,19 @@ public class UserUtil extends RoleUtil {
             try {
                 user.addRole(role);
             } catch (DiscordException ex) {
-                if (!ex.getMessage().contains("cloudflare"))
-                    addRole(user, role);
             }
+        });
+    }
+
+    public static void banUser(IUser user, IGuild guild) {
+        RequestBuffer.request(() -> {
+            guild.banUser(user);
         });
     }
 
     public static void removeRole(IUser user, IRole role) {
         RequestBuffer.request(() -> {
-            try {
                 user.removeRole(role);
-            } catch (DiscordException ex) {
-                if (!ex.getMessage().contains("cloudflare"))
-                    removeRole(user, role);
-            }
         });
     }
 

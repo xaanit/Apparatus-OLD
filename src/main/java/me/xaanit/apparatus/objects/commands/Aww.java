@@ -4,8 +4,6 @@ import me.xaanit.apparatus.api.outside.Requests;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
-import me.xaanit.apparatus.util.GuildUtil;
-import me.xaanit.apparatus.util.Util;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
@@ -14,6 +12,8 @@ import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
 
 import java.util.Arrays;
+
+import static me.xaanit.apparatus.util.Util.*;
 
 /**
  * Created by Jacob on 5/19/2017.
@@ -36,7 +36,7 @@ public class Aww implements ICommand {
 
     @Override
     public EmbedObject getHelp(IUser user, IGuild guild) {
-        EmbedBuilder em = Util.addToHelpEmbed(this, user, new String[]{GuildUtil.getGuild(guild).getPrefix(), getName()}, new String[]{Arrays.toString(getAliases())
+        EmbedBuilder em = addToHelpEmbed(this, user, new String[]{getGuild(guild).getPrefix(), getName()}, new String[]{Arrays.toString(getAliases())
                 .replaceAll(getName() + ",\\s", "")});
         return em.build();
     }
@@ -48,14 +48,14 @@ public class Aww implements ICommand {
 
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
-        Util.allChecks(user, guild, this, channel);
+        allChecks(user, guild, this, channel);
         EmbedBuilder em = new EmbedBuilder();
-        em.withColor(Util.hexToColor(CColors.BASIC));
-        em.withAuthorIcon(Util.botAva());
+        em.withColor(hexToColor(CColors.BASIC));
+        em.withAuthorIcon(botAva());
         em.withAuthorName("Aww!");
         em.withImage(Requests.getCuteImage());
         em.withFooterIcon(user.getAvatarURL());
-        em.withFooterText("Requested By: " + Util.getNameAndDescrim(user));
-        Util.sendMessage(channel, em.build());
+        em.withFooterText("Requested By: " + getNameAndDescrim(user));
+        sendMessage(channel, em.build());
     }
 }

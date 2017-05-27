@@ -4,7 +4,6 @@ import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
-import me.xaanit.apparatus.util.*;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.BotInviteBuilder;
@@ -16,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static me.xaanit.apparatus.util.Util.*;
 
 /**
  * Created by Jacob on 5/15/2017.
@@ -41,7 +42,7 @@ public class Info implements ICommand {
 
     @Override
     public EmbedObject getHelp(IUser user, IGuild guild) {
-        EmbedBuilder em = Util.addToHelpEmbed(this, user, new String[]{GuildUtil.getGuild(guild).getPrefix(), getName() + " [arg]"}, new String[]{Arrays.toString(getAliases())
+        EmbedBuilder em = addToHelpEmbed(this, user, new String[]{getGuild(guild).getPrefix(), getName() + " [arg]"}, new String[]{Arrays.toString(getAliases())
                 .replaceAll(getName() + ",\\s", "")});
         return em.build();
     }
@@ -53,7 +54,7 @@ public class Info implements ICommand {
 
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
-        Util.allChecks(user, guild, this, channel);
+        allChecks(user, guild, this, channel);
         if (args.length == 1) {
             moduleHelp(user, channel, guild);
             return;
@@ -80,10 +81,10 @@ public class Info implements ICommand {
         if (m != null) {
             return;
         }
-        String look = MessageUtil.combineArgs(args, 1, -1);
-        IUser u = UserUtil.getUser(look, message, guild);
-        IRole r = RoleUtil.getRole(look, message, guild);
-        IChannel c = ChannelUtil.getChannel(look, message);
+        String look = combineArgs(args, 1, -1);
+        IUser u = getUser(look, message, guild);
+        IRole r = getRole(look, message, guild);
+        IChannel c = getChannel(look, message);
         if (u != null) {
             m = moduleUser(user, channel, guild, u);
         } else if (r != null) {
@@ -102,7 +103,7 @@ public class Info implements ICommand {
 
     private IMessage moduleHelp(IUser user, IChannel channel, IGuild guild) {
         EmbedBuilder em = new EmbedBuilder();
-        em.withColor(Util.hexToColor("249999"));
+        em.withColor(hexToColor("249999"));
         em.withAuthorIcon(guild.getIconURL());
         em.withAuthorName("Info | Help");
         em.withDesc(
@@ -126,8 +127,8 @@ public class Info implements ICommand {
 
         em.withFooterIcon(user.getAvatarURL());
         em.withFooterText(
-                "Requested by: " + UserUtil.getNameAndDescrim(user));
-        return MessageUtil.sendMessage(channel, em.build());
+                "Requested by: " + getNameAndDescrim(user));
+        return sendMessage(channel, em.build());
 
     }
 
@@ -141,15 +142,15 @@ public class Info implements ICommand {
         em.appendField("Patreon", "You can support me [here!](https://www.patreon.com/xaanit)", false);
         em.withFooterIcon(user.getAvatarURL());
         em.withFooterText(
-                "Requested by: " + UserUtil.getNameAndDescrim(user));
-        em.withColor(Util.hexToColor(CColors.BASIC));
-        IMessage m = Util.sendMessage(channel, em.build());
+                "Requested by: " + getNameAndDescrim(user));
+        em.withColor(hexToColor(CColors.BASIC));
+        IMessage m = sendMessage(channel, em.build());
         return m;
     }
 
     private IMessage moduleChannel(IUser user, IChannel channel, IGuild guild, IChannel c) {
         EmbedBuilder em = new EmbedBuilder();
-        em.withColor(Util.hexToColor("249999"));
+        em.withColor(hexToColor("249999"));
         em.withAuthorIcon(guild.getIconURL());
         em.withAuthorName("Info | Channel");
         em.appendField("Name", c.getName(), false);
@@ -157,18 +158,18 @@ public class Info implements ICommand {
         em.appendField("Topic", c.getTopic() == null || c.getTopic().isEmpty() ? "None set" : c.getTopic(), false);
         em.withFooterIcon(user.getAvatarURL());
         em.withFooterText(
-                "Requested by: " + UserUtil.getNameAndDescrim(user));
-        return MessageUtil.sendMessage(channel, em.build());
+                "Requested by: " + getNameAndDescrim(user));
+        return sendMessage(channel, em.build());
     }
 
     private IMessage moduleUser(IUser user, IChannel channel, IGuild guild, IUser u) {
         EmbedBuilder em = new EmbedBuilder();
         em.withAuthorIcon(u.getAvatarURL());
-        em.withAuthorName(UserUtil.getNameAndDescrim(u));
+        em.withAuthorName(getNameAndDescrim(u));
         em.withThumbnail(u.getAvatarURL());
-        em.withColor(Util.hexToColor("249999"));
+        em.withColor(hexToColor("249999"));
         em.appendField("ID", u.getStringID(), true);
-        em.appendField("Status", UserUtil.formatPresence(u.getPresence()), true);
+        em.appendField("Status", formatPresence(u.getPresence()), true);
         em.appendField("Display name", u.getDisplayName(guild), false);
         LocalDateTime cDate = u.getCreationDate();
         LocalTime cTime = cDate.toLocalTime();
@@ -184,21 +185,21 @@ public class Info implements ICommand {
                         cTime.getHour() > 12 ? " PM" : " AM"),
                 false);
         em.appendField("Roles [" + (u.getRolesForGuild(guild).size() - 1) + "]",
-                UserUtil.compactRoles(u.getRolesForGuild(guild)), true);
+                compactRoles(u.getRolesForGuild(guild)), true);
         em.appendField("Is bot?", u.isBot() + "", true);
         em.appendField("Shared servers on this shard", guild.getShard().getGuilds().stream().filter(
                 g -> g.getUsers().stream().anyMatch(ur -> ur.getStringID().equalsIgnoreCase(u.getStringID()))).count() + "", false);
         em.withFooterIcon(user.getAvatarURL());
         em.withFooterText(
-                "Requested by: " + UserUtil.getNameAndDescrim(user));
-        return MessageUtil.sendMessage(channel, em.build());
+                "Requested by: " + getNameAndDescrim(user));
+        return sendMessage(channel, em.build());
     }
 
     private IMessage moduleBot(IUser user, IChannel channel, IGuild guild) {
         if (invite.isEmpty()) {
             BotInviteBuilder builder = new BotInviteBuilder(GlobalVars.client);
             builder.withClientID(GlobalVars.client.getOurUser().getStringID());
-            builder.withPermissions(Util.makePermissions(Util.basicPermissions(), Permissions.BAN, Permissions.KICK, Permissions.CHANGE_NICKNAME, Permissions.USE_EXTERNAL_EMOJIS));
+            builder.withPermissions(makePermissions(basicPermissions(), Permissions.BAN, Permissions.KICK, Permissions.CHANGE_NICKNAME, Permissions.USE_EXTERNAL_EMOJIS));
             invite = builder.build();
         }
 
@@ -216,25 +217,25 @@ public class Info implements ICommand {
             channels += g.getChannels().size();
         }
         EmbedBuilder em = new EmbedBuilder();
-        em.withColor(Util.hexToColor(CColors.BASIC));
+        em.withColor(hexToColor(CColors.BASIC));
         em.withAuthorName("Bot info");
-        em.withAuthorIcon(Util.botAva());
+        em.withAuthorIcon(botAva());
         em.withDesc("Hey there! I'm Apparatus. I'm made by <@!233611560545812480>.\n\nMy version is **" + GlobalVars.VERISON + "**\nI run on [Discord4J, version 2.8.1](https://github.com/austinv11/Discord4J)\n\nI am on " + GlobalVars.client.getGuilds().size() + " guild(s).\nI serve " + GlobalVars.client.getUsers().size() + " user(s).\nIn " + channels + " channel(s).\nI have a total of " + totalCommands + " command(s).\n\nYou can invite me with [this](" + invite + "}) link [BROKEN ATM]\nYou can join my support server [here.](https://discord.gg/SHTbdnJ)");
         em.withFooterIcon(user.getAvatarURL());
-        em.withFooterText("Requested by: " + Util.getNameAndDescrim(user));
-        IMessage m = Util.sendMessage(channel, em.build());
+        em.withFooterText("Requested by: " + getNameAndDescrim(user));
+        IMessage m = sendMessage(channel, em.build());
         return m;
     }
 
     private IMessage moduleGuild(IUser user, IChannel channel, IGuild guild) {
         EmbedBuilder em = new EmbedBuilder();
-        em.withColor(Util.hexToColor("249999"));
+        em.withColor(hexToColor("249999"));
         em.withThumbnail(guild.getIconURL());
         em.withAuthorName(guild.getName());
         em.withAuthorIcon(guild.getIconURL());
         em.appendField("ID", guild.getStringID(), true);
         em.appendField("Owner",
-                UserUtil.getNameAndDescrim(guild.getOwner()) + " ("
+                getNameAndDescrim(guild.getOwner()) + " ("
                         + guild.getOwner().getStringID() + ") " + "[" + guild.getOwner().getDisplayName(guild)
                         + "]", true);
         LocalDateTime cDate = guild.getCreationDate();
@@ -259,7 +260,7 @@ public class Info implements ICommand {
                 .collect(
                         Collectors.toList());
         roleList.get(0).getPosition();
-        String roles = RoleUtil.formatRoleList(roleList);
+        String roles = formatRoleList(roleList);
 
         em.appendField("Roles [" + roles.split("(?:,\\s)+").length + "]", roles, true);
         em.appendField("Users [" + guild.getUsers().size() + "]", "Online: " + guild.getUsers().stream()
@@ -274,8 +275,8 @@ public class Info implements ICommand {
                 .count(), true);
         em.withFooterIcon(user.getAvatarURL());
         em.withFooterText(
-                "Requested by: " + UserUtil.getNameAndDescrim(user));
-        return MessageUtil.sendMessage(channel, em.build());
+                "Requested by: " + getNameAndDescrim(user));
+        return sendMessage(channel, em.build());
 
     }
 
@@ -286,7 +287,7 @@ public class Info implements ICommand {
                     .replace("_", "\\_") + ", ";
         }
         EmbedBuilder em = new EmbedBuilder();
-        em.withColor(Util.hexToColor("249999"));
+        em.withColor(hexToColor("249999"));
         em.withAuthorIcon(guild.getIconURL());
         em.withAuthorName(role.getName());
         em.withColor(role.getColor());
@@ -296,7 +297,7 @@ public class Info implements ICommand {
         em.appendField("Mentionable", role.isMentionable() + "", true);
         em.appendField("Permissions", role.getPermissions() + "", true);
         em.appendField("Users", users.length() == 0 ? "No Users" : users.substring(0, users.length() - 2), true);
-        return MessageUtil.sendMessage(channel, em.build());
+        return sendMessage(channel, em.build());
 
 
     }

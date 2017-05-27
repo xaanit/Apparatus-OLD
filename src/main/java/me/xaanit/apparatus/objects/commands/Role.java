@@ -4,7 +4,6 @@ import me.xaanit.apparatus.objects.FailedRole;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
-import me.xaanit.apparatus.util.Util;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.EmbedBuilder;
@@ -13,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
+
+import static me.xaanit.apparatus.util.Util.*;
 
 /**
  * Created by Jacob on 5/15/2017.
@@ -35,12 +36,12 @@ public class Role implements ICommand {
 
     @Override
     public EnumSet<Permissions> getNeededPermission() {
-        return Util.makePermissions(Util.basicPermissions(), Permissions.MANAGE_ROLES);
+        return makePermissions(basicPermissions(), Permissions.MANAGE_ROLES);
     }
 
     @Override
     public EmbedObject getHelp(IUser user, IGuild guild) {
-        EmbedBuilder em = Util.addToHelpEmbed(this, user, new String[]{Util.getGuild(guild).getPrefix(), getName() + "<add/remove/role names> [role names]"}, new String[]{Arrays.toString(getAliases())
+        EmbedBuilder em = addToHelpEmbed(this, user, new String[]{getGuild(guild).getPrefix(), getName() + "<add/remove/role names> [role names]"}, new String[]{Arrays.toString(getAliases())
                 .replaceAll(getName() + ",\\s", "")});
         return em.build();
     }
@@ -52,16 +53,16 @@ public class Role implements ICommand {
 
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
-        Util.allChecks(user, guild, this, channel);
+        allChecks(user, guild, this, channel);
 
         if (args.length == 1 || (args.length > 1 && args[1].equalsIgnoreCase("list"))) {
             List<IRole> roles = new ArrayList<>();
-            for (long l : Util.getGuild(guild).getAssignableRoles()) {
+            for (long l : getGuild(guild).getAssignableRoles()) {
                 IRole role = guild.getRoleByID(l);
                 System.out.println("LONG: " + l);
                 if (role == null) {
                     System.out.println("NULL");
-                    Util.getGuild(guild).removeAutorole(l);
+                    getGuild(guild).removeAutorole(l);
                 } else {
                     System.out.println("ADDED");
                     roles.add(role);
@@ -69,12 +70,12 @@ public class Role implements ICommand {
             }
             EmbedBuilder em = new EmbedBuilder();
             em.withAuthorName("Self assignable roles");
-            em.withAuthorIcon(Util.botAva());
-            em.withColor(Util.hexToColor(CColors.BASIC));
-            em.withDesc(Util.formatRoleList(roles));
-            em.withFooterText("Requested by: " + Util.getNameAndDescrim(user));
+            em.withAuthorIcon(botAva());
+            em.withColor(hexToColor(CColors.BASIC));
+            em.withDesc(formatRoleList(roles));
+            em.withFooterText("Requested by: " + getNameAndDescrim(user));
             em.withFooterIcon(user.getAvatarURL());
-            Util.sendMessage(channel, em.build());
+            sendMessage(channel, em.build());
             return;
         }
 
@@ -89,19 +90,19 @@ public class Role implements ICommand {
         List<FailedRole> rolesFailed = new ArrayList<>();
 
         for (int i = 1; i < args.length; i++) {
-            IRole role = Util.getRole(args[i], message);
+            IRole role = getRole(args[i], message);
             if (role != null) {
                 if (role.isEveryoneRole()) {
                     rolesFailed.add(new FailedRole(guild.getEveryoneRole(), "This role is the everyone role."));
                     continue;
                 }
 
-                if (role.getPosition() > Util.getHighestRole(user, guild).getPosition()) {
+                if (role.getPosition() > getHighestRole(user, guild).getPosition()) {
                     rolesFailed.add(new FailedRole(role, "This role is above my highest role."));
                     continue;
                 }
 
-                if (Util.getGuild(guild).getAssignableRoles().stream().filter(l -> l == role.getLongID()).count() == 0) {
+                if (getGuild(guild).getAssignableRoles().stream().filter(l -> l == role.getLongID()).count() == 0) {
                     rolesFailed.add(new FailedRole(role, "This role isn't self assignable."));
                     continue;
                 }
@@ -113,20 +114,20 @@ public class Role implements ICommand {
 
                 if (user.getRolesForGuild(guild).stream().filter(r -> r.getLongID() == role.getLongID()).count() == 0) {
                     rolesAdded.add(role);
-                    Util.addRole(user, role);
+                    addRole(user, role);
                 } else {
                     rolesRemoved.add(role);
-                    Util.removeRole(user, role);
+                    removeRole(user, role);
                 }
             }
         }
 
         EmbedBuilder em = new EmbedBuilder();
-        em.withColor(Util.hexToColor(CColors.BASIC));
-        em.withAuthorIcon(Util.botAva());
+        em.withColor(hexToColor(CColors.BASIC));
+        em.withAuthorIcon(botAva());
         em.withAuthorName("Added roles!");
         String res = "";
-        res += "Roles added: " + Util.formatRoleList(rolesAdded) + "\n\nRoles removed: " + Util.formatRoleList(rolesRemoved) + "\n\nAll of these roles failed for one reason or another.";
+        res += "Roles added: " + formatRoleList(rolesAdded) + "\n\nRoles removed: " + formatRoleList(rolesRemoved) + "\n\nAll of these roles failed for one reason or another.";
         String temp = "None";
         for (FailedRole r : rolesFailed) {
             if (temp.equalsIgnoreCase("none"))
@@ -137,8 +138,8 @@ public class Role implements ICommand {
 
         em.withDesc(res + "\n" + temp);
         em.withFooterIcon(user.getAvatarURL());
-        em.withFooterText("Requested by: " + Util.getNameAndDescrim(user));
-        Util.sendMessage(channel, em.build());
+        em.withFooterText("Requested by: " + getNameAndDescrim(user));
+        sendMessage(channel, em.build());
     }
 
     private void moduleAddRoles(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
@@ -151,7 +152,7 @@ public class Role implements ICommand {
         System.out.println(Arrays.toString(args) + " :: ARGS");
         for (int i = 1; i < args.length; i++) {
             System.out.println(args[i] + " :: ARGS[i]");
-            IRole role = Util.getRole(args[i], message);
+            IRole role = getRole(args[i], message);
             if (role != null) {
                 System.out.println(role.getName() + " :: ROLE NAME");
                 if (role.isEveryoneRole()) {
@@ -160,13 +161,13 @@ public class Role implements ICommand {
                     continue;
                 }
 
-                if (role.getPosition() > Util.getHighestRole(user, guild).getPosition()) {
+                if (role.getPosition() > getHighestRole(user, guild).getPosition()) {
                     System.out.println(":: ABOVE HIGHEST ROLE");
                     rolesFailed.add(new FailedRole(role, "This role is above my highest role."));
                     continue;
                 }
 
-                if (Util.getGuild(guild).getAssignableRoles().stream().filter(l -> l == role.getLongID()).count() == 1) {
+                if (getGuild(guild).getAssignableRoles().stream().filter(l -> l == role.getLongID()).count() == 1) {
                     rolesFailed.add(new FailedRole(role, "This role is already self assignable."));
                     continue;
                 }
@@ -182,20 +183,20 @@ public class Role implements ICommand {
         }
 
         for (IRole role : rolesAdded) {
-            Util.getGuild(guild).addAssignableRole(role.getLongID());
+            getGuild(guild).addAssignableRole(role.getLongID());
         }
 
         EmbedBuilder em = new EmbedBuilder();
         em.withAuthorName("Self assignable roles");
-        em.withAuthorIcon(Util.botAva());
-        em.withColor(Util.hexToColor(CColors.BASIC));
+        em.withAuthorIcon(botAva());
+        em.withColor(hexToColor(CColors.BASIC));
         String res = "";
         for (FailedRole r : rolesFailed) {
             res += "Role [ " + r.getRole().getName() + " ] failed because [ " + r.getReason() + "]\n";
         }
-        em.withDesc("Roles added to the self assignable roles: " + Util.formatRoleList(rolesAdded) + "\n\nThese roles failed due to any specific reason:\n" + res);
-        em.withFooterText("Requested by: " + Util.getNameAndDescrim(user));
+        em.withDesc("Roles added to the self assignable roles: " + formatRoleList(rolesAdded) + "\n\nThese roles failed due to any specific reason:\n" + res);
+        em.withFooterText("Requested by: " + getNameAndDescrim(user));
         em.withFooterIcon(user.getAvatarURL());
-        Util.sendMessage(channel, em.build());
+        sendMessage(channel, em.build());
     }
 }
