@@ -1,8 +1,9 @@
 package me.xaanit.apparatus.internal.json;
 
 import me.xaanit.apparatus.GlobalVars;
-import me.xaanit.apparatus.objects.interfaces.ICommand;
 import me.xaanit.apparatus.internal.json.embeds.CustomEmbed;
+import me.xaanit.apparatus.objects.enums.CmdType;
+import me.xaanit.apparatus.objects.interfaces.ICommand;
 import sx.blah.discord.handle.obj.IGuild;
 
 import java.util.ArrayList;
@@ -63,7 +64,8 @@ public class Guild {
 
     public void updateCommands() {
         for (String key : GlobalVars.commands.keySet()) {
-            addCommand(GlobalVars.commands.get(key));
+            if (GlobalVars.commands.get(key).getType() != CmdType.DEV)
+                addCommand(GlobalVars.commands.get(key));
         }
     }
 

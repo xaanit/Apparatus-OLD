@@ -54,6 +54,7 @@ public class Help implements ICommand {
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
         Util.allChecks(user, guild, this, channel);
+        String checkDM = ":clipboard: | Check your DMs!";
         if (args.length == 1) {
             if (typeList == null) {
                 EmbedBuilder em = new EmbedBuilder();
@@ -68,6 +69,7 @@ public class Help implements ICommand {
                 this.typeList = em.build();
             }
             Util.sendMessage(user, this.typeList);
+            Util.sendMessage(channel, checkDM);
             return;
         }
 
@@ -91,13 +93,15 @@ public class Help implements ICommand {
                     em.withFooterText(user.getAvatarURL());
                     em.withFooterText("Requested by: " + Util.getNameAndDescrim(user));
                     Util.sendMessage(user, em.build());
+                    Util.sendMessage(channel, checkDM);
                     return;
                 }
             }
 
             if (GlobalVars.commands.containsKey(args[1].toLowerCase())) {
                 ICommand command = GlobalVars.commands.get(args[1].toLowerCase());
-                Util.sendMessage(channel, command.getHelp(user, guild));
+                Util.sendMessage(user, command.getHelp(user, guild));
+                Util.sendMessage(channel, checkDM);
                 return;
             } else {
                 EmbedBuilder em = new EmbedBuilder();

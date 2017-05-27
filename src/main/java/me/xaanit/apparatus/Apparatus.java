@@ -23,8 +23,6 @@ public class Apparatus extends GlobalVars{
             logger.log("Logging in...", Level.INFO);
             client.login();
             logger.log("Logged in!", Level.INFO);
-
-
     }
 
     private static void initListeners() {

@@ -1,5 +1,6 @@
 package me.xaanit.apparatus.objects.commands;
 
+import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
 import me.xaanit.apparatus.util.GuildUtil;
@@ -11,11 +12,14 @@ import sx.blah.discord.util.EmbedBuilder;
 
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.Random;
 
 /**
  * Created by Jacob on 5/13/2017.
  */
 public class Ban implements ICommand {
+    private Random random = new Random();
+
     @Override
     public String getName() {
         return "ban";
@@ -55,8 +59,20 @@ public class Ban implements ICommand {
 
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
-        IUser u = message.getMentions().get(0);
-        IUser u1 = message.getMentions().get(1);
-        Util.sendMessage(channel, "The ship name for [ " + u.getName() + " ] and [ " + u1.getName() + " ] is " + Util.getShipName(u, u1));
+        Util.allChecks(user, guild, this, channel);
+
+        if (args.length == 1) {
+            EmbedBuilder em = Util.basicEmbed(user, "Missing arguments", CColors.ERROR);
+            em.withDesc("Please provide a user and an optional reason.");
+            Util.sendMessage(channel, em.build());
+            return;
+        }
+
+        String reason;
+        if (args.length == 2) {
+            reason = "None provided";
+        } else {
+            reason = Util.combineArgs(args, 2, args.length);
+        }
     }
 }

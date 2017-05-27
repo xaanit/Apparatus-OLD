@@ -2,6 +2,7 @@ package me.xaanit.apparatus.util;
 
 import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.internal.json.embeds.CustomEmbed;
+import me.xaanit.apparatus.internal.json.embeds.Field;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
@@ -21,6 +22,7 @@ import java.util.regex.Pattern;
  * Created by Jacob on 5/15/2017.
  */
 public class EmbedUtil extends ChannelUtil {
+
 
     public static final String BASIC_USAGE = "Usage: %s%s";
     public static final String BASIC_ALIAS = "Aliases: %s";
@@ -112,7 +114,9 @@ public class EmbedUtil extends ChannelUtil {
             else if (!str.replaceAll("(http(s)?:\\/\\/pastebin.com\\/raw.+)", "").isEmpty())
                 return null;
         }
-
+        System.out.println(str);
+        str = str.replaceAll("\\sFieldText", "} {FieldText").replaceAll("\\sInline", "} {Inline");
+        System.out.println(str);
 
         Pattern p = Pattern
                 .compile("\\{([a-zA-Z]+):([\\w\\s\\n.,\\--;!”“‘’?-@<>:/#$%^&*()**\\[\\]_=+=~`’\'\"\\\\|]+)}");
@@ -130,6 +134,7 @@ public class EmbedUtil extends ChannelUtil {
         String titleURL = "";
         String image = "";
         List<String> fieldInfo = new ArrayList<>();
+        boolean includeTimestamp = false;
 
         EmbedBuilder em = new EmbedBuilder();
         while (m.find()) {
@@ -142,84 +147,108 @@ public class EmbedUtil extends ChannelUtil {
                     }
                 }
                 case "authoricon": {
-                    if (!res.equals("")) {
-                        authorIcon = getIcon(guild, user, res).equalsIgnoreCase("NONE") ? res : getIcon(guild, user, res);
+                    if (!res.isEmpty()) {
+                        authorIcon = res;
                         break;
                     }
                 }
                 case "authorname": {
-                    if (!res.equals("")) {
+                    if (!res.isEmpty()) {
                         authorName = res;
                         break;
                     }
                 }
                 case "authorurl": {
-                    if (!res.equals("")) {
+                    if (!res.isEmpty()) {
                         authorURL = res;
                         break;
                     }
                 }
                 case "thumbnail": {
-                    if (!res.equals("")) {
-                        thumbnail = getIcon(guild, user, res).equalsIgnoreCase("NONE") ? res : getIcon(guild, user, res);
+                    if (!res.isEmpty()) {
+                        thumbnail = res;
                         break;
                     }
                 }
                 case "title": {
-                    if (!res.equals("")) {
+                    if (!res.isEmpty()) {
                         title = res;
                         break;
                     }
                 }
                 case "titleurl": {
-                    if (!res.equals("")) {
+                    if (!res.isEmpty()) {
+                        titleURL = res;
+                        break;
                     }
                 }
                 case "description": {
-                    if (!res.equals("")) {
+                    if (!res.isEmpty()) {
                         if (res.length() > 2048)
                             throw new IllegalArgumentException(
                                     "The Description can only be a max of 2048 chars! Yours is " + res.length());
-
+                        description = res;
+                        break;
                     }
                 }
                 case "fieldtitle": {
-                    if (!res.equals("")) {
+                    if (!res.isEmpty()) {
                         if (res.length() > 256)
                             throw new IllegalArgumentException(
                                     "Field Titles can only be a max of 256 characters! Yours is " + res.length());
+                        fieldInfo.add(res);
+                        break;
                     }
                 }
                 case "fieldtext": {
-                    if (!res.equals("")) {
+                    if (!res.isEmpty()) {
                         if (res.length() > 1024)
                             throw new IllegalArgumentException(
                                     "Field Titles can only be a max of 1024 characters! Yours is " + res.length());
+                        fieldInfo.add(res);
+                        break;
+                    }
+                }
 
+                case "inline": {
+                    if (!res.isEmpty()) {
+                        if (!res.equalsIgnoreCase("true") && !res.equalsIgnoreCase("false"))
+                            throw new IllegalArgumentException("Inline must be true or false!");
+                        fieldInfo.add(res);
+                        break;
+                    }
+                }
+
+                case "timestamp": {
+                    if (!res.isEmpty()) {
+                        includeTimestamp = res.equalsIgnoreCase("true");
                     }
                 }
 
                 case "footericon": {
-                    if (!res.equals("")) {
-
+                    if (!res.isEmpty()) {
+                        footerIcon = res;
+                        break;
                     }
                 }
                 case "footertext": {
-                    if (!res.equals("")) {
-
+                    if (!res.isEmpty()) {
+                        footerText = res;
+                        break;
                     }
                 }
                 case "image": {
-                    if (!res.equals("")) {
-                    image =  getIcon(guild, user, res).equalsIgnoreCase("NONE") ? res : getIcon(guild, user, res);;
+                    if (!res.isEmpty()) {
+                        image = res;
+                        break;
                     }
                 }
             }
         }
 
-        if (fieldInfo.size() % 2 != 0)
-            throw new IllegalArgumentException("There isn't an even number of 'FieldTitle' and 'FieldText'!");
-        if (fieldInfo.size() > 50)
+        if (fieldInfo.size() % 3 != 0)
+            throw new IllegalArgumentException("There isn't an even number of 'FieldTitle', 'FieldText', and `Inline`!");
+        if (fieldInfo.size() > (3 * 25))
             throw new IllegalArgumentException("Discord has a restriction of 25 fields!");
         if (!footerIcon.isEmpty() && footerText.isEmpty())
             throw new IllegalArgumentException("You can not have a footer icon without footer text!");
@@ -232,22 +261,44 @@ public class EmbedUtil extends ChannelUtil {
         if (colour.length() != 6 && !colour.isEmpty())
             throw new IllegalArgumentException("Your hex code must only be 6 length!");
 
+        List<Field> fields = new ArrayList<>();
+        for (int i = 0; i < fieldInfo.size() - 3; i += 3) {
+            fields.add(new Field(fieldInfo.get(i), fieldInfo.get(i + 1), fieldInfo.get(i + 2).equalsIgnoreCase("true")));
+        }
 
-        CustomEmbed c = new CustomEmbed();
+
+        CustomEmbed c = new CustomEmbed(
+                authorIcon, authorName, authorURL, thumbnail, title, titleURL,
+                description, fields, image, colour, footerIcon, footerText, includeTimestamp
+        );
         return c;
     }
 
 
-    private static String getIcon(IGuild guild, IUser user, String str) {
-        switch (str.toLowerCase()) {
-            case "{guildicon}":
-                return guild.getIconURL();
-            case "{usericon}":
-                return user.getAvatarURL();
-            case "{boticon}":
-                return Util.botAva();
-            default:
-                return "NONE";
-        }
-    }
+    /* PICTURE
+
+    .replace("{guildicon}", guild.getIconURL())
+    .replace("{usericon}", user.getAvatarURL())
+    .replace("{boticon}", Util.botAva());
+
+    */
+
+    /* TEXT
+
+    .replace("{timestamp}", Util.getCurrentTime())
+    .replace("{userid}", user.getStringID())
+    .replace("{username}", user.getName())
+    .replace("{usermention}", user.mention())
+    .replace("{userdescrim}", user.getDiscriminator())
+    .replace("{guildname}", guild.getName())
+    .replace("{guildid}", guild.getStringID())
+    .replace("{botname}", "Apparatus")
+    .replace("{botdescrim}", GlobalVars.client().getOurUser().getDiscriminator())
+    .replace("{channelname}",channel.getName())
+    .replace("{channelmention}", channel.mention())
+    .replace("{oldmessag}e", oldmessage)
+    .replace("{newmessage}", newmessage)
+    .replace("{deletedmessage}", deletedmessage)
+
+     */
 }

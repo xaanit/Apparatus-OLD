@@ -2,10 +2,10 @@ package me.xaanit.apparatus.objects.commands;
 
 import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.database.Database;
+import me.xaanit.apparatus.internal.json.Guild;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
-import me.xaanit.apparatus.internal.json.Guild;
 import me.xaanit.apparatus.util.GuildUtil;
 import me.xaanit.apparatus.util.Util;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
@@ -15,6 +15,7 @@ import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
 
+import java.io.File;
 import java.util.Arrays;
 
 /**
@@ -53,7 +54,9 @@ public class Reload implements ICommand {
         Util.allChecks(user, guild, this, channel);
 
         if (args.length == 1) {
-            // TODO: ADD EMBED
+            EmbedBuilder em = Util.basicEmbed(user, "Error", CColors.ERROR);
+            em.withDesc("Please add an argument.");
+            Util.sendMessage(channel, em.build());
             return;
         }
 
@@ -80,6 +83,19 @@ public class Reload implements ICommand {
             em.withFooterText("Took " + (diff / 1000.0) + " second(s) to attempt to save [ " + GlobalVars.guilds.size() + " ] guilds.");
             Util.sendMessage(channel, em.build());
             return;
+        }
+
+        if (args[1].equalsIgnoreCase("prune")) {
+            int pruned = 0;
+            for (File file : new File(GlobalVars.PATH + "guilds").listFiles()) {
+                if (GlobalVars.client.getGuildByID(Long.parseUnsignedLong(file.getName().replaceAll("\\.json", ""))) == null) {
+                    file.delete();
+                    pruned++;
+                }
+            }
+            EmbedBuilder em = Util.basicEmbed(user, "Prune", CColors.BASIC);
+            em.withDesc("Pruned [ " + pruned + " ] guilds.");
+            Util.sendMessage(channel, em.build());
         }
 
         if (args[1].equalsIgnoreCase("gcommands")) {

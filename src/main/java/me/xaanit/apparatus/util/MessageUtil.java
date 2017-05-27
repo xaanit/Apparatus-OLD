@@ -1,6 +1,5 @@
 package me.xaanit.apparatus.util;
 
-import me.xaanit.apparatus.GlobalVars;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
@@ -18,6 +17,8 @@ import java.util.concurrent.TimeUnit;
  */
 @SuppressWarnings("unused")
 public class MessageUtil extends GuildUtil {
+
+    private static final int MAX_RETRIES = 4;
 
     /**
      * Gets a message by the ID
@@ -40,18 +41,16 @@ public class MessageUtil extends GuildUtil {
      */
     private static IMessage sendMessage(IChannel channel, String str, EmbedObject em) {
         return RequestBuffer.request(() -> {
+
             try {
                 return channel.sendMessage(str, em);
             } catch (DiscordException ex) {
-                if (!channel.isPrivate()) {
-                    sendMessage(channel, str, em);
-                } else {
-                    ex.printStackTrace();
-                }
+                ex.printStackTrace();
             }
             return null;
         }).get();
     }
+
 
     /**
      * Sends a message to the specified channel
@@ -79,28 +78,30 @@ public class MessageUtil extends GuildUtil {
      * Sends a user a DM.
      *
      * @param user The user to send it to
-     * @param str The String
-     * @param em The embed
+     * @param str  The String
+     * @param em   The embed
      * @return The IMessage, for chaining.
      */
     public static IMessage sendMessage(IUser user, String str, EmbedObject em) {
         return sendMessage(user.getOrCreatePMChannel(), str, em);
     }
+
     /**
      * Sends a user a DM.
      *
      * @param user The user to send it to
-     * @param em The embed
+     * @param em   The embed
      * @return The IMessage, for chaining.
      */
     public static IMessage sendMessage(IUser user, EmbedObject em) {
         return sendMessage(user.getOrCreatePMChannel(), "", em);
     }
+
     /**
      * Sends a user a DM.
      *
      * @param user The user to send it to
-     * @param str The String
+     * @param str  The String
      * @return The IMessage, for chaining.
      */
     public static IMessage sendMessage(IUser user, String str) {
@@ -117,11 +118,7 @@ public class MessageUtil extends GuildUtil {
             try {
                 message.delete();
             } catch (DiscordException ex) {
-                if (!message.getChannel().isPrivate()) {
-                    deleteMessage(message);
-                } else {
-                    ex.printStackTrace();
-                }
+                ex.printStackTrace();
             }
         });
     }
@@ -140,11 +137,7 @@ public class MessageUtil extends GuildUtil {
             try {
                 return message.edit(str, e);
             } catch (DiscordException ex) {
-                if (message.getAuthor().getLongID() == GlobalVars.client.getOurUser().getLongID()) {
-                    editMessage(message, str, e);
-                } else {
                     ex.printStackTrace();
-                }
             }
             return null;
         }).get();
