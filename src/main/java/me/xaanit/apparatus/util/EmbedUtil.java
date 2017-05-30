@@ -1,6 +1,7 @@
 package me.xaanit.apparatus.util;
 
 import me.xaanit.apparatus.GlobalVars;
+import me.xaanit.apparatus.api.outside.Requests;
 import me.xaanit.apparatus.internal.json.embeds.CustomEmbed;
 import me.xaanit.apparatus.internal.json.embeds.Field;
 import me.xaanit.apparatus.objects.enums.CColors;
@@ -13,6 +14,7 @@ import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -109,14 +111,37 @@ public class EmbedUtil extends ChannelUtil {
 
     public static CustomEmbed customEmbedParser(IUser user, IGuild guild, IChannel channel, IMessage message, String str) {
         if (str.startsWith("http")) {
-            if (!str.replaceAll("(http(s)?:\\/\\/raw\\.githubusercontent\\.com.+)", "").isEmpty())
+            if (!str.startsWith("https://pastebin.com/raw/") && !str.startsWith("https://raw.githubusercontent.com/"))
                 return null;
-            else if (!str.replaceAll("(http(s)?:\\/\\/pastebin.com\\/raw.+)", "").isEmpty())
+            try {
+                str = Requests.get(str);
+            } catch (IOException ex) {
                 return null;
+            }
         }
-        System.out.println(str);
+        System.out.println(str + " :: STR");
         str = str.replaceAll("\\sFieldText", "} {FieldText").replaceAll("\\sInline", "} {Inline");
-        System.out.println(str);
+
+        List<String> look = new ArrayList<>();
+        String s;
+        try {
+            s = Requests.get("https://raw.githubusercontent.com/NegotiumBots/ApparatusWiki/master/variables.md");
+        } catch (IOException ex) {
+            return null;
+        }
+
+        String[] split = s.replaceAll("[\\{\\}]", "").split(":");
+        for (String s1 : split) {
+            String s2 = s1.split(";")[0];
+            look.add(s2);
+        }
+
+        for (String s1 : look) {
+            str = str.replace("{" + s1 + "}", "[[" + s1 + "]]");
+        }
+
+
+        System.out.println(str + " :: STR");
 
         Pattern p = Pattern
                 .compile("\\{([a-zA-Z]+):([\\w\\s\\n.,\\--;!”“‘’?-@<>:/#$%^&*()**\\[\\]_=+=~`’\'\"\\\\|]+)}");
@@ -266,7 +291,6 @@ public class EmbedUtil extends ChannelUtil {
             fields.add(new Field(fieldInfo.get(i), fieldInfo.get(i + 1), fieldInfo.get(i + 2).equalsIgnoreCase("true")));
         }
 
-
         CustomEmbed c = new CustomEmbed(
                 authorIcon, authorName, authorURL, thumbnail, title, titleURL,
                 description, fields, image, colour, footerIcon, footerText, includeTimestamp
@@ -277,28 +301,28 @@ public class EmbedUtil extends ChannelUtil {
 
     /* PICTURE
 
-    .replace("{guildicon}", guild.getIconURL())
-    .replace("{usericon}", user.getAvatarURL())
-    .replace("{boticon}", Util.botAva());
+    .replace("[[guildicon]]", guild.getIconURL())
+    .replace("[[usericon]]", user.getAvatarURL())
+    .replace("[[boticon]]", Util.botAva());
 
     */
 
     /* TEXT
 
-    .replace("{timestamp}", Util.getCurrentTime())
-    .replace("{userid}", user.getStringID())
-    .replace("{username}", user.getName())
-    .replace("{usermention}", user.mention())
-    .replace("{userdescrim}", user.getDiscriminator())
-    .replace("{guildname}", guild.getName())
-    .replace("{guildid}", guild.getStringID())
-    .replace("{botname}", "Apparatus")
-    .replace("{botdescrim}", GlobalVars.client().getOurUser().getDiscriminator())
-    .replace("{channelname}",channel.getName())
-    .replace("{channelmention}", channel.mention())
-    .replace("{oldmessag}e", oldmessage)
-    .replace("{newmessage}", newmessage)
-    .replace("{deletedmessage}", deletedmessage)
+    .replace("[[timestamp]]", Util.getCurrentTime())
+    .replace("[[userid]]", user.getStringID())
+    .replace("[[username}], user.getName())
+    .replace("[[usermention]]," user.mention())
+    .replace("[[userdescrim]]", user.getDiscriminator())
+    .replace("[[guildname]]", guild.getName())
+    .replace("[[guildid]]", guild.getStringID())
+    .replace("[[botname]]", "Apparatus")
+    .replace("[[botdescrim]]", GlobalVars.client().getOurUser().getDiscriminator())
+    .replace("[[channelname]]",channel.getName())
+    .replace("[[channelmention]]", channel.mention())
+    .replace("[[oldmessag]]e", oldmessage)
+    .replace("[[newmessage]]", newmessage)
+    .replace("[[deletedmessage]]", deletedmessage)
 
      */
 }

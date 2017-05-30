@@ -2,6 +2,7 @@ package me.xaanit.apparatus.objects.interfaces;
 
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.util.Util;
+import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.*;
 
@@ -49,9 +50,9 @@ public interface ICommand {
      *
      * @return The permission
      */
-   default Permissions getUserPerm() {
-       return null;
-   }
+    default Permissions getUserPerm() {
+        return null;
+    }
 
     /**
      * The help embed for this command
@@ -90,8 +91,9 @@ public interface ICommand {
      * @param guild   The guild it was ran in
      * @param message The message
      * @param args    The arguments associated with it
+     * @param client  The client
      */
-    void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args);
+    void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args, IDiscordClient client);
 
 }
 

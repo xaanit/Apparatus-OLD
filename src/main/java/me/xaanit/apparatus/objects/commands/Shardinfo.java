@@ -4,6 +4,7 @@ import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
+import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.IShard;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IChannel;
@@ -16,9 +17,6 @@ import java.util.Arrays;
 
 import static me.xaanit.apparatus.util.Util.*;
 
-/**
- * Created by Jacob on 5/15/2017.
- */
 public class Shardinfo implements ICommand {
     @Override
     public String getName() {
@@ -48,7 +46,7 @@ public class Shardinfo implements ICommand {
     }
 
     @Override
-    public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
+    public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args, IDiscordClient client) {
         allChecks(user, guild, this, channel);
         EmbedBuilder em = basicEmbed(user, "Shard info!", CColors.BASIC);
         for (IShard shard : GlobalVars.client.getShards()) {

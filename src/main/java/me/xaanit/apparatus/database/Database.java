@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 
+import static me.xaanit.apparatus.GlobalVars.guilds;
 import static me.xaanit.apparatus.GlobalVars.logger;
 
 /**
@@ -52,7 +53,7 @@ public class Database {
     }
 
     public static boolean saveGuild(IGuild guild) {
-        return true;
+        return saveGuild(guilds.get(guild.getLongID()));
     }
 
     public static boolean saveGuild(Guild guild) {

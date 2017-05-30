@@ -74,7 +74,7 @@ public class CommandListener implements IListener {
             String look = args[0].substring(Util.getGuild(guild).getPrefix().length()).toLowerCase();
             if (commands.containsKey(look))
                 commands.get(look)
-                        .runCommand(user, channel, guild, message, args);
+                        .runCommand(user, channel, guild, message, args, GlobalVars.client);
         } catch (PermissionsException ex) {
 
         }
@@ -108,7 +108,7 @@ public class CommandListener implements IListener {
         try {
             if (GlobalVars.commands.containsKey(args[0].toLowerCase()))
                 GlobalVars.commands.get(args[0].toLowerCase())
-                        .runCommand(user, channel, guild, message, args);
+                        .runCommand(user, channel, guild, message, args, GlobalVars.client);
             else {
                 Util.sendMessage(channel, user.mention() + " | " + getCleverbotResponse(Util.combineArgs(args, 0, args.length)));
             }

@@ -9,7 +9,7 @@ public class Logger {
     public Logger() {
     }
 
-    public void log(String str, Level level) {
+    public void log(CharSequence str, Level level) {
         System.err.println("[" + Util.getCurrentTime() + "] " + level.toString() + ": " + str);
     }
 }

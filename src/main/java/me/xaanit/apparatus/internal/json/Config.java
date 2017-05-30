@@ -18,6 +18,8 @@ public class Config {
 
     private int cleverbotCalls = 1;
 
+    private Stats stats = new Stats();
+
     public Config() {
     }
 
@@ -76,5 +78,9 @@ public class Config {
 
     public void setCleverbotCalls(int cleverbotCalls) {
         this.cleverbotCalls = cleverbotCalls;
+    }
+
+    public Stats getStats() {
+        return stats;
     }
 }

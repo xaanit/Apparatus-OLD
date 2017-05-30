@@ -4,6 +4,7 @@ import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
+import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.BotInviteBuilder;
@@ -53,7 +54,7 @@ public class Info implements ICommand {
     }
 
     @Override
-    public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
+    public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args, IDiscordClient client) {
         allChecks(user, guild, this, channel);
         if (args.length == 1) {
             moduleHelp(user, channel, guild);

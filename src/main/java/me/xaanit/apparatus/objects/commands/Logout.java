@@ -5,6 +5,7 @@ import me.xaanit.apparatus.database.Database;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
+import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
@@ -48,7 +49,7 @@ public class Logout implements ICommand {
     }
 
     @Override
-    public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args) {
+    public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args, IDiscordClient client) {
         allChecks(user, guild, this, channel);
 
         EmbedBuilder em = new EmbedBuilder();
@@ -64,7 +65,7 @@ public class Logout implements ICommand {
         em.withDesc("Guilds saved!");
         em.withFooterText("Took me [ " + (System.currentTimeMillis() - begin) + " ms ] to save [ " + GlobalVars.guilds.size() + " ] guilds.");
         editMessage(m, em.build());
-        GlobalVars.client.logout();
+        client.logout();
         System.exit(0);
     }
 }

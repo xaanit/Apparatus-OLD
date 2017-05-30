@@ -43,6 +43,8 @@ public class Guild {
 
     private String prefix = "+";
 
+    private Stats stats = new Stats();
+
     private List<Command> commands = new ArrayList<>();
 
     private List<Modlog> modlogs = new ArrayList<>();
@@ -217,5 +219,9 @@ public class Guild {
 
     public void setCrashReports(boolean crashReports) {
         this.crashReports = crashReports;
+    }
+
+    public Stats getStats() {
+        return stats;
     }
 }

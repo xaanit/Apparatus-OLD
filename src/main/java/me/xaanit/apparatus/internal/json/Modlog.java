@@ -71,4 +71,11 @@ public class Modlog {
                 if(channels.stream().filter(l -> l == l1).count() == 0)
                     channels.add(l1);
     }
+
+    public void removeChannel(long l1) {
+        for(int i = 0; i < channels.size(); i++) {
+            if(channels.get(i) == l1)
+                channels.remove(i);
+        }
+    }
 }
