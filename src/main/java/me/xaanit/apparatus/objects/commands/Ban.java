@@ -90,7 +90,7 @@ public class Ban implements ICommand {
 
         banCheck(user, u, guild, channel);
 
-        //  banUser(user, guild);
+        //  banUser(u, guild);
         client.getDispatcher().dispatch(new BanEvent(guild, u, user, channel, reason));
     }
 

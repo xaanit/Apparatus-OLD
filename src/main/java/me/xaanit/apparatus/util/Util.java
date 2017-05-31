@@ -11,7 +11,7 @@ import java.util.List;
 
 @SuppressWarnings("unused")
 public class Util extends UserUtil {
-
+    
 
     /**
      * Gets the current time in UTC

@@ -43,8 +43,7 @@ public class Announcements implements ICommand {
 
     @Override
     public EmbedObject getHelp(IUser user, IGuild guild) {
-        EmbedBuilder em = addToHelpEmbed(this, user, new String[]{getGuild(guild).getPrefix(), getName() + " [all]"}, new String[]{Arrays.toString(getAliases())
-                .replaceAll(getName() + ",\\s", "")});
+        EmbedBuilder em = addToHelpEmbed(this, user, new String[]{getGuild(guild).getPrefix(), getName() + " [all]"}, new String[]{Arrays.toString(getAliases()).replaceAll(getName() + ",\\s", "")});
         return em.build();
     }
 
@@ -56,13 +55,11 @@ public class Announcements implements ICommand {
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args, IDiscordClient client) {
         allChecks(user, guild, this, channel);
-
         while (announcements == null || updates == null || todo == null) {
             announcements = GlobalVars.client.getChannelByID(Long.parseUnsignedLong("313745078340419585"));
             updates = GlobalVars.client.getChannelByID(Long.parseUnsignedLong("313745091619454979"));
             todo = GlobalVars.client.getChannelByID(Long.parseUnsignedLong("313812891939635240"));
         }
-
         boolean sendA = false;
         boolean sendB = false;
         boolean sendT = false;
@@ -70,31 +67,22 @@ public class Announcements implements ICommand {
             sendA = true;
             sendT = sendB = sendA;
         }
-
-        if (args[0].toLowerCase().contains("announce"))
-            sendA = true;
-        else if (args[0].toLowerCase().contains("update"))
-            sendB = true;
-        else
-            sendT = true;
-
+        if (args[0].toLowerCase().contains("announce")) sendA = true;
+        else if (args[0].toLowerCase().contains("update")) sendB = true;
+        else sendT = true;
         List<IMessage> am = announcements.getMessageHistoryFrom(LocalDateTime.now(), 1);
         String ams = am.isEmpty() ? "No current announcements." : am.get(0).getContent();
         List<IMessage> um = updates.getMessageHistoryFrom(LocalDateTime.now(), 1);
         String ums = um.isEmpty() ? "No current updates." : um.get(0).getContent();
         List<IMessage> tom = todo.getMessageHistoryFrom(LocalDateTime.now(), 1);
         String toms = tom.isEmpty() ? "No current TODO." : tom.get(0).getContent();
-
         EmbedBuilder em = new EmbedBuilder();
         em.withColor(hexToColor(CColors.BASIC));
         em.withAuthorName("Announcements!");
         em.withAuthorIcon(botAva());
-        if(sendA)
-        em.appendField("Announcements", ams.length() > 1024 ? ams.substring(0, 1021) + "..." : ams, false);
-        if(sendB)
-        em.appendField("Updates", ums.length() > 1024 ? ums.substring(0, 1021) + "..." : ums, false);
-        if(sendT)
-        em.appendField("TODO", toms.length() > 1024 ? toms.substring(0, 1021) + "..." : toms, false);
+        if (sendA) em.appendField("Announcements", ams.length() > 1024 ? ams.substring(0, 1021) + "..." : ams, false);
+        if (sendB) em.appendField("Updates", ums.length() > 1024 ? ums.substring(0, 1021) + "..." : ums, false);
+        if (sendT) em.appendField("TODO", toms.length() > 1024 ? toms.substring(0, 1021) + "..." : toms, false);
         em.withDesc("Things cut off? Join the support server [here!](https://discord.gg/SHTbdnJ)");
         em.withFooterIcon(user.getAvatarURL());
         em.withFooterText("Requested by: " + getNameAndDescrim(user));

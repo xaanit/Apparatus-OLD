@@ -69,8 +69,8 @@ public class Help implements ICommand {
                 em.withDesc(res + "\nTo view a catagory do " + getGuild(guild).getPrefix() + "help [type]");
                 this.typeList = em.build();
             }
-            sendMessage(user, this.typeList);
-            sendMessage(channel, checkDM);
+            sendMessage(channel, this.typeList);
+          //  sendMessage(channel, checkDM);
             return;
         }
 
@@ -93,16 +93,16 @@ public class Help implements ICommand {
                     }
                     em.withFooterText(user.getAvatarURL());
                     em.withFooterText("Requested by: " + getNameAndDescrim(user));
-                    sendMessage(user, em.build());
-                    sendMessage(channel, checkDM);
+                    sendMessage(channel, em.build());
+             //       sendMessage(channel, checkDM);
                     return;
                 }
             }
 
             if (GlobalVars.commands.containsKey(args[1].toLowerCase())) {
                 ICommand command = GlobalVars.commands.get(args[1].toLowerCase());
-                sendMessage(user, command.getHelp(user, guild));
-                sendMessage(channel, checkDM);
+                sendMessage(channel, command.getHelp(user, guild));
+         //       sendMessage(channel, checkDM);
                 return;
             } else {
                 EmbedBuilder em = new EmbedBuilder();

@@ -16,8 +16,7 @@ import sx.blah.discord.util.EmbedBuilder;
 
 import java.io.IOException;
 
-import static me.xaanit.apparatus.GlobalVars.client;
-import static me.xaanit.apparatus.GlobalVars.commands;
+import static me.xaanit.apparatus.GlobalVars.*;
 
 
 public class CommandListener implements IListener {
@@ -72,9 +71,13 @@ public class CommandListener implements IListener {
         }
         try {
             String look = args[0].substring(Util.getGuild(guild).getPrefix().length()).toLowerCase();
-            if (commands.containsKey(look))
+            if (commands.containsKey(look)) {
+                config.shardStats.get(guild.getShard().getInfo()[0]).increaseCommandsExecuted();
+                Util.getGuild(guild).getStats().increaseCommandsExecuted();
+                config.getStats().increaseCommandsExecuted();
                 commands.get(look)
                         .runCommand(user, channel, guild, message, args, GlobalVars.client);
+            }
         } catch (PermissionsException ex) {
 
         }
@@ -106,11 +109,15 @@ public class CommandListener implements IListener {
         }
 
         try {
-            if (GlobalVars.commands.containsKey(args[0].toLowerCase()))
+            if (GlobalVars.commands.containsKey(args[0].toLowerCase())) {
+                config.shardStats.get(guild.getShard().getInfo()[0]).increaseCommandsExecuted();
+                Util.getGuild(guild).getStats().increaseCommandsExecuted();
+                config.getStats().increaseCommandsExecuted();
                 GlobalVars.commands.get(args[0].toLowerCase())
                         .runCommand(user, channel, guild, message, args, GlobalVars.client);
-            else {
-                Util.sendMessage(channel, user.mention() + " | " + getCleverbotResponse(Util.combineArgs(args, 0, args.length)));
+            } else {
+                if (Util.getGuild(guild).whitelistedGuild)
+                    Util.sendMessage(channel, user.mention() + " | " + getCleverbotResponse(Util.combineArgs(args, 0, args.length)));
             }
         } catch (PermissionsException ex) {
 

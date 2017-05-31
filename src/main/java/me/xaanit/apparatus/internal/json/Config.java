@@ -1,7 +1,9 @@
 package me.xaanit.apparatus.internal.json;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Jacob on 4/21/2017.
@@ -19,6 +21,8 @@ public class Config {
     private int cleverbotCalls = 1;
 
     private Stats stats = new Stats();
+
+    public Map<Integer, Stats> shardStats = new HashMap<>();
 
     public Config() {
     }
