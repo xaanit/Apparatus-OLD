@@ -1,10 +1,9 @@
 package me.xaanit.apparatus.database;
 
 import me.xaanit.apparatus.GlobalVars;
-import me.xaanit.apparatus.objects.enums.Level;
 import me.xaanit.apparatus.internal.json.Config;
 import me.xaanit.apparatus.internal.json.Guild;
-import me.xaanit.apparatus.internal.json.User;
+import me.xaanit.apparatus.objects.enums.Level;
 import sx.blah.discord.handle.obj.IGuild;
 
 import java.io.File;
@@ -90,33 +89,4 @@ public class Database {
         }
     }
 
-    public static boolean saveUser(User user) {
-        try {
-            String path = GlobalVars.PATH + "users";
-            new File(path).mkdirs();
-            File file = new File(path + "\\" + user.getId() + ".json");
-            if (!file.exists())
-                file.createNewFile();
-            FileWriter fw = new FileWriter(file);
-            String json = GlobalVars.gson.toJson(user);
-            fw.write(json);
-            fw.close();
-            return true;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return false;
-        }
-    }
-
-    public static User loadUser(long id) {
-        try {
-            String path = GlobalVars.PATH + "users";
-            File file = new File(path + "\\" + id + ".json");
-            User user = GlobalVars.gson.fromJson(new FileReader(file), User.class);
-            logger.log("Loading user object: " + user.toString(), Level.INFO);
-            return user;
-        } catch (Exception ex) {
-            return null;
-        }
-    }
 }

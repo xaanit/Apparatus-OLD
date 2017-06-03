@@ -1,6 +1,5 @@
 package me.xaanit.apparatus.objects.commands;
 
-import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
@@ -56,9 +55,9 @@ public class Announcements implements ICommand {
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args, IDiscordClient client) {
         allChecks(user, guild, this, channel);
         while (announcements == null || updates == null || todo == null) {
-            announcements = GlobalVars.client.getChannelByID(Long.parseUnsignedLong("313745078340419585"));
-            updates = GlobalVars.client.getChannelByID(Long.parseUnsignedLong("313745091619454979"));
-            todo = GlobalVars.client.getChannelByID(Long.parseUnsignedLong("313812891939635240"));
+            announcements = client.getChannelByID(Long.parseUnsignedLong("313745078340419585"));
+            updates = client.getChannelByID(Long.parseUnsignedLong("313745091619454979"));
+            todo = client.getChannelByID(Long.parseUnsignedLong("313812891939635240"));
         }
         boolean sendA = false;
         boolean sendB = false;

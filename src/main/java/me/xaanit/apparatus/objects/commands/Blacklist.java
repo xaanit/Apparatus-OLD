@@ -11,6 +11,7 @@ import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
+import sx.blah.discord.util.RequestBuffer;
 
 import java.util.Arrays;
 
@@ -52,13 +53,6 @@ public class Blacklist implements ICommand {
         String type = args.length == 1 ? "GUILD" : args[1];
         long id = args.length == 2 ? guild.getLongID() : Long.parseUnsignedLong(args[2]);
 
-        if (client.getGuildByID(id) == null && type.equalsIgnoreCase("GUILD")) {
-            EmbedBuilder em = basicEmbed(user, "Error", CColors.ERROR);
-            em.withDesc("That guild does not exist.");
-            sendMessage(channel, em.build());
-            return;
-        }
-
         if (client.getUserByID(id) == null && type.equalsIgnoreCase("USER")) {
             EmbedBuilder em = basicEmbed(user, "Error", CColors.ERROR);
             em.withDesc("That user does not exist.");
@@ -80,14 +74,21 @@ public class Blacklist implements ICommand {
             }
         } else {
             if (!config.getBlacklistedServers().contains(id)) {
+                if (client.getGuildByID(id) == null && type.equalsIgnoreCase("GUILD")) {
+                    EmbedBuilder em = basicEmbed(user, "Error", CColors.ERROR);
+                    em.withDesc("That guild does not exist.");
+                    sendMessage(channel, em.build());
+                    return;
+                }
                 config.blacklistServer(id);
                 EmbedBuilder em = basicEmbed(user, "Blacklist", CColors.BASIC);
                 em.withDesc("Blacklisted " + client.getGuildByID(id).getName());
                 sendMessage(channel, em.build());
+                RequestBuffer.request(() -> client.getGuildByID(id).leave());
             } else {
                 config.unBlacklistServer(id);
                 EmbedBuilder em = basicEmbed(user, "Blacklist", CColors.BASIC);
-                em.withDesc("Blacklisted " + client.getGuildByID(id).getName());
+                em.withDesc("Unblacklisted " + (client.getGuildByID(id) == null ? "" + id : client.getGuildByID(id).getName()));
                 sendMessage(channel, em.build());
             }
         }

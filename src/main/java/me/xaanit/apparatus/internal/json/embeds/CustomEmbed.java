@@ -143,5 +143,9 @@ public class CustomEmbed {
     public void setIncludeTimestamp(boolean includeTimestamp) {
         this.includeTimestamp = includeTimestamp;
     }
+
+    public boolean isEmpty() {
+        return authorIcon.isEmpty() && authorName.isEmpty() && authorURL.isEmpty() && thumbnail.isEmpty() && title.isEmpty() && titleURL.isEmpty() && desc.isEmpty() && fields.isEmpty() && image.isEmpty() && colorHex.isEmpty() && footerIcon.isEmpty() && footerText.isEmpty();
+    }
 }
 

@@ -10,9 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by Jacob on 4/21/2017.
- */
 public class Guild {
 
     private long id = 0;
@@ -223,5 +220,53 @@ public class Guild {
 
     public Stats getStats() {
         return stats;
+    }
+
+    public String getGoodbyeMessage() {
+        return goodbyeMessage;
+    }
+
+    public void setGoodbyeMessage(String goodbyeMessage) {
+        this.goodbyeMessage = goodbyeMessage;
+    }
+
+    public CustomEmbed getWelcomeEmbed() {
+        return welcomeEmbed;
+    }
+
+    public void setWelcomeEmbed(CustomEmbed welcomeEmbed) {
+        this.welcomeEmbed = welcomeEmbed;
+    }
+
+    public CustomEmbed getGoodbyeEmbed() {
+        return goodbyeEmbed;
+    }
+
+    public void setGoodbyeEmbed(CustomEmbed goodbyeEmbed) {
+        this.goodbyeEmbed = goodbyeEmbed;
+    }
+
+    public boolean isUseWelcomeEmbed() {
+        return useWelcomeEmbed;
+    }
+
+    public void setUseWelcomeEmbed(boolean useWelcomeEmbed) {
+        this.useWelcomeEmbed = useWelcomeEmbed;
+    }
+
+    public boolean isUseGoodbyeEmbed() {
+        return useGoodbyeEmbed;
+    }
+
+    public void setUseGoodbyeEmbed(boolean useGoodbyeEmbed) {
+        this.useGoodbyeEmbed = useGoodbyeEmbed;
+    }
+
+    public boolean isGoodbyeOn() {
+        return goodbyeOn;
+    }
+
+    public void setGoodbyeOn(boolean goodbyeOn) {
+        this.goodbyeOn = goodbyeOn;
     }
 }

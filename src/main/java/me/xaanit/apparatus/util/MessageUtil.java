@@ -8,6 +8,8 @@ import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.RequestBuffer;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -45,6 +47,17 @@ public class MessageUtil extends GuildUtil {
             try {
                 return channel.sendMessage(str, em);
             } catch (DiscordException ex) {
+                ex.printStackTrace();
+            }
+            return null;
+        }).get();
+    }
+
+    public static IMessage sendMessage(IChannel channel, File file, String str) {
+        return RequestBuffer.request(() -> {
+            try {
+                return channel.sendFile(str, file);
+            } catch (DiscordException | FileNotFoundException ex) {
                 ex.printStackTrace();
             }
             return null;

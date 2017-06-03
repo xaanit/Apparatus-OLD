@@ -38,14 +38,14 @@ public class Restart implements ICommand {
 
     @Override
     public EmbedObject getHelp(IUser user, IGuild guild) {
-        EmbedBuilder em = addToHelpEmbed(this, user, new String[]{getGuild(guild).getPrefix(), getName()}, new String[]{Arrays.toString(getAliases())
+        EmbedBuilder em = addToHelpEmbed(this, user, new String[]{getGuild(guild).getPrefix(), getName() + "<shard>"}, new String[]{Arrays.toString(getAliases())
                 .replaceAll(getName() + ",\\s", "")});
         return em.build();
     }
 
     @Override
     public String getInfo() {
-        return "Restarts the bot (and can update it)";
+        return "Restarts a shard.";
     }
 
     @Override

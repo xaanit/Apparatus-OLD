@@ -55,7 +55,6 @@ public class Help implements ICommand {
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args, IDiscordClient client) {
         allChecks(user, guild, this, channel);
-        String checkDM = ":clipboard: | Check your DMs!";
         if (args.length == 1) {
             if (typeList == null) {
                 EmbedBuilder em = new EmbedBuilder();
@@ -63,20 +62,19 @@ public class Help implements ICommand {
                 em.withAuthorName("Help - Types");
                 em.withAuthorIcon(botAva());
                 String res = "Categories:\n\n";
-                for (CmdType type : CmdType.getTypes()) {
+                for (CmdType type : CmdType.values()) {
                     res += "**" + CmdType.format(type) + "**\n";
                 }
                 em.withDesc(res + "\nTo view a catagory do " + getGuild(guild).getPrefix() + "help [type]");
                 this.typeList = em.build();
             }
             sendMessage(channel, this.typeList);
-          //  sendMessage(channel, checkDM);
             return;
         }
 
         if (args.length == 2) {
-            for (CmdType type : CmdType.getTypes()) {
-                if (type.toString().replaceAll("_", "").equalsIgnoreCase(args[1].replaceAll("_", ""))) {
+            for (CmdType type : CmdType.values()) {
+                if (type.toString().replaceAll("_", "").equalsIgnoreCase(args[1].replaceAll("_", "")) && type != CmdType.SECRET) {
                     List<ICommand> commandsFound = new ArrayList<>();
                     for (String key : GlobalVars.commands.keySet()) {
                         ICommand command = GlobalVars.commands.get(key);
@@ -94,15 +92,14 @@ public class Help implements ICommand {
                     em.withFooterText(user.getAvatarURL());
                     em.withFooterText("Requested by: " + getNameAndDescrim(user));
                     sendMessage(channel, em.build());
-             //       sendMessage(channel, checkDM);
                     return;
                 }
             }
 
             if (GlobalVars.commands.containsKey(args[1].toLowerCase())) {
                 ICommand command = GlobalVars.commands.get(args[1].toLowerCase());
-                sendMessage(channel, command.getHelp(user, guild));
-         //       sendMessage(channel, checkDM);
+                if (command.getType() != CmdType.SECRET)
+                    sendMessage(channel, command.getHelp(user, guild));
                 return;
             } else {
                 EmbedBuilder em = new EmbedBuilder();
@@ -112,7 +109,7 @@ public class Help implements ICommand {
                 em.withDesc("I can't seem to find the command " + args[1] + " in my database. Are you sure you typed it correctly?\n\n*Deletes after 15 seconds*");
                 em.withFooterText(user.getAvatarURL());
                 em.withFooterText("Requested by: " + getNameAndDescrim(user));
-                IMessage m = sendMessage(user, em.build());
+                IMessage m = sendMessage(channel, em.build());
                 deleteCommand(m, 15);
                 return;
             }

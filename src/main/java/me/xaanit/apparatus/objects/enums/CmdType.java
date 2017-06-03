@@ -8,6 +8,8 @@ public enum CmdType {
     FUN,
     DEV,
     MODERATION,
+    CUSTOMISATION,
+    SECRET,
     BOT_INFO;
 
     public static String format(CmdType type) {
@@ -18,7 +20,4 @@ public enum CmdType {
         return res.trim().substring(0, res.length() - 1);
     }
 
-    public static CmdType[] getTypes() {
-        return new CmdType[]{UTIL, FUN, DEV, MODERATION, BOT_INFO};
-    }
 }

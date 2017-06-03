@@ -83,6 +83,10 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>imagej.public</id>
+            <url>http://maven.imagej.net/content/groups/public</url>
+        </repository>
     </repositories>
     <dependencies>
         <!--    <dependency>
@@ -124,6 +128,11 @@
             <groupId>com.michaelwflaherty</groupId>
             <artifactId>cleverbotapi</artifactId>
             <version>1.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>net.imagej</groupId>
+            <artifactId>ij</artifactId>
+            <version>1.45b</version>
         </dependency>
     </dependencies>
 </project>

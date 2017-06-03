@@ -23,7 +23,7 @@ import static me.xaanit.apparatus.util.Util.*;
  * Created by Jacob on 5/15/2017.
  */
 public class Info implements ICommand {
-    private String invite = "";
+    public static String invite = "";
     int totalCommands = -1;
 
     @Override

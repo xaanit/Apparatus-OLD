@@ -1,6 +1,5 @@
 package me.xaanit.apparatus.objects.commands;
 
-import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
@@ -12,7 +11,6 @@ import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
-import sx.blah.discord.util.RequestBuffer;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -37,7 +35,6 @@ public class Eval implements ICommand {
 
     @Override
     public String getName() {
-        RequestBuffer.request(() -> GlobalVars.client.streaming("@Apparatus prefix | " + GlobalVars.client.getGuilds().size() + " guild(s)", "https://www.twitch.tv/awdawdadwwd"));
         return "eval";
     }
 
@@ -71,10 +68,10 @@ public class Eval implements ICommand {
         Object o = null;
         factory.put("guild", guild);
         factory.put("channel", channel);
-        factory.put("commands", GlobalVars.commands);
-        factory.put("guilds", GlobalVars.guilds);
+        factory.put("commands", commands);
+        factory.put("guilds", guilds);
         factory.put("currGuild", getGuild(guild));
-        factory.put("gson", GlobalVars.gson);
+        factory.put("gson", gson);
         factory.put("util", util);
         factory.put("userUtil", userUtil);
         factory.put("roleUtil", roleUtil);
@@ -83,12 +80,13 @@ public class Eval implements ICommand {
         factory.put("guildUtil", guildUtil);
         factory.put("embedUtil", embedUtil);
         factory.put("channelUtil", channelUtil);
-        factory.put("users", GlobalVars.users);
+        factory.put("users", users);
+        factory.put("config", config);
         factory.put("user", user);
         factory.put("message", message);
         factory.put("command", this);
-        factory.put("client", GlobalVars.client);
-        factory.put("commandnames", GlobalVars.commandNames);
+        factory.put("client", client);
+        factory.put("commandnames", commandNames);
 
         try {
             String imports = "var imports = new JavaImporter(java.io, java.lang, java.util, \"Packages.sx.blah.discord.handle.obj\", \"Packages.sx.blah.discord.util\", \"Packages.me.xaanit.apparatus.util\");";

@@ -5,9 +5,14 @@ import me.xaanit.apparatus.util.Util;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.*;
+import sx.blah.discord.util.EmbedBuilder;
 
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Map;
+
+import static me.xaanit.apparatus.util.EmbedUtil.addToHelpEmbed;
+import static me.xaanit.apparatus.util.GuildUtil.getGuild;
 
 public interface ICommand {
 
@@ -61,7 +66,11 @@ public interface ICommand {
      * @param guild The guild it was run it
      * @return The built EmbedObject
      */
-    EmbedObject getHelp(IUser user, IGuild guild);
+    default EmbedObject getHelp(IUser user, IGuild guild) {
+        EmbedBuilder em = addToHelpEmbed(this, user, new String[]{getGuild(guild).getPrefix(), getName()}, new String[]{Arrays.toString(getAliases())
+                .replaceAll(getName() + ",\\s", "")});
+        return em.build();
+    }
 
     default Permissions getModPerm() {
         return null;
