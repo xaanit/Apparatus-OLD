@@ -1,5 +1,7 @@
-package me.xaanit.apparatus.objects.commands;
+package me.xaanit.apparatus.objects.commands.dev;
 
+import me.xaanit.apparatus.GlobalVars;
+import me.xaanit.apparatus.database.Database;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
@@ -10,48 +12,50 @@ import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
 
-import java.time.ZoneOffset;
-
 import static me.xaanit.apparatus.util.Util.*;
 
 /**
- * Created by Jacob on 5/21/2017.
+ * Created by Jacob on 5/17/2017.
  */
-public class Ping implements ICommand {
+public class Logout implements ICommand {
     @Override
     public String getName() {
-        return "ping";
+        return "logout";
     }
 
     @Override
     public String[] getAliases() {
-        return new String[]{getName()};
+        return new String[]{getName(), "shutdown"};
     }
 
     @Override
     public CmdType getType() {
-        return CmdType.UTIL;
+        return CmdType.DEV;
     }
 
     @Override
     public String getInfo() {
-        return "Ping!";
+        return "Logs out the bot.";
     }
 
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args, IDiscordClient client) {
         allChecks(user, guild, this, channel);
 
-        IMessage m = sendMessage(channel, "Pong!");
-
-        long diff = m.getTimestamp().toInstant(ZoneOffset.UTC).toEpochMilli() - message.getTimestamp().toInstant(ZoneOffset.UTC).toEpochMilli();
         EmbedBuilder em = new EmbedBuilder();
         em.withAuthorIcon(botAva());
+        em.withAuthorName("Logout!");
+        em.withDesc("Logging out.... Saving guilds...");
         em.withColor(hexToColor(CColors.BASIC));
-        em.withAuthorName("Ping! Stats");
-        em.withDesc("Time in between messages: " + diff + "ms.\nTime it took the Rest API to get back to me: " + guild.getShard().getResponseTime() + "ms");
-        em.withFooterIcon(user.getAvatarURL());
-        em.withFooterText("Requested by: " + getNameAndDescrim(user));
+        IMessage m = sendMessage(channel, em.build());
+        long begin = System.currentTimeMillis();
+        for (long key : GlobalVars.guilds.keySet()) {
+            Database.saveGuild(GlobalVars.guilds.get(key));
+        }
+        em.withDesc("Guilds saved!");
+        em.withFooterText("Took me [ " + (System.currentTimeMillis() - begin) + " ms ] to save [ " + GlobalVars.guilds.size() + " ] guilds.");
         editMessage(m, em.build());
+        client.logout();
+        System.exit(0);
     }
 }

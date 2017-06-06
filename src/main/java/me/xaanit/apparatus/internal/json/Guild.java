@@ -19,6 +19,8 @@ public class Guild {
     private boolean devOverride = false;
     private boolean crashReports = true;
 
+    private List<Long> barredUsers = new ArrayList<>();
+
     private List<BuyableRole> buyableRoles = new ArrayList<>();
 
     private String welcomeMessage = "";
@@ -268,5 +270,19 @@ public class Guild {
 
     public void setGoodbyeOn(boolean goodbyeOn) {
         this.goodbyeOn = goodbyeOn;
+    }
+
+    public List<Long> getBarredUsers() {
+        return barredUsers;
+    }
+
+    public void barUser(long id) {
+        if (barredUsers.stream().filter(u -> u == id).count() == 0)
+            barredUsers.add(id);
+    }
+
+    public void unbarUser(long id) {
+        if (barredUsers.stream().filter(u -> u == id).count() == 1)
+            barredUsers.remove(id);
     }
 }

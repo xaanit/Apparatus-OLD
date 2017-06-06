@@ -111,7 +111,7 @@ public class EmbedUtil extends ChannelUtil {
 
     public static CustomEmbed customEmbedParser(IUser user, IGuild guild, IChannel channel, IMessage message, String str) {
         if (str.startsWith("http")) {
-            if (!str.startsWith("https://pastebin.com/raw/") && !str.startsWith("https://raw.githubusercontent.com/"))
+            if (!str.startsWith("https://pastebin.com/raw/") && !str.startsWith("https://raw.githubusercontent.com/") && !str.startsWith("https://hastebin.com/raw/"))
                 return null;
             try {
                 str = Requests.get(str);
@@ -119,7 +119,6 @@ public class EmbedUtil extends ChannelUtil {
                 return null;
             }
         }
-        System.out.println(str + " :: STR");
         str = str.replaceAll("\\sFieldText", "} {FieldText").replaceAll("\\sInline", "} {Inline");
 
         List<String> look = new ArrayList<>();
@@ -140,8 +139,6 @@ public class EmbedUtil extends ChannelUtil {
             str = str.replace("{" + s1 + "}", "[[" + s1 + "]]");
         }
 
-
-        System.out.println(str + " :: STR");
 
         Pattern p = Pattern
                 .compile("\\{([a-zA-Z]+):([\\w\\s\\n.,\\--;!”“‘’?-@<>:/#$%^&*()**\\[\\]_=+=~`’\'\"\\\\|]+)}");
@@ -165,7 +162,9 @@ public class EmbedUtil extends ChannelUtil {
         while (m.find()) {
             String res = m.group(2);
             switch (m.group(1).toLowerCase()) {
+                case "colour":
                 case "color": {
+                    res = res.replace("#", "");
                     if (res.length() == 6 && !res.equals("")) {
                         colour = res;
                         break;
@@ -287,9 +286,8 @@ public class EmbedUtil extends ChannelUtil {
             throw new IllegalArgumentException("Your hex code must only be 6 length!");
 
         List<Field> fields = new ArrayList<>();
-        for (int i = 0; i < fieldInfo.size() - 3; i += 3) {
+        for (int i = 0; i < fieldInfo.size(); i += 3)
             fields.add(new Field(fieldInfo.get(i), fieldInfo.get(i + 1), fieldInfo.get(i + 2).equalsIgnoreCase("true")));
-        }
 
         CustomEmbed c = new CustomEmbed(
                 authorIcon, authorName, authorURL, thumbnail, title, titleURL,

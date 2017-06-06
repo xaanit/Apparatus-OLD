@@ -1,6 +1,7 @@
-package me.xaanit.apparatus.objects.commands;
+package me.xaanit.apparatus.objects.commands.botinfo;
 
 import me.xaanit.apparatus.GlobalVars;
+import me.xaanit.apparatus.objects.commands.util.Info;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
@@ -24,6 +25,7 @@ public class Invite implements ICommand {
     public String[] getAliases() {
         return new String[]{getName(), "getbot", "howdoiaddyoutomyserver", "iloveyoucomejoinme"};
     }
+
 
     @Override
     public CmdType getType() {

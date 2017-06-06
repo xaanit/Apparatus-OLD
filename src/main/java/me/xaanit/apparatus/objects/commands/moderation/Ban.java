@@ -1,4 +1,4 @@
-package me.xaanit.apparatus.objects.commands;
+package me.xaanit.apparatus.objects.commands.moderation;
 
 import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.internal.events.BanEvent;
@@ -35,11 +35,6 @@ public class Ban implements ICommand {
     }
 
     @Override
-    public CmdType getType() {
-        return CmdType.MODERATION;
-    }
-
-    @Override
     public EnumSet<Permissions> getNeededPermission() {
         return PermissionsUtil.makePermissions(PermissionsUtil.basicPermissions(), Permissions.BAN);
     }
@@ -47,6 +42,12 @@ public class Ban implements ICommand {
     @Override
     public Permissions getUserPerm() {
         return Permissions.BAN;
+    }
+
+
+    @Override
+    public CmdType getType() {
+        return CmdType.MODERATION;
     }
 
     @Override

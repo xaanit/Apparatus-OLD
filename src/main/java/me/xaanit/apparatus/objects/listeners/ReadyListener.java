@@ -29,7 +29,6 @@ public class ReadyListener implements IListener {
 
     @EventSubscriber
     public void onReady(ReadyEvent event) {
-        ready = true;
         logger.log("Ready event start...", Level.INFO);
         for (long l : GlobalVars.config.getBlacklistedServers()) {
             IGuild guild = GlobalVars.client.getGuildByID(l);
@@ -38,12 +37,15 @@ public class ReadyListener implements IListener {
                 RequestBuffer.request(() -> guild.leave());
             }
         }
-        RequestBuffer.request(() -> GlobalVars.client.streaming("@Apparatus prefix | " + GlobalVars.client.getGuilds().size() + " guild(s)", "https://www.twitch.tv"));
+        RequestBuffer.request(() -> GlobalVars.client.streaming("@Apparatus prefix | " + GlobalVars.client.getGuilds().size() + " guild(s)", "https://www.twitch.tv/p/about"));
         //RequestBuffer.request(() -> GlobalVars.client.changeAvatar(Image.forUrl("png", "https://cdn.discordapp.com/attachments/245615097559515136/313983485775708160/XanXan.png")));
         initCommands();
-        save();
-        initShardStats();
+        if (!ready) {
+            save();
+            initShardStats();
+        }
         logger.log("Bot ready!", Level.INFO);
+        ready = true;
     }
 
     public void initShardStats() {

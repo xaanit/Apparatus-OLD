@@ -1,4 +1,4 @@
-package me.xaanit.apparatus.objects.commands;
+package me.xaanit.apparatus.objects.commands.botinfo;
 
 import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.objects.enums.CColors;
@@ -35,6 +35,7 @@ public class Help implements ICommand {
         return new String[]{getName(), "commands"};
     }
 
+
     @Override
     public CmdType getType() {
         return CmdType.BOT_INFO;
@@ -63,7 +64,8 @@ public class Help implements ICommand {
                 em.withAuthorIcon(botAva());
                 String res = "Categories:\n\n";
                 for (CmdType type : CmdType.values()) {
-                    res += "**" + CmdType.format(type) + "**\n";
+                    if (type != CmdType.SECRET)
+                        res += "**" + CmdType.format(type) + "**\n";
                 }
                 em.withDesc(res + "\nTo view a catagory do " + getGuild(guild).getPrefix() + "help [type]");
                 this.typeList = em.build();

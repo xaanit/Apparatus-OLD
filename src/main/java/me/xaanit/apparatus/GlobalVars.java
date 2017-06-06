@@ -1,11 +1,10 @@
 package me.xaanit.apparatus;
 
 import com.google.gson.Gson;
-import me.xaanit.apparatus.objects.Logger;
-import me.xaanit.apparatus.objects.interfaces.ICommand;
 import me.xaanit.apparatus.internal.json.Config;
 import me.xaanit.apparatus.internal.json.Guild;
-import me.xaanit.apparatus.internal.json.User;
+import me.xaanit.apparatus.objects.Logger;
+import me.xaanit.apparatus.objects.interfaces.ICommand;
 import sx.blah.discord.api.IDiscordClient;
 
 import java.util.ArrayList;
@@ -27,8 +26,6 @@ public class GlobalVars {
     public static List<String> commandNames = new ArrayList<>();
 
     public static Map<Long, Guild> guilds = new HashMap<>();
-
-    public static Map<Long, User> users = new HashMap<>();
 
     public static Logger logger = new Logger();
 

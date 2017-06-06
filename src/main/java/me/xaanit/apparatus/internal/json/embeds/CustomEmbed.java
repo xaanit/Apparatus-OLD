@@ -24,6 +24,25 @@ public class CustomEmbed {
     public CustomEmbed() {
     }
 
+    @Override
+    public String toString() {
+        return "CustomEmbed{" +
+                "authorIcon='" + authorIcon + '\'' + "\n" +
+                ", authorName='" + authorName + '\'' + "\n"+
+                ", authorURL='" + authorURL + '\'' + "\n"+
+                ", thumbnail='" + thumbnail + '\'' + "\n"+
+                ", title='" + title + '\'' + "\n"+
+                ", titleURL='" + titleURL + '\'' + "\n"+
+                ", desc='" + desc + '\'' + "\n"+
+                ", fields=" + fields + "\n"+
+                ", image='" + image + '\'' + "\n"+
+                ", colorHex='" + colorHex + '\'' + "\n"+
+                ", footerIcon='" + footerIcon + '\'' + "\n"+
+                ", footerText='" + footerText + '\'' + "\n"+
+                ", includeTimestamp=" + includeTimestamp + "\n"+
+                '}';
+    }
+
     public CustomEmbed(String authorIcon, String authorName, String authorURL, String thumbnail, String title, String titleURL, String desc, List<Field> fields, String image, String colorHex, String footerIcon, String footerText, boolean includeTimestamp) {
         this.authorIcon = authorIcon;
         this.authorName = authorName;
@@ -147,5 +166,6 @@ public class CustomEmbed {
     public boolean isEmpty() {
         return authorIcon.isEmpty() && authorName.isEmpty() && authorURL.isEmpty() && thumbnail.isEmpty() && title.isEmpty() && titleURL.isEmpty() && desc.isEmpty() && fields.isEmpty() && image.isEmpty() && colorHex.isEmpty() && footerIcon.isEmpty() && footerText.isEmpty();
     }
+
 }
 

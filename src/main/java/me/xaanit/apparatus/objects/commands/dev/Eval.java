@@ -1,4 +1,4 @@
-package me.xaanit.apparatus.objects.commands;
+package me.xaanit.apparatus.objects.commands.dev;
 
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
@@ -44,15 +44,15 @@ public class Eval implements ICommand {
     }
 
     @Override
-    public CmdType getType() {
-        return CmdType.DEV;
-    }
-
-    @Override
     public EmbedObject getHelp(IUser user, IGuild guild) {
         EmbedBuilder em = addToHelpEmbed(this, user, new String[]{getGuild(guild).getPrefix(), getName() + " <expression>"}, new String[]{Arrays.toString(getAliases())
                 .replaceAll(getName() + ",\\s", "")});
         return em.build();
+    }
+
+    @Override
+    public CmdType getType() {
+        return CmdType.DEV;
     }
 
     @Override
@@ -80,7 +80,6 @@ public class Eval implements ICommand {
         factory.put("guildUtil", guildUtil);
         factory.put("embedUtil", embedUtil);
         factory.put("channelUtil", channelUtil);
-        factory.put("users", users);
         factory.put("config", config);
         factory.put("user", user);
         factory.put("message", message);

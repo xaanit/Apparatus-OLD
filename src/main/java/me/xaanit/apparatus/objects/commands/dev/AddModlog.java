@@ -1,4 +1,4 @@
-package me.xaanit.apparatus.objects.commands;
+package me.xaanit.apparatus.objects.commands.dev;
 
 import me.xaanit.apparatus.database.Database;
 import me.xaanit.apparatus.internal.json.Guild;

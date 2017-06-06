@@ -8,7 +8,8 @@ public class Field {
     private String fieldValue = "";
     private boolean inline = false;
 
-    public Field() {}
+    public Field() {
+    }
 
     public Field(String title, String value, boolean inline) {
         this.fieldTitle = title;
@@ -38,5 +39,10 @@ public class Field {
 
     public void setInline(boolean inline) {
         this.inline = inline;
+    }
+
+    @Override
+    public String toString() {
+        return "[title=" + fieldTitle + "[value=" + fieldValue + "[inline=" + inline + "]]]";
     }
 }

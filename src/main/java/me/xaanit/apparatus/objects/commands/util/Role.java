@@ -1,4 +1,4 @@
-package me.xaanit.apparatus.objects.commands;
+package me.xaanit.apparatus.objects.commands.util;
 
 import me.xaanit.apparatus.objects.FailedRole;
 import me.xaanit.apparatus.objects.enums.CColors;

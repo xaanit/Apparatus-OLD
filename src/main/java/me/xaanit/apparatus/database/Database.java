@@ -21,13 +21,13 @@ public class Database {
     public static Config loadConfig() {
         try {
             File file = new File(GlobalVars.PATH + "config.json");
-            System.out.println(file.getAbsolutePath());
             if (!file.exists()) {
                 file.createNewFile();
                 return new Config(true);
             }
             return GlobalVars.gson.fromJson(new FileReader(file), Config.class);
         } catch (Exception ex) {
+            ex.printStackTrace();
             System.exit(0);
             return null;
         }

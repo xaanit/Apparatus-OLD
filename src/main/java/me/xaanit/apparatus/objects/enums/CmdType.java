@@ -12,6 +12,7 @@ public enum CmdType {
     SECRET,
     BOT_INFO;
 
+
     public static String format(CmdType type) {
         String[] args = type.toString().split("_");
         String res = "";

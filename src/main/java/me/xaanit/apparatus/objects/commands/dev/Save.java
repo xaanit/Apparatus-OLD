@@ -1,4 +1,4 @@
-package me.xaanit.apparatus.objects.commands;
+package me.xaanit.apparatus.objects.commands.dev;
 
 import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.database.Database;
@@ -34,15 +34,15 @@ public class Save implements ICommand {
     }
 
     @Override
-    public CmdType getType() {
-        return null;
-    }
-
-    @Override
     public EmbedObject getHelp(IUser user, IGuild guild) {
         EmbedBuilder em = addToHelpEmbed(this, user, new String[]{getGuild(guild).getPrefix(), getName() + "[guildID]"}, new String[]{Arrays.toString(getAliases())
                 .replaceAll(getName() + ",\\s", "")});
         return em.build();
+    }
+
+    @Override
+    public CmdType getType() {
+        return CmdType.DEV;
     }
 
     @Override
@@ -79,7 +79,7 @@ public class Save implements ICommand {
         } else {
             IGuild g;
             try {
-                 g = GlobalVars.client.getGuildByID(Long.parseUnsignedLong(args[1]));
+                g = GlobalVars.client.getGuildByID(Long.parseUnsignedLong(args[1]));
             } catch (NumberFormatException ex) {
                 EmbedBuilder em = new EmbedBuilder();
                 em.withColor(hexToColor(CColors.ERROR));

@@ -1,4 +1,4 @@
-package me.xaanit.apparatus.objects.commands;
+package me.xaanit.apparatus.objects.commands.dev;
 
 import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.objects.enums.CColors;
@@ -52,7 +52,7 @@ public class Restart implements ICommand {
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args, IDiscordClient client) {
         allChecks(user, guild, this, channel);
 
-        if(args.length == 1) {
+        if (args.length == 1) {
             EmbedBuilder em = new EmbedBuilder();
             em.withColor(hexToColor(CColors.ERROR));
             em.withAuthorIcon(botAva());
@@ -78,7 +78,7 @@ public class Restart implements ICommand {
             sendMessage(channel, em.build());
             return;
         }
-        if(shard >= GlobalVars.client.getShardCount()) {
+        if (shard >= GlobalVars.client.getShardCount()) {
             EmbedBuilder em = new EmbedBuilder();
             em.withColor(hexToColor(CColors.ERROR));
             em.withAuthorIcon(botAva());
