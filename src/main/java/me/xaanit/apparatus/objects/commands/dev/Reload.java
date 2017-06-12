@@ -6,6 +6,7 @@ import me.xaanit.apparatus.internal.json.Guild;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
+import me.xaanit.apparatus.objects.listeners.ReadyListener;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IChannel;
@@ -61,6 +62,18 @@ public class Reload implements ICommand {
             return;
         }
 
+        if (args[1].equalsIgnoreCase("guild")) {
+            guilds.put(guild.getLongID(), Database.loadGuild(guild));
+            EmbedBuilder em = new EmbedBuilder();
+            em.withColor(hexToColor(CColors.BASIC));
+            em.withAuthorIcon(botAva());
+            em.withAuthorName("Reload");
+            em.withDesc("Reloaded the guild..");
+            em.withFooterText("Reloaded guild " + guild.getName());
+            sendMessage(channel, em.build());
+            return;
+        }
+
         if (args[1].equalsIgnoreCase("guilds")) {
             long now = System.currentTimeMillis();
             int s = 0;
@@ -75,6 +88,7 @@ public class Reload implements ICommand {
                     s++;
                 }
             }
+            ReadyListener.initMusicManagers();
             EmbedBuilder em = new EmbedBuilder();
             em.withColor(hexToColor(CColors.BASIC));
             em.withAuthorIcon(botAva());

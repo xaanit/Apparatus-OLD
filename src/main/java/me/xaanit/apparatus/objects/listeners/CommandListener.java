@@ -33,18 +33,18 @@ public class CommandListener implements IListener {
         IGuild guild = event.getGuild();
         String content = message.getContent();
 
-        if (content.isEmpty()) {
-            return;
-        }
+        if (content.isEmpty()) return;
+
+
+        if (channel.isPrivate()) return;
+
         String[] args = content.split(" ");
 
-        if (user.isBot())
-            return;
+        if (user.isBot()) return;
 
 
-        if (GlobalVars.config.getBlacklistedUsers().contains(user.getLongID())) {
-            return;
-        }
+        if (GlobalVars.config.getBlacklistedUsers().contains(user.getLongID())) return;
+
         if (content.startsWith("❌")) {
             if (!Util.isDev(user))
                 return;
@@ -66,9 +66,8 @@ public class CommandListener implements IListener {
             }
         }
 
-        if (!content.startsWith(Util.getGuild(guild).getPrefix())) {
-            return;
-        }
+        if (!content.startsWith(Util.getGuild(guild).getPrefix())) return;
+
         try {
             String look = args[0].substring(Util.getGuild(guild).getPrefix().length()).toLowerCase();
             if (commands.containsKey(look)) {
@@ -79,7 +78,9 @@ public class CommandListener implements IListener {
                         .runCommand(user, channel, guild, message, args, GlobalVars.client);
             }
         } catch (PermissionsException ex) {
-
+            config.shardStats.get(guild.getShard().getInfo()[0]).decreaseCommandsExecuted();
+            Util.getGuild(guild).getStats().decreaseCommandsExecuted();
+            config.getStats().decreaseCommandsExecuted();
         }
     }
 
@@ -93,12 +94,13 @@ public class CommandListener implements IListener {
         String content = message.getContent();
 
 
-        if (user.isBot())
-            return;
+        if (user.isBot()) return;
+
+        if (channel.isPrivate()) return;
 
         String[] oldArgs = content.split("\\s");
         if (!channel.getModifiedPermissions(GlobalVars.client.getOurUser()).contains(Permissions.SEND_MESSAGES)) return;
-        if (!oldArgs[0].replaceAll("<@(!)?305407264099926016>", "").isEmpty()) return;
+        if (!oldArgs[0].replaceAll("<@!?305407264099926016>", "").isEmpty()) return;
         if (oldArgs.length == 1) return;
         if (GlobalVars.config.getBlacklistedUsers().contains(user.getLongID())) return;
         String[] args = copy(oldArgs, 1);
@@ -120,7 +122,9 @@ public class CommandListener implements IListener {
                     Util.sendMessage(channel, user.mention() + " | " + getCleverbotResponse(Util.combineArgs(args, 0, args.length)));
             }
         } catch (PermissionsException ex) {
-
+            config.shardStats.get(guild.getShard().getInfo()[0]).decreaseCommandsExecuted();
+            Util.getGuild(guild).getStats().decreaseCommandsExecuted();
+            config.getStats().decreaseCommandsExecuted();
         }
     }
 

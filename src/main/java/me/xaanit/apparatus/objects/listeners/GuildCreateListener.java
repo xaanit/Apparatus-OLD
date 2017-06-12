@@ -2,8 +2,8 @@ package me.xaanit.apparatus.objects.listeners;
 
 import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.database.Database;
-import me.xaanit.apparatus.objects.interfaces.IListener;
 import me.xaanit.apparatus.internal.json.Guild;
+import me.xaanit.apparatus.objects.interfaces.IListener;
 import me.xaanit.apparatus.util.Util;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.guild.GuildCreateEvent;
@@ -30,11 +30,13 @@ public class GuildCreateListener implements IListener {
             if (left)
                 return;
         }
-        IGuild guild = event.getGuild();
-        if (!GlobalVars.guilds.containsKey(guild.getLongID())) {
-            Guild g = Database.loadGuild(guild);
-            g.updateCommands();
-            GlobalVars.guilds.putIfAbsent(guild.getLongID(), g);
+        synchronized (this) {
+            IGuild guild = event.getGuild();
+            if (!GlobalVars.guilds.containsKey(guild.getLongID())) {
+                Guild g = Database.loadGuild(guild);
+                g.updateCommands();
+                GlobalVars.guilds.putIfAbsent(guild.getLongID(), g);
+            }
         }
     }
 }

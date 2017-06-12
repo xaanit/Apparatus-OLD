@@ -31,6 +31,7 @@ public class Guild {
     private boolean useWelcomeEmbed = false;
     private boolean useGoodbyeEmbed = false;
 
+
     private List<Autorole> autoRoles = new ArrayList<>();
 
     private List<Long> assignableRoles = new ArrayList<>();

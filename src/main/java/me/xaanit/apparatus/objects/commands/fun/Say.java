@@ -13,13 +13,7 @@ import sx.blah.discord.util.EmbedBuilder;
 
 import java.util.Arrays;
 
-import static me.xaanit.apparatus.util.EmbedUtil.basicEmbed;
-import static me.xaanit.apparatus.util.MessageUtil.combineArgs;
-import static me.xaanit.apparatus.util.MessageUtil.sendMessage;
-import static me.xaanit.apparatus.util.PermissionsUtil.allChecks;
-import static me.xaanit.apparatus.util.UserUtil.getNameAndDescrim;
-import static me.xaanit.apparatus.util.Util.addToHelpEmbed;
-import static me.xaanit.apparatus.util.Util.getGuild;
+import static me.xaanit.apparatus.util.Util.*;
 
 public class Say implements ICommand {
     @Override
@@ -59,6 +53,7 @@ public class Say implements ICommand {
             sendMessage(channel, em.build());
             return;
         }
-        sendMessage(channel, combineArgs(args, 1, args.length) + "\n\n*~" + getNameAndDescrim(user) + "*");
+        String text = args[args.length - 1].equalsIgnoreCase("r") ? new StringBuilder(combineArgs(args, 1, args.length - 1)).reverse().toString() : combineArgs(args, 1, args.length);
+        sendMessage(channel, (args[args.length - 1].equalsIgnoreCase("d") && isDev(user) ? text.substring(0, text.length() - 2) : text) + (args[args.length - 1].equalsIgnoreCase("d") && isDev(user) ? "" : "\n\n*~" + getNameAndDescrim(user) + "*"));
     }
 }

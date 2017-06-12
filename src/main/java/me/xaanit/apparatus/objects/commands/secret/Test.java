@@ -11,6 +11,13 @@ import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import static me.xaanit.apparatus.util.Util.*;
 
 public class Test implements ICommand {
@@ -37,7 +44,12 @@ public class Test implements ICommand {
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args, IDiscordClient client) {
         allChecks(user, guild, this, channel);
-        CustomEmbed c = customEmbedParser(user, guild, channel, message, combineArgs(args, 1, args.length));
+        client.getOurUser().getVoiceStateForGuild(guild).getChannel().leave();
+
+        if (true) return;
+        CustomEmbed c = customEmbedParser(combineArgs(args, 1, args.length));
+        sendMessage(channel, "```json\n" + gson.toJson(c) + "```");
+        if (true) return;
         EmbedBuilder em = new EmbedBuilder();
         if (!c.getColorHex().isEmpty())
             em.withColor(hexToColor(c.getColorHex()));
@@ -67,5 +79,36 @@ public class Test implements ICommand {
             em.withFooterText((c.getFooterText().isEmpty() ? "" : " | ") + getCurrentTime());
 
         sendMessage(channel, em.build());
+    }
+
+
+    private String getInfo(String str) {
+        String res = "";
+        URL url;
+        InputStream is = null;
+        BufferedReader br;
+        String line;
+
+        try {
+            url = new URL(str);
+            is = url.openStream();  // throws an IOException
+            br = new BufferedReader(new InputStreamReader(is));
+
+            while ((line = br.readLine()) != null) {
+                res += line;
+            }
+        } catch (MalformedURLException mue) {
+            mue.printStackTrace();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        } finally {
+            try {
+                if (is != null) is.close();
+            } catch (IOException ioe) {
+                // nothing to see here
+            }
+        }
+
+        return res;
     }
 }

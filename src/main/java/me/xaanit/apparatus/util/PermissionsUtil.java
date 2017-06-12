@@ -59,6 +59,15 @@ public class PermissionsUtil extends MessageUtil {
         return res.append("```\n\nYou are receiving this message due to trying to execute the `").append(command.getName()).append("` command.").toString();
     }
 
+
+    public static boolean checkChannel(IGuild guild, IChannel channel, ICommand command) {
+        if (getGuild(guild).getCommand(command.getName()).isChannelsWhitelist())
+            return getGuild(guild).getCommand(command.getName()).getChannels().contains(channel.getLongID());
+        if (!getGuild(guild).getCommand(command.getName()).isChannelsWhitelist())
+            return !getGuild(guild).getCommand(command.getName()).getChannels().contains(channel.getLongID());
+        return true;
+    }
+
     private static boolean checkUserPerm(IUser user, IGuild guild, ICommand command) {
         if (getGuild(guild).isDevOverride())
             if (isDev(user))
@@ -66,8 +75,13 @@ public class PermissionsUtil extends MessageUtil {
         if (command.getType() == CmdType.DEV) {
             return isDev(user);
         }
+
+        if (command.getType() == CmdType.MUSIC)
+            return getGuild(guild).whitelistedGuild || isDev(user);
+
         if (command.requiresPatron())
             return isPatron(user);
+
         if (guild.getOwnerLongID() == user.getLongID())
             return true;
         if (!GuildUtil.getGuild(guild).getCommand(command.getName()).isRole())
@@ -103,19 +117,34 @@ public class PermissionsUtil extends MessageUtil {
             throw new PermissionsException();
         }
 
+        if (!checkChannel(guild, channel, command))
+            throw new PermissionsException();
+
         if (!checkUserPerm(user, guild, command)) {
 
             if (command.getType() == CmdType.DEV) {
                 logger.log("User [" + Util.getNameAndDescrim(user) + "] tried to use developer command [" + command.getName() + "] on guild [" + guild.getName() + "]", Level.MEDIUM);
                 EmbedBuilder em = new EmbedBuilder();
                 em.withTitle("Error!");
-                em.withDesc("This is a developer command, it can only be run by a developer..");
+                em.withDesc("This is a developer command, it can only be run by a developer.");
                 em.withFooterIcon(user.getAvatarURL());
                 em.withFooterText("Requested By: " + UserUtil.getNameAndDescrim(user));
                 em.withColor(Util.hexToColor(CColors.ERROR));
                 MessageUtil.sendMessage(channel, em.build());
                 throw new PermissionsException();
             }
+
+            if (command.getType() == CmdType.MUSIC) {
+                EmbedBuilder em = new EmbedBuilder();
+                em.withTitle("Error!");
+                em.withDesc("This can only be used on a guild that's whitelisted!");
+                em.withFooterIcon(user.getAvatarURL());
+                em.withFooterText("Requested By: " + UserUtil.getNameAndDescrim(user));
+                em.withColor(Util.hexToColor(CColors.ERROR));
+                MessageUtil.sendMessage(channel, em.build());
+                throw new PermissionsException();
+            }
+
 
             logger.log("User [" + user.getName() + "] doesn't have correct permissions or role for command [" + command.getName() + "] in guild [" + guild.getName() + "]", Level.LOW);
             EmbedBuilder em = new EmbedBuilder();

@@ -53,11 +53,6 @@ public class AddModlog implements ICommand {
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args, IDiscordClient client) {
         allChecks(user, guild, this, channel);
 
-        if (customEmbedParser(user, guild, channel, message, args[1]) == null)
-            System.out.println("null");
-
-        if (true)
-            return;
         if (args.length == 1) {
             sendMessage(channel, basicEmbed(user, "Error", CColors.ERROR).withDesc("You're missing the modlog argument").build());
             return;

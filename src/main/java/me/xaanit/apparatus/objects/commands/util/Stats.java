@@ -56,6 +56,11 @@ public class Stats implements ICommand {
         em.withFooterIcon(user.getAvatarURL());
         em.withFooterText("Requested by: " + getNameAndDescrim(user));
         sendMessage(channel, em.build());
+
+        if(args.length == 1 || !isDev(user))
+            return;
+
+        EmbedBuilder builder = new EmbedBuilder();
     }
 
 }

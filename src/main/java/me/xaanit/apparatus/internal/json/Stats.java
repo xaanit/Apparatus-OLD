@@ -3,7 +3,7 @@ package me.xaanit.apparatus.internal.json;
 
 public class Stats {
 
-   private int commandExecuted = 0;
+    private int commandExecuted = 0;
 
     public int getCommandExecuted() {
         return commandExecuted;
@@ -11,5 +11,9 @@ public class Stats {
 
     public void increaseCommandsExecuted() {
         this.commandExecuted++;
+    }
+
+    public void decreaseCommandsExecuted() {
+        this.commandExecuted--;
     }
 }

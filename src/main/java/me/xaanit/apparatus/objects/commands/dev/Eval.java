@@ -15,6 +15,7 @@ import sx.blah.discord.util.EmbedBuilder;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.util.Arrays;
+import java.util.Random;
 
 import static me.xaanit.apparatus.util.Util.*;
 
@@ -32,6 +33,7 @@ public class Eval implements ICommand {
     private GuildUtil guildUtil = new GuildUtil();
     private EmbedUtil embedUtil = new EmbedUtil();
     private ChannelUtil channelUtil = new ChannelUtil();
+    private Random random = new Random();
 
     @Override
     public String getName() {
@@ -86,6 +88,10 @@ public class Eval implements ICommand {
         factory.put("command", this);
         factory.put("client", client);
         factory.put("commandnames", commandNames);
+        factory.put("builder", new EmbedBuilder());
+        factory.put("cUser", client.getOurUser());
+        factory.put("random", random);
+
 
         try {
             String imports = "var imports = new JavaImporter(java.io, java.lang, java.util, \"Packages.sx.blah.discord.handle.obj\", \"Packages.sx.blah.discord.util\", \"Packages.me.xaanit.apparatus.util\");";

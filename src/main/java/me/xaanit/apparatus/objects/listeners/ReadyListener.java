@@ -2,10 +2,13 @@ package me.xaanit.apparatus.objects.listeners;
 
 import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.database.Database;
+import me.xaanit.apparatus.internal.json.Guild;
 import me.xaanit.apparatus.internal.json.Stats;
+import me.xaanit.apparatus.objects.commands.music.MusicVariables;
 import me.xaanit.apparatus.objects.enums.Level;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
 import me.xaanit.apparatus.objects.interfaces.IListener;
+import me.xaanit.apparatus.objects.music.GuildMusicManager;
 import me.xaanit.apparatus.util.Util;
 import org.reflections.Reflections;
 import sx.blah.discord.api.IShard;
@@ -38,14 +41,26 @@ public class ReadyListener implements IListener {
             }
         }
         RequestBuffer.request(() -> GlobalVars.client.streaming("@Apparatus prefix | " + GlobalVars.client.getGuilds().size() + " guild(s)", "https://www.twitch.tv/p/about"));
-        //RequestBuffer.request(() -> GlobalVars.client.changeAvatar(Image.forUrl("png", "https://cdn.discordapp.com/attachments/245615097559515136/313983485775708160/XanXan.png")));
         initCommands();
         if (!ready) {
             save();
             initShardStats();
         }
+        initMusicManagers();
         logger.log("Bot ready!", Level.INFO);
         ready = true;
+    }
+
+    public static void initMusicManagers() {
+
+        for (Guild g : guilds.values()) {
+            if (g.whitelistedGuild) {
+                if (!MusicVariables.managers.containsKey(g.getId())) {
+                    MusicVariables.managers.putIfAbsent(g.getId(), new GuildMusicManager(MusicVariables.manager));
+                    logger.log("Making music manager for guild [ " + client.getGuildByID(g.getId()).getName() + " ]", Level.INFO);
+                }
+            }
+        }
     }
 
     public void initShardStats() {

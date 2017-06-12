@@ -3,6 +3,7 @@ package me.xaanit.apparatus.objects.listeners;
 import me.xaanit.apparatus.internal.events.BanEvent;
 import me.xaanit.apparatus.internal.json.Modlog;
 import me.xaanit.apparatus.internal.json.embeds.CustomEmbed;
+import me.xaanit.apparatus.internal.json.embeds.Field;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.interfaces.IListener;
 import sx.blah.discord.api.events.EventSubscriber;
@@ -37,19 +38,14 @@ public class BanListener implements IListener {
         boolean useEmbed = m.isUseEmbed();
         String str = m.isUseDefault() ? getBasicString(banner, banned, bannedIn, reason) : build(m.getStringLog(), banned, bannedIn, bannedIn.getGuild(), banner, reason);
         EmbedObject em = m.isUseDefault() ? getBasicEmbed(banner, banned, bannedIn, reason) : build(m.getEmbed(), banned, bannedIn, bannedIn.getGuild(), banner, reason);
-        System.out.println("USE EMBED: " + useEmbed);
-        System.out.println("STR: " + str);
-        System.out.println("EMBED: " + em.toString());
         final List<Long> channels = m.getChannels();
         List<Long> channelsToRemove = new ArrayList<>();
         for (long c : channels) {
-            System.out.println("C: " + c);
             IChannel channel = client.getChannelByID(c);
             if (channel == null) {
                 channelsToRemove.add(c);
                 continue;
             }
-            System.out.println("GOT TO HERE");
             if (useEmbed)
                 sendMessage(channel, em);
             else
@@ -62,8 +58,7 @@ public class BanListener implements IListener {
     }
 
     public String getBasicString(IUser user, IUser u, IChannel channel, String reason) {
-        String input = "[[modname]]#[[moddescrim]] banned [[username]]#[[userdescrim]] for [[reason]] from channel #[[channelname]]\nTime: [[timestamp]]";
-        System.out.println("CALLED");
+        String input = "[[modname]]#[[moddescrim]] banned [[username]]#[[userdescrim]] for reason ```fix\n[[reason]]``` from channel #[[channelname]]\nTime: [[timestamp]]";
         return format(input, u, channel, channel.getGuild(), user, reason);
     }
 
@@ -81,8 +76,35 @@ public class BanListener implements IListener {
         return em.build();
     }
 
-    public EmbedObject build(CustomEmbed em, IUser user, IChannel channel, IGuild guild, IUser banner, String reason) {
-        return null;
+    public EmbedObject build(CustomEmbed c, IUser user, IChannel channel, IGuild guild, IUser banner, String reason) {
+        EmbedBuilder em = new EmbedBuilder();
+        if (!c.getColorHex().isEmpty())
+            em.withColor(hexToColor(c.getColorHex()));
+        if (!c.getAuthorIcon().isEmpty())
+            em.withAuthorIcon(format(c.getAuthorIcon(), user, channel, guild, banner, reason));
+        if (!c.getAuthorName().isEmpty())
+            em.withAuthorName(format(c.getAuthorName(), user, channel, guild, banner, reason));
+        if (!c.getAuthorURL().isEmpty())
+            em.withAuthorUrl(format(c.getAuthorURL(), user, channel, guild, banner, reason));
+        if (!c.getThumbnail().isEmpty())
+            em.withThumbnail(format(c.getThumbnail(), user, channel, guild, banner, reason));
+        if (!c.getTitle().isEmpty())
+            em.withTitle(format(c.getTitle(), user, channel, guild, banner, reason));
+        if (!c.getTitleURL().isEmpty())
+            em.withUrl(format(c.getTitleURL(), user, channel, guild, banner, reason));
+        if (!c.getDesc().isEmpty())
+            em.withDesc(format(c.getDesc(), user, channel, guild, banner, reason));
+        for (Field f : c.getFields())
+            em.appendField(format(f.getFieldTitle(), user, channel, guild, banner, reason), format(f.getFieldValue(), user, channel, guild, banner, reason), f.isInline());
+        if (!c.getImage().isEmpty())
+            em.withImage(format(c.getImage(), user, channel, guild, banner, reason));
+        if (!c.getFooterIcon().isEmpty())
+            em.withFooterIcon(format(c.getFooterIcon(), user, channel, guild, banner, reason));
+        if (!c.getFooterText().isEmpty())
+            em.withFooterText(format(c.getFooterText(), user, channel, guild, banner, reason));
+        if (c.isIncludeTimestamp())
+            em.withFooterText((c.getFooterText().isEmpty() ? "" : " | ") + format("[[timestamp]]", user, channel, guild, banner, reason));
+        return em.build();
     }
 
     public String build(String input, IUser user, IChannel channel, IGuild guild, IUser banner, String reason) {
@@ -108,7 +130,7 @@ public class BanListener implements IListener {
                 .replace("[[timestamp]]", getCurrentTime())
                 .replace("[[reason]]", reason)
                 .replace("[[modid]]", banner.getStringID())
-                .replace("[[modname]]",banner.getName())
+                .replace("[[modname]]", banner.getName())
                 .replace("[[moddescrim]]", banner.getDiscriminator())
                 .replace("[[modmention]]", banner.mention())
                 .replace("[[modicon]]", banner.getAvatarURL());

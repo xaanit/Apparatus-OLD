@@ -10,6 +10,7 @@ public enum CmdType {
     MODERATION,
     CUSTOMISATION,
     SECRET,
+    MUSIC,
     BOT_INFO;
 
 

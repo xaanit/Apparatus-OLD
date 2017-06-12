@@ -7,9 +7,6 @@ import me.xaanit.apparatus.internal.json.embeds.Field;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
 
@@ -109,7 +106,7 @@ public class EmbedUtil extends ChannelUtil {
         return em;
     }
 
-    public static CustomEmbed customEmbedParser(IUser user, IGuild guild, IChannel channel, IMessage message, String str) {
+    public static CustomEmbed customEmbedParser(String str) {
         if (str.startsWith("http")) {
             if (!str.startsWith("https://pastebin.com/raw/") && !str.startsWith("https://raw.githubusercontent.com/") && !str.startsWith("https://hastebin.com/raw/"))
                 return null;

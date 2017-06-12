@@ -1,5 +1,6 @@
 package me.xaanit.apparatus.util;
 
+import me.xaanit.apparatus.objects.enums.Level;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
@@ -42,6 +43,7 @@ public class MessageUtil extends GuildUtil {
      * @return The message
      */
     private static IMessage sendMessage(IChannel channel, String str, EmbedObject em) {
+        logger.log("sendMessage called", Level.INFO);
         return RequestBuffer.request(() -> {
 
             try {
@@ -150,7 +152,7 @@ public class MessageUtil extends GuildUtil {
             try {
                 return message.edit(str, e);
             } catch (DiscordException ex) {
-                    ex.printStackTrace();
+                ex.printStackTrace();
             }
             return null;
         }).get();
