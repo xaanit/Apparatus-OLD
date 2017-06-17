@@ -3,17 +3,17 @@ package me.xaanit.apparatus.internal.json;
 /**
  * Created by Jacob on 5/17/2017.
  */
-public class Autorole {
+public class JsonAutorole {
 
     public boolean bot = false;
     public long id = 0;
 
-    public Autorole(boolean bot, long id) {
+    public JsonAutorole(boolean bot, long id) {
         this.bot = bot;
         this.id = id;
     }
 
-    public Autorole() {
+    public JsonAutorole() {
     }
 
     public boolean isBot() {

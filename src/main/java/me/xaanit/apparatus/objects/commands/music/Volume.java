@@ -104,6 +104,9 @@ public class Volume implements ICommand {
             EmbedBuilder em = basicEmbed(user, "Volume", CColors.BASIC);
             em.withDesc("Set volume to " + volume);
             sendMessage(channel, em.build());
+
+
+
             return;
         }
 

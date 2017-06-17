@@ -31,12 +31,12 @@ public class Ban implements ICommand {
 
     @Override
     public String[] getAliases() {
-        return new String[]{getName(), "banish"};
+        return new String[]{getName(), "banish", "banne"};
     }
 
     @Override
     public EnumSet<Permissions> getNeededPermission() {
-        return PermissionsUtil.makePermissions(PermissionsUtil.basicPermissions(), Permissions.BAN);
+        return makePermissions(PermissionsUtil.basicPermissions(), Permissions.BAN);
     }
 
     @Override

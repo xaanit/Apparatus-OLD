@@ -21,7 +21,7 @@ public class Guild {
 
     private List<Long> barredUsers = new ArrayList<>();
 
-    private List<BuyableRole> buyableRoles = new ArrayList<>();
+    private List<JsonBuyableRole> buyableRoles = new ArrayList<>();
 
     private String welcomeMessage = "";
     private String goodbyeMessage = "";
@@ -32,7 +32,7 @@ public class Guild {
     private boolean useGoodbyeEmbed = false;
 
 
-    private List<Autorole> autoRoles = new ArrayList<>();
+    private List<JsonAutorole> autoRoles = new ArrayList<>();
 
     private List<Long> assignableRoles = new ArrayList<>();
 
@@ -103,13 +103,13 @@ public class Guild {
 
     }
 
-    public List<Autorole> getAutoRoles() {
+    public List<JsonAutorole> getAutoRoles() {
         return autoRoles;
     }
 
     private void addAutorole(long l, boolean val) {
         if (autoRoles.stream().filter(c -> c.getID() == l).count() == 0)
-            this.autoRoles.add(new Autorole(val, l));
+            this.autoRoles.add(new JsonAutorole(val, l));
     }
 
     public void removeAutorole(long l) {

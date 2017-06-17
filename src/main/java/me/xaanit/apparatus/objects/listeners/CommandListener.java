@@ -16,7 +16,7 @@ import sx.blah.discord.util.EmbedBuilder;
 
 import java.io.IOException;
 
-import static me.xaanit.apparatus.GlobalVars.*;
+import static me.xaanit.apparatus.util.Util.*;
 
 
 public class CommandListener implements IListener {
@@ -61,25 +61,25 @@ public class CommandListener implements IListener {
                 Util.deleteMessage(m);
                 EmbedBuilder em = Util.basicEmbed(user, "Message Deletion", CColors.BASIC);
                 em.withDesc("Deleted message by Apparatus with ID " + args[1]);
-                Util.sendMessage(channel, em.build());
+                sendMessage(channel, em.build());
                 return;
             }
         }
 
-        if (!content.startsWith(Util.getGuild(guild).getPrefix())) return;
+        if (!content.startsWith(getGuild(guild).getPrefix())) return;
 
         try {
-            String look = args[0].substring(Util.getGuild(guild).getPrefix().length()).toLowerCase();
+            String look = args[0].substring(getGuild(guild).getPrefix().length()).toLowerCase();
             if (commands.containsKey(look)) {
                 config.shardStats.get(guild.getShard().getInfo()[0]).increaseCommandsExecuted();
-                Util.getGuild(guild).getStats().increaseCommandsExecuted();
+
                 config.getStats().increaseCommandsExecuted();
                 commands.get(look)
                         .runCommand(user, channel, guild, message, args, GlobalVars.client);
             }
         } catch (PermissionsException ex) {
             config.shardStats.get(guild.getShard().getInfo()[0]).decreaseCommandsExecuted();
-            Util.getGuild(guild).getStats().decreaseCommandsExecuted();
+            getGuild(guild).getStats().decreaseCommandsExecuted();
             config.getStats().decreaseCommandsExecuted();
         }
     }
@@ -106,24 +106,25 @@ public class CommandListener implements IListener {
         String[] args = copy(oldArgs, 1);
 
         if (args[0].equalsIgnoreCase("prefix")) {
-            Util.sendMessage(channel, user.mention() + " | The prefix for this guild is `" + Util.getGuild(guild).getPrefix() + "`");
+            sendMessage(channel, user.mention() + " | The prefix for this guild is `" + getGuild(guild).getPrefix() + "`");
             return;
         }
 
         try {
             if (GlobalVars.commands.containsKey(args[0].toLowerCase())) {
                 config.shardStats.get(guild.getShard().getInfo()[0]).increaseCommandsExecuted();
-                Util.getGuild(guild).getStats().increaseCommandsExecuted();
+                getGuild(guild).getStats().increaseCommandsExecuted();
                 config.getStats().increaseCommandsExecuted();
                 GlobalVars.commands.get(args[0].toLowerCase())
                         .runCommand(user, channel, guild, message, args, GlobalVars.client);
             } else {
-                if (Util.getGuild(guild).whitelistedGuild)
-                    Util.sendMessage(channel, user.mention() + " | " + getCleverbotResponse(Util.combineArgs(args, 0, args.length)));
+                if (isPatron(user)) {
+                    sendMessage(channel, user.mention() + " | " + getCleverbotResponse(Util.combineArgs(args, 0, args.length)));
+                }
             }
         } catch (PermissionsException ex) {
             config.shardStats.get(guild.getShard().getInfo()[0]).decreaseCommandsExecuted();
-            Util.getGuild(guild).getStats().decreaseCommandsExecuted();
+            getGuild(guild).getStats().decreaseCommandsExecuted();
             config.getStats().decreaseCommandsExecuted();
         }
     }

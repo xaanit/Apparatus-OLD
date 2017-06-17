@@ -101,7 +101,7 @@ public class PermissionsUtil extends MessageUtil {
         return user.getRolesForGuild(devGuild).stream().filter(r -> r.getLongID() == Long.parseUnsignedLong("313732279258185730")).count() > 0;
     }
 
-    private static boolean isPatron(IUser user) {
+    public static boolean isPatron(IUser user) {
         return isDev(user) || user.getRolesForGuild(devGuild).stream().filter(r -> Util.equalsAny(r, 313909639161053185L, 313909493060861952L, 313909773546291203L, 313909405982916610L)).count() > 0;
     }
 
@@ -112,7 +112,12 @@ public class PermissionsUtil extends MessageUtil {
                 + "] in guild [" + guild.getName()
                 + "] in channel [" + channel.getName() + "]", Level.INFO);
         if (!hasPerms(guild, command)) {
-            MessageUtil.sendMessage(user.getOrCreatePMChannel(), getMissingPermissions(guild, command));
+            EmbedBuilder em = new EmbedBuilder();
+            em.withColor(hexToColor(CColors.BASIC));
+            em.withDesc(getMissingPermissions(guild, command));
+            em.withAuthorName("Missing permissions");
+            em.withAuthorIcon(Util.botAva());
+            MessageUtil.sendMessage(user.getOrCreatePMChannel(), em.build());
             logger.log("Missing permissions for command [" + command.getName() + "] on guild [" + guild.getName() + "]", Level.LOW);
             throw new PermissionsException();
         }

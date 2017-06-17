@@ -5,12 +5,12 @@ import me.xaanit.apparatus.objects.enums.TatsuType;
 /**
  * Created by Jacob on 5/19/2017.
  */
-public class BuyableRole {
+public class JsonBuyableRole {
     private long id = 0;
     private long price = 0;
     private TatsuType type = TatsuType.UNKNOWN;
 
-    public BuyableRole(){}
+    public JsonBuyableRole(){}
 
     public long getId() {
         return id;

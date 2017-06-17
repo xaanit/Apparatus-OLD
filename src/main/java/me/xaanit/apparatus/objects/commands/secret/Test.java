@@ -44,12 +44,13 @@ public class Test implements ICommand {
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args, IDiscordClient client) {
         allChecks(user, guild, this, channel);
-        client.getOurUser().getVoiceStateForGuild(guild).getChannel().leave();
 
-        if (true) return;
+     //   client.getOurUser().getVoiceStateForGuild(guild).getChannel().leave();
+
+      //  if (true) return;
         CustomEmbed c = customEmbedParser(combineArgs(args, 1, args.length));
-        sendMessage(channel, "```json\n" + gson.toJson(c) + "```");
-        if (true) return;
+        //sendMessage(channel, "```json\n" + gson.toJson(c) + "```");
+        //if (true) return;
         EmbedBuilder em = new EmbedBuilder();
         if (!c.getColorHex().isEmpty())
             em.withColor(hexToColor(c.getColorHex()));

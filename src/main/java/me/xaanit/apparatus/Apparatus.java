@@ -5,10 +5,12 @@ import me.xaanit.apparatus.database.Database;
 import me.xaanit.apparatus.objects.enums.Level;
 import me.xaanit.apparatus.objects.interfaces.IListener;
 import org.reflections.Reflections;
+import sx.blah.discord.Discord4J;
 import sx.blah.discord.api.ClientBuilder;
 
 public class Apparatus extends GlobalVars {
     public static void main(String[] args) {
+        ((Discord4J.Discord4JLogger) Discord4J.LOGGER).setLevel(Discord4J.Discord4JLogger.Level.NONE);
         gson = new GsonBuilder().create();
         config = Database.loadConfig();
         Database.saveConfig();

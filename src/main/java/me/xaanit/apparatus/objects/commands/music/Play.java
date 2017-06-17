@@ -16,8 +16,7 @@ import java.util.EnumSet;
 
 import static me.xaanit.apparatus.util.Util.*;
 
-public class Play extends MusicVariables implements ICommand{
-
+public class Play extends MusicVariables implements ICommand {
 
 
     @Override
@@ -85,11 +84,14 @@ public class Play extends MusicVariables implements ICommand{
 
         String info = combineArgs(args, 1, -1);
 
+        if (!info.startsWith("http"))
+              info = "ytsearch: " + info;
+
+
         loadAndPlay(user, channel, info);
 
 
     }
-
 
 
 }

@@ -104,4 +104,5 @@ public class MusicUtil extends MusicVariables {
         em.withDesc("Skipped to next track.");
         Util.sendMessage(channel, em.build());
     }
+
 }
