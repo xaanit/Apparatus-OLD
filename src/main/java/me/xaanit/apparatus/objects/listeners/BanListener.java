@@ -1,7 +1,7 @@
 package me.xaanit.apparatus.objects.listeners;
 
 import me.xaanit.apparatus.internal.events.BanEvent;
-import me.xaanit.apparatus.internal.json.Modlog;
+import me.xaanit.apparatus.internal.json.JsonModlog;
 import me.xaanit.apparatus.internal.json.embeds.CustomEmbed;
 import me.xaanit.apparatus.internal.json.embeds.Field;
 import me.xaanit.apparatus.objects.enums.CColors;
@@ -33,7 +33,7 @@ public class BanListener implements IListener {
         IChannel bannedIn = event.getBannedIn();
         String reason = event.getBanReason();
 
-        Modlog m = getGuild(guild).getModlog("user_ban");
+        JsonModlog m = getGuild(guild).getModlog("user_ban");
 
         boolean useEmbed = m.isUseEmbed();
         String str = m.isUseDefault() ? getBasicString(banner, banned, bannedIn, reason) : build(m.getStringLog(), banned, bannedIn, bannedIn.getGuild(), banner, reason);

@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by Jacob on 5/15/2017.
  */
-public class Modlog {
+public class JsonModlog {
 
     private String name;
 
@@ -22,10 +22,10 @@ public class Modlog {
 
     private boolean useDefault = true;
 
-    public Modlog() {
+    public JsonModlog() {
     }
 
-    public Modlog(String name) {
+    public JsonModlog(String name) {
         this.name = name;
         channels = new ArrayList<>();
     }

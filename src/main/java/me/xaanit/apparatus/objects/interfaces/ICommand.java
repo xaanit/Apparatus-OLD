@@ -37,8 +37,6 @@ public interface ICommand {
      */
     CmdType getType();
 
-
-
     /**
      * The required permissions for this command
      *

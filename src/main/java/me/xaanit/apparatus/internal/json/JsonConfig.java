@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Created by Jacob on 4/21/2017.
  */
-public class Config {
+public class JsonConfig {
 
     private String token = "";
 
@@ -20,14 +20,14 @@ public class Config {
 
     private int cleverbotCalls = 1;
 
-    private Stats stats = new Stats();
+    private JsonStats stats = new JsonStats();
 
-    public Map<Integer, Stats> shardStats = new HashMap<>();
+    public Map<Integer, JsonStats> shardStats = new HashMap<>();
 
-    public Config() {
+    public JsonConfig() {
     }
 
-    public Config(boolean val) {
+    public JsonConfig(boolean val) {
         this.token = "";
         this.blacklistedUsers = new ArrayList<>();
         this.blacklistedServers = new ArrayList<>();
@@ -84,7 +84,7 @@ public class Config {
         this.cleverbotCalls = cleverbotCalls;
     }
 
-    public Stats getStats() {
+    public JsonStats getStats() {
         return stats;
     }
 }

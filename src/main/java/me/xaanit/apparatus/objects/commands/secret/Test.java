@@ -10,6 +10,7 @@ import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
+import sx.blah.discord.util.MessageTokenizer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,6 +18,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import static me.xaanit.apparatus.util.Util.*;
 
@@ -44,10 +47,21 @@ public class Test implements ICommand {
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args, IDiscordClient client) {
         allChecks(user, guild, this, channel);
+        MessageTokenizer tokenizer = new MessageTokenizer(message);
+        List<IUser> mentions = new ArrayList<>();
+        while (tokenizer.hasNextMention()) {
+            String id = tokenizer.nextMention().getMentionObject().toString().replaceAll("[<@!>]", "");
+            mentions.add(tokenizer.getClient().getUserByID(Long.parseUnsignedLong(id)));
+        }
 
-     //   client.getOurUser().getVoiceStateForGuild(guild).getChannel().leave();
+        for (IUser u : mentions) {
+            System.out.println(u.getName());
+        }
 
-      //  if (true) return;
+        if (true) return;
+        //   client.getOurUser().getVoiceStateForGuild(guild).getChannel().leave();
+
+        //  if (true) return;
         CustomEmbed c = customEmbedParser(combineArgs(args, 1, args.length));
         //sendMessage(channel, "```json\n" + gson.toJson(c) + "```");
         //if (true) return;

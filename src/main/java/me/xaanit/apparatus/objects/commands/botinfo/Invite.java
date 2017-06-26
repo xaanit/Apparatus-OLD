@@ -1,6 +1,5 @@
 package me.xaanit.apparatus.objects.commands.botinfo;
 
-import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.objects.commands.util.Info;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
@@ -48,8 +47,7 @@ public class Invite implements ICommand {
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args, IDiscordClient client) {
         allChecks(user, guild, this, channel);
         if (Info.invite.isEmpty()) {
-            BotInviteBuilder builder = new BotInviteBuilder(GlobalVars.client);
-            builder.withClientID(GlobalVars.client.getOurUser().getStringID());
+            BotInviteBuilder builder = new BotInviteBuilder(client);
             builder.withPermissions(makePermissions(basicPermissions(), Permissions.BAN, Permissions.KICK, Permissions.CHANGE_NICKNAME, Permissions.USE_EXTERNAL_EMOJIS));
             Info.invite = builder.build();
         }

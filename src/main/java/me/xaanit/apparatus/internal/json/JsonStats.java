@@ -1,7 +1,7 @@
 package me.xaanit.apparatus.internal.json;
 
 
-public class Stats {
+public class JsonStats {
 
     private int commandExecuted = 0;
 

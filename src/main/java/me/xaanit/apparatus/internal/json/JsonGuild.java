@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Guild {
+public class JsonGuild {
 
     private long id = 0;
 
@@ -43,18 +43,18 @@ public class Guild {
 
     private String prefix = "+";
 
-    private Stats stats = new Stats();
+    private JsonStats stats = new JsonStats();
 
-    private List<Command> commands = new ArrayList<>();
+    private List<JsonCommand> commands = new ArrayList<>();
 
-    private List<Modlog> modlogs = new ArrayList<>();
+    private List<JsonModlog> modlogs = new ArrayList<>();
 
-    public Guild() {
+    public JsonGuild() {
         this.prefix = "+";
         updateCommands();
     }
 
-    public Guild(IGuild guild) {
+    public JsonGuild(IGuild guild) {
         this.id = guild.getLongID();
         updateCommands();
     }
@@ -79,16 +79,16 @@ public class Guild {
         return id;
     }
 
-    public List<Command> getCommands() {
+    public List<JsonCommand> getCommands() {
         return commands;
     }
 
     public void addCommand(ICommand command) {
         if (commands.stream().filter(c -> c.getName().equalsIgnoreCase(command.getName())).count() == 0)
-            this.commands.add(new Command(command.getName()));
+            this.commands.add(new JsonCommand(command.getName()));
     }
 
-    private void addCommand(Command command) {
+    private void addCommand(JsonCommand command) {
         if (commands.stream().filter(c -> c.getName().equalsIgnoreCase(command.getName())).count() == 0)
             this.commands.add(command);
     }
@@ -142,25 +142,25 @@ public class Guild {
 
     }
 
-    public List<Modlog> getModlogs() {
+    public List<JsonModlog> getModlogs() {
         return modlogs;
     }
 
     public void addModlog(String name) {
         if (modlogs.stream().filter(c -> c.getName().equalsIgnoreCase(name)).count() == 0)
-            this.modlogs.add(new Modlog(name));
+            this.modlogs.add(new JsonModlog(name));
     }
 
-    private void addModlog(Modlog m) {
+    private void addModlog(JsonModlog m) {
         if (modlogs.stream().filter(c -> c.getName().equalsIgnoreCase(m.getName())).count() == 0)
             this.modlogs.add(m);
     }
 
-    public Modlog getModlog(String name) {
-        Modlog command = null;
-        List<Modlog> cs = modlogs.stream().filter(c -> c.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
+    public JsonModlog getModlog(String name) {
+        JsonModlog command = null;
+        List<JsonModlog> cs = modlogs.stream().filter(c -> c.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
         if (cs.isEmpty()) {
-            command = new Modlog(name);
+            command = new JsonModlog(name);
             addModlog(command);
         } else {
             command = cs.get(0);
@@ -169,11 +169,11 @@ public class Guild {
     }
 
 
-    public Command getCommand(String name) {
-        Command command = null;
-        List<Command> cs = commands.stream().filter(c -> c.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
+    public JsonCommand getCommand(String name) {
+        JsonCommand command = null;
+        List<JsonCommand> cs = commands.stream().filter(c -> c.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
         if (cs.isEmpty()) {
-            command = new Command(name);
+            command = new JsonCommand(name);
             addCommand(command);
         } else {
             command = cs.get(0);
@@ -221,7 +221,7 @@ public class Guild {
         this.crashReports = crashReports;
     }
 
-    public Stats getStats() {
+    public JsonStats getStats() {
         return stats;
     }
 

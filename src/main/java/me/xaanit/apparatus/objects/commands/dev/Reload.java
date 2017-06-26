@@ -2,7 +2,7 @@ package me.xaanit.apparatus.objects.commands.dev;
 
 import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.database.Database;
-import me.xaanit.apparatus.internal.json.Guild;
+import me.xaanit.apparatus.internal.json.JsonGuild;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
@@ -117,7 +117,7 @@ public class Reload implements ICommand {
             long now = System.currentTimeMillis();
 
             for (long key : GlobalVars.guilds.keySet()) {
-                Guild g = GlobalVars.guilds.get(key);
+                JsonGuild g = GlobalVars.guilds.get(key);
                 g.updateCommands();
                 GlobalVars.guilds.put(key, g);
             }

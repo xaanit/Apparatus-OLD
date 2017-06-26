@@ -35,6 +35,25 @@ public class Eval implements ICommand {
     private ChannelUtil channelUtil = new ChannelUtil();
     private Random random = new Random();
 
+    {
+        factory.put("commands", commands);
+        factory.put("guilds", guilds);
+        factory.put("gson", gson);
+        factory.put("util", util);
+        factory.put("userUtil", userUtil);
+        factory.put("roleUtil", roleUtil);
+        factory.put("permUtil", permUtil);
+        factory.put("messageUtil", messageUtil);
+        factory.put("guildUtil", guildUtil);
+        factory.put("embedUtil", embedUtil);
+        factory.put("channelUtil", channelUtil);
+        factory.put("config", config);
+        factory.put("commandnames", commandNames);
+        factory.put("random", random);
+        factory.put("colorError", hexToColor(CColors.ERROR));
+        factory.put("colorBasic", hexToColor(CColors.BASIC));
+    }
+
     @Override
     public String getName() {
         return "eval";
@@ -70,27 +89,14 @@ public class Eval implements ICommand {
         Object o = null;
         factory.put("guild", guild);
         factory.put("channel", channel);
-        factory.put("commands", commands);
-        factory.put("guilds", guilds);
-        factory.put("currGuild", getGuild(guild));
-        factory.put("gson", gson);
-        factory.put("util", util);
-        factory.put("userUtil", userUtil);
-        factory.put("roleUtil", roleUtil);
-        factory.put("permUtil", permUtil);
-        factory.put("messageUtil", messageUtil);
-        factory.put("guildUtil", guildUtil);
-        factory.put("embedUtil", embedUtil);
-        factory.put("channelUtil", channelUtil);
-        factory.put("config", config);
         factory.put("user", user);
         factory.put("message", message);
         factory.put("command", this);
         factory.put("client", client);
-        factory.put("commandnames", commandNames);
+        factory.put("currGuild", getGuild(guild));
         factory.put("builder", new EmbedBuilder());
         factory.put("cUser", client.getOurUser());
-        factory.put("random", random);
+
 
 
         try {
@@ -107,6 +113,7 @@ public class Eval implements ICommand {
             sendMessage(channel, em.build());
             return;
         }
+
         EmbedBuilder em = new EmbedBuilder();
         em.withAuthorIcon(botAva());
         em.withAuthorName("Success!");

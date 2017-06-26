@@ -1,9 +1,8 @@
 package me.xaanit.apparatus.objects.listeners;
 
-import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.database.Database;
-import me.xaanit.apparatus.internal.json.Guild;
-import me.xaanit.apparatus.internal.json.Stats;
+import me.xaanit.apparatus.internal.json.JsonGuild;
+import me.xaanit.apparatus.internal.json.JsonStats;
 import me.xaanit.apparatus.objects.commands.music.MusicVariables;
 import me.xaanit.apparatus.objects.enums.Level;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
@@ -33,14 +32,15 @@ public class ReadyListener implements IListener {
     @EventSubscriber
     public void onReady(ReadyEvent event) {
         logger.log("Ready event start...", Level.INFO);
-        for (long l : GlobalVars.config.getBlacklistedServers()) {
-            IGuild guild = GlobalVars.client.getGuildByID(l);
+        for (long l : config.getBlacklistedServers()) {
+            IGuild guild = client.getGuildByID(l);
             if (guild != null) {
                 Util.sendMessage(guild.getOwner().getOrCreatePMChannel(), "Your server [" + guild.getName() + " ] has been blacklisted by the developer for one reason or another. I shall be leaving it.");
                 RequestBuffer.request(() -> guild.leave());
             }
         }
-        RequestBuffer.request(() -> GlobalVars.client.streaming("@Apparatus prefix | " + GlobalVars.client.getGuilds().size() + " guild(s)", "https://www.twitch.tv/p/about"));
+        RequestBuffer.request(() -> client.streaming("@Apparatus prefix | " + client.getGuilds().size() + " guild(s)", "https://www.twitch.tv/p/about"));
+
         initCommands();
         if (!ready) {
             save();
@@ -53,7 +53,7 @@ public class ReadyListener implements IListener {
 
     public static void initMusicManagers() {
 
-        for (Guild g : guilds.values()) {
+        for (JsonGuild g : guilds.values()) {
             if (g.whitelistedGuild) {
                 if (!MusicVariables.managers.containsKey(g.getId())) {
                     MusicVariables.managers.putIfAbsent(g.getId(), new GuildMusicManager(MusicVariables.manager));
@@ -65,7 +65,7 @@ public class ReadyListener implements IListener {
 
     public void initShardStats() {
         for (IShard shard : client.getShards()) {
-            config.shardStats.putIfAbsent(shard.getInfo()[0], new Stats());
+            config.shardStats.putIfAbsent(shard.getInfo()[0], new JsonStats());
         }
     }
 
@@ -78,8 +78,8 @@ public class ReadyListener implements IListener {
                 int s = 0;
                 int f = 0;
                 List<Long> failedGuilds = new ArrayList<>();
-                for (long key : GlobalVars.guilds.keySet()) {
-                    if (!Database.saveGuild(GlobalVars.guilds.get(key))) {
+                for (long key : guilds.keySet()) {
+                    if (!Database.saveGuild(guilds.get(key))) {
                         f++;
                         failedGuilds.add(key);
                     } else {
@@ -115,10 +115,10 @@ public class ReadyListener implements IListener {
                 ICommand command = subclass.newInstance();
                 if (command.getAliases().length != 0) {
                     for (String str : command.getAliases()) {
-                        GlobalVars.commands.putIfAbsent(str.toLowerCase(), command);
+                        commands.putIfAbsent(str.toLowerCase(), command);
                         String lol = str + ":" + command.getName();
-                        if (!GlobalVars.commandNames.contains(lol))
-                            GlobalVars.commandNames.add(lol);
+                        if (!commandNames.contains(lol))
+                            commandNames.add(lol);
                         logger.log("Loaded command \"" + command.getName() + "\" with alias \"" + str + "\"", Level.INFO);
                     }
                 }

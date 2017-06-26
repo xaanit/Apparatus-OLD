@@ -7,7 +7,7 @@ import sx.blah.discord.handle.obj.IRole;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Command {
+public class JsonCommand {
 
     private String name = "";
     private boolean role = false;
@@ -18,7 +18,7 @@ public class Command {
     private List<Long> roles = new ArrayList<>();
     private List<Long> modRoles = new ArrayList<>();
 
-    protected Command(String name) {
+    protected JsonCommand(String name) {
         this.name = name;
         this.roles = new ArrayList<>();
     }

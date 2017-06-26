@@ -1,7 +1,7 @@
 package me.xaanit.apparatus.objects.commands.dev;
 
 import me.xaanit.apparatus.database.Database;
-import me.xaanit.apparatus.internal.json.Guild;
+import me.xaanit.apparatus.internal.json.JsonGuild;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
@@ -65,7 +65,7 @@ public class AddModlog implements ICommand {
             }
         }
 
-        for (Guild val : guilds.values()) {
+        for (JsonGuild val : guilds.values()) {
             val.addModlog(args[1]);
             guilds.put(val.getId(), val);
             Database.saveGuild(val);
