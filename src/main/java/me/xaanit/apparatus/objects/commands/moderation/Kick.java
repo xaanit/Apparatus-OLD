@@ -1,13 +1,12 @@
 package me.xaanit.apparatus.objects.commands.moderation;
 
 import me.xaanit.apparatus.GlobalVars;
-import me.xaanit.apparatus.internal.events.BanEvent;
+import me.xaanit.apparatus.internal.events.KickEvent;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.exceptions.PermissionsException;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
 import me.xaanit.apparatus.util.GuildUtil;
-import me.xaanit.apparatus.util.PermissionsUtil;
 import me.xaanit.apparatus.util.Util;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
@@ -19,35 +18,30 @@ import java.util.EnumSet;
 
 import static me.xaanit.apparatus.util.Util.*;
 
-/**
- * Created by Jacob on 5/13/2017.
- */
-public class Ban implements ICommand {
-
+public class Kick implements ICommand {
     @Override
     public String getName() {
-        return "ban";
+        return "kick";
     }
 
     @Override
     public String[] getAliases() {
-        return new String[]{getName(), "banish", "banne"};
+        return new String[] {getName()};
     }
-
-    @Override
-    public EnumSet<Permissions> getNeededPermission() {
-        return makePermissions(PermissionsUtil.basicPermissions(), Permissions.BAN);
-    }
-
-    @Override
-    public Permissions getUserPerm() {
-        return Permissions.BAN;
-    }
-
 
     @Override
     public CmdType getType() {
         return CmdType.MODERATION;
+    }
+
+    @Override
+    public EnumSet<Permissions> getNeededPermission() {
+        return makePermissions(basicPermissions(), Permissions.KICK);
+    }
+
+    @Override
+    public Permissions getUserPerm() {
+        return Permissions.KICK;
     }
 
     @Override
@@ -59,7 +53,7 @@ public class Ban implements ICommand {
 
     @Override
     public String getInfo() {
-        return "Bans a user from the server.";
+        return "Kicks a user from the server.";
     }
 
     @Override
@@ -83,14 +77,14 @@ public class Ban implements ICommand {
         IUser u = getUser(args[1], message);
 
 
-        banCheck(user, u, guild, channel);
+        kickCheck(user, u, guild, channel);
 
-        //  banUser(u, guild);
-        client.getDispatcher().dispatch(new BanEvent(guild, u, user, channel, reason));
+        //  kickUser(u, guild);
+        client.getDispatcher().dispatch(new KickEvent(guild, u, user, channel, reason));
     }
 
 
-    private void banCheck(IUser user, IUser u, IGuild guild, IChannel channel) {
+    private void kickCheck(IUser user, IUser u, IGuild guild, IChannel channel) {
         if (u == null) {
             EmbedBuilder em = basicEmbed(user, "Error", CColors.ERROR);
             em.withDesc("I could not find the user based on your input.");
@@ -98,30 +92,30 @@ public class Ban implements ICommand {
             throw new PermissionsException();
         }
 
-        if (getHighestRole(u, guild).getPosition() >= getHighestRole(user, guild).getPosition() && !user.equals(guild.getOwner())) {
+        if (getHighestRole(u, guild).getPosition() >= getHighestRole(user, guild).getPosition()) {
             EmbedBuilder em = basicEmbed(user, "Error", CColors.ERROR);
-            em.withDesc("You can only ban users with a rank below yours! Their highest rank is: [ " + getHighestRole(u, guild).getName().toUpperCase() + " ]");
+            em.withDesc("You can only kick users with a rank below yours! Their highest rank is: [ " + getHighestRole(u, guild).getName().toUpperCase() + " ]");
             sendMessage(channel, em.build());
             throw new PermissionsException();
         }
 
         if (u.equals(guild.getOwner())) {
             EmbedBuilder em = basicEmbed(user, "Error", CColors.ERROR);
-            em.withDesc("You can not ban the owner!");
+            em.withDesc("You can not kick the owner!");
             sendMessage(channel, em.build());
             throw new PermissionsException();
         }
 
         if (getHighestRole(GlobalVars.client.getOurUser(), guild).getPosition() <= getHighestRole(u, guild).getPosition()) {
             EmbedBuilder em = basicEmbed(user, "Error", CColors.ERROR);
-            em.withDesc("I can only ban users who have a role lower than my highest role!");
+            em.withDesc("I can only kick users who have a role lower than my highest role!");
             sendMessage(channel, em.build());
             throw new PermissionsException();
         }
 
         if (u.equals(user)) {
             EmbedBuilder em = basicEmbed(user, "Error", CColors.ERROR);
-            em.withDesc("You can not ban yourself!");
+            em.withDesc("You can not kick yourself!");
             sendMessage(channel, em.build());
             throw new PermissionsException();
         }

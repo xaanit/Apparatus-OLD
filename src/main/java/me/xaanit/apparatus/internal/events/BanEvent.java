@@ -7,9 +7,9 @@ import sx.blah.discord.handle.obj.IUser;
 
 public class BanEvent extends UserBanEvent {
 
-    private IUser banner;
-    private IChannel bannedIn;
-    private String banReason;
+    private final IUser banner;
+    private final IChannel bannedIn;
+    private final String banReason;
 
     public BanEvent(IGuild guild, IUser user, IUser banner, IChannel bannedIn, String banReason) {
         super(guild, user);

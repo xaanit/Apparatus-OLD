@@ -41,6 +41,12 @@ public class UserUtil extends RoleUtil {
         });
     }
 
+    public static void kickUser(IUser user, IGuild guild) {
+        RequestBuffer.request(() -> {
+            guild.kickUser(user);
+        });
+    }
+
     public static void removeRole(IUser user, IRole role) {
         RequestBuffer.request(() -> {
                 user.removeRole(role);
