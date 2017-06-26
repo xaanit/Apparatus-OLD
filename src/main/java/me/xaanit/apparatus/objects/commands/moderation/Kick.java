@@ -107,28 +107,28 @@ public class Kick implements ICommand {
 
         if (getHighestRole(u, guild).getPosition() >= getHighestRole(user, guild).getPosition() && !user.equals(guild.getOwner())) {
             EmbedBuilder em = basicEmbed(user, "Error", CColors.ERROR);
-            em.withDesc("You can only ban users with a rank below yours! Their highest rank is: [ " + getHighestRole(u, guild).getName().toUpperCase() + " ]");
+            em.withDesc("You can only kick users with a rank below yours! Their highest rank is: [ " + getHighestRole(u, guild).getName().toUpperCase() + " ]");
             sendMessage(channel, em.build());
             throw new PermissionsException();
         }
 
         if (u.equals(guild.getOwner())) {
             EmbedBuilder em = basicEmbed(user, "Error", CColors.ERROR);
-            em.withDesc("You can not ban the owner!");
+            em.withDesc("You can not kick the owner!");
             sendMessage(channel, em.build());
             throw new PermissionsException();
         }
 
         if (getHighestRole(GlobalVars.client.getOurUser(), guild).getPosition() <= getHighestRole(u, guild).getPosition()) {
             EmbedBuilder em = basicEmbed(user, "Error", CColors.ERROR);
-            em.withDesc("I can only ban users who have a role lower than my highest role!");
+            em.withDesc("I can only kick users who have a role lower than my highest role!");
             sendMessage(channel, em.build());
             throw new PermissionsException();
         }
 
         if (u.equals(user)) {
             EmbedBuilder em = basicEmbed(user, "Error", CColors.ERROR);
-            em.withDesc("You can not ban yourself!");
+            em.withDesc("You can not kick yourself!");
             sendMessage(channel, em.build());
             throw new PermissionsException();
         }
