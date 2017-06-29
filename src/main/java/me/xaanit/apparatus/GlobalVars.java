@@ -35,4 +35,6 @@ public class GlobalVars {
 
     public static JsonConfig config;
 
+    public static final int EXIT_CODE = 0;
+
 }

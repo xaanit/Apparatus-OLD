@@ -8,7 +8,7 @@ import org.reflections.Reflections;
 import sx.blah.discord.Discord4J;
 import sx.blah.discord.api.ClientBuilder;
 
-public class Apparatus extends GlobalVars {
+public class Slave extends GlobalVars {
     public static void main(String[] args) {
         ((Discord4J.Discord4JLogger) Discord4J.LOGGER).setLevel(Discord4J.Discord4JLogger.Level.NONE);
         gson = new GsonBuilder().create();
