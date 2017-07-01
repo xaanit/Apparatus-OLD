@@ -3,8 +3,8 @@ package me.xaanit.apparatus;
 import com.google.gson.Gson;
 import me.xaanit.apparatus.internal.json.JsonConfig;
 import me.xaanit.apparatus.internal.json.JsonGuild;
-import me.xaanit.apparatus.objects.Logger;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
+import me.xaanit.simplelogger.SimpleLogger;
 import sx.blah.discord.api.IDiscordClient;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class GlobalVars {
 
     public static Map<Long, JsonGuild> guilds = new HashMap<>();
 
-    public static Logger logger = new Logger();
+    public static SimpleLogger logger = new SimpleLogger(Apparatus.class, null);
 
     public static IDiscordClient client;
 

@@ -1,14 +1,15 @@
 package me.xaanit.apparatus.objects.listeners;
 
+import me.xaanit.apparatus.Apparatus;
 import me.xaanit.apparatus.database.Database;
 import me.xaanit.apparatus.internal.json.JsonGuild;
 import me.xaanit.apparatus.internal.json.JsonStats;
-import me.xaanit.apparatus.objects.commands.music.MusicVariables;
-import me.xaanit.apparatus.objects.enums.Level;
+import me.xaanit.apparatus.objects.commands.music.Music;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
 import me.xaanit.apparatus.objects.interfaces.IListener;
 import me.xaanit.apparatus.objects.music.GuildMusicManager;
 import me.xaanit.apparatus.util.Util;
+import me.xaanit.simplelogger.SimpleLogger;
 import org.reflections.Reflections;
 import sx.blah.discord.api.IShard;
 import sx.blah.discord.api.events.EventSubscriber;
@@ -28,10 +29,11 @@ import static me.xaanit.apparatus.GlobalVars.*;
 public class ReadyListener implements IListener {
 
     public static boolean ready = false;
+    static SimpleLogger logger = SimpleLogger.getLoggerByClass(Apparatus.class);
 
     @EventSubscriber
     public void onReady(ReadyEvent event) {
-        logger.log("Ready event start...", Level.INFO);
+        logger.info("Ready event start...");
         for (long l : config.getBlacklistedServers()) {
             IGuild guild = client.getGuildByID(l);
             if (guild != null) {
@@ -40,24 +42,23 @@ public class ReadyListener implements IListener {
             }
         }
         RequestBuffer.request(() -> client.streaming("@Apparatus prefix | " + client.getGuilds().size() + " guild(s)", "https://www.twitch.tv/p/about"));
-
         initCommands();
         if (!ready) {
             save();
             initShardStats();
         }
         initMusicManagers();
-        logger.log("Bot ready!", Level.INFO);
+        logger.info("Bot ready!");
         ready = true;
     }
 
     public static void initMusicManagers() {
-
+SimpleLogger logger = SimpleLogger.getLoggerByClass(Music.class);
         for (JsonGuild g : guilds.values()) {
             if (g.whitelistedGuild) {
-                if (!MusicVariables.managers.containsKey(g.getId())) {
-                    MusicVariables.managers.putIfAbsent(g.getId(), new GuildMusicManager(MusicVariables.manager));
-                    logger.log("Making music manager for guild [ " + client.getGuildByID(g.getId()).getName() + " ]", Level.INFO);
+                if (!Music.managers.containsKey(g.getId())) {
+                    Music.managers.putIfAbsent(g.getId(), new GuildMusicManager(Music.manager));
+                    logger.info("Making music manager for guild [ " + client.getGuildByID(g.getId()).getName() + " ]");
                 }
             }
         }
@@ -88,7 +89,7 @@ public class ReadyListener implements IListener {
                 }
                 int max = guilds.size();
                 int perc = f * 100 / max;
-                logger.log("Saved [ " + s + " ] guilds. Failed to save the following [ " + f + " ] guilds:\n" + failedGuilds, (perc >= 75 ? Level.CRITICAL : perc >= 50 ? Level.HIGH : perc >= 25 ? Level.HIGH : perc >= 10 ? Level.MEDIUM : perc >= 5 ? Level.LOW : Level.INFO));
+                SimpleLogger.getLoggerByClass(Database.class).debug("Saved [ " + s + " ] guilds. Failed to save the following [ " + f + " ] guilds:\n" + failedGuilds);
             }
         };
 
@@ -101,14 +102,15 @@ public class ReadyListener implements IListener {
                 if (lastExecution != null && !lastExecution.isDone()) {
                     return;
                 }
-                logger.log("Saving config..", Level.INFO);
+                SimpleLogger.getLoggerByClass(Database.class).debug("Saving config..");
                 lastExecution = executor.submit(actualTask);
             }
         }, 10, 10, TimeUnit.MINUTES);
     }
 
     private void initCommands() {
-        logger.log("Initialising commands....", Level.INFO);
+        SimpleLogger logger = SimpleLogger.getLoggerByClass(ICommand.class);
+        logger.info("Initialising commands....");
         Reflections reflections = new Reflections("me.xaanit.apparatus.objects.commands");
         reflections.getSubTypesOf(ICommand.class).forEach(subclass -> {
             try {
@@ -119,16 +121,15 @@ public class ReadyListener implements IListener {
                         String lol = str + ":" + command.getName();
                         if (!commandNames.contains(lol))
                             commandNames.add(lol);
-                        logger.log("Loaded command \"" + command.getName() + "\" with alias \"" + str + "\"", Level.INFO);
                     }
                 }
             } catch (InstantiationException | IllegalAccessException e) {
-                logger.log(subclass.getName() + " failed to load!", Level.CRITICAL);
-                logger.log("[" + e.getMessage() + "]", Level.CRITICAL);
+                logger.critical(subclass.getName() + " failed to load!");
+                logger.critical("[" + e.getMessage() + "]");
 
             }
         });
-        logger.log("Commands initialised!", Level.INFO);
+        logger.info("Commands initialised!");
     }
 
 }

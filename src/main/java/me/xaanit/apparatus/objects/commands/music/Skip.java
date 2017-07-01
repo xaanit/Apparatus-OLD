@@ -10,7 +10,7 @@ import java.util.EnumSet;
 /**
  * Created by Jacob on 6/10/2017.
  */
-public class Skip extends MusicVariables implements ICommand {
+public class Skip extends Music implements ICommand {
 
     @Override
     public String getName() {

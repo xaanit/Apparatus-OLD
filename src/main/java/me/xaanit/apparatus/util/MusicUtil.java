@@ -5,10 +5,10 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-import me.xaanit.apparatus.objects.commands.music.MusicVariables;
+import me.xaanit.apparatus.objects.commands.music.Music;
 import me.xaanit.apparatus.objects.enums.CColors;
-import me.xaanit.apparatus.objects.enums.Level;
 import me.xaanit.apparatus.objects.music.GuildMusicManager;
+import me.xaanit.simplelogger.SimpleLogger;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
@@ -17,7 +17,9 @@ import sx.blah.discord.util.EmbedBuilder;
 /**
  * Lots of code taken (or adapted) from: https://github.com/sedmelluq/lavaplayer/blob/master/demo-d4j/src/main/java/com/sedmelluq/discord/lavaplayer/demo/d4j/Main.java
  */
-public class MusicUtil extends MusicVariables {
+public class MusicUtil extends Music {
+
+    private static SimpleLogger logger = new SimpleLogger(Music.class);
 
     public static synchronized GuildMusicManager getGuildAudioPlayer(IGuild guild) {
         long guildId = guild.getLongID();
@@ -87,7 +89,7 @@ public class MusicUtil extends MusicVariables {
 
     public static void play(IGuild guild, GuildMusicManager musicManager, AudioTrack track) {
         musicManager.scheduler.queue(track);
-        logger.log("Queued track with info " + trackInfo(track.getInfo()) + " on guild [ " + guild.getName() + " ] ", Level.INFO);
+        logger.info("Queued track with info " + trackInfo(track.getInfo()) + " on guild [ " + guild.getName() + " ] ");
     }
 
     public static String trackInfo(AudioTrackInfo info) {

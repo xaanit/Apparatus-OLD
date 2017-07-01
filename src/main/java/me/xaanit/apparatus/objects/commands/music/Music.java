@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class MusicVariables extends GlobalVars {
+public class Music extends GlobalVars {
 
     public static Map<Long, IVoiceChannel> channels = new HashMap<>();
     public static Map<Long, GuildMusicManager> managers = new HashMap<>();

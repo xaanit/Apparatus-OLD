@@ -4,8 +4,8 @@ import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.database.Database;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
-import me.xaanit.apparatus.objects.enums.Level;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
+import me.xaanit.simplelogger.SimpleLogger;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IChannel;
@@ -16,13 +16,15 @@ import sx.blah.discord.util.EmbedBuilder;
 
 import java.util.Arrays;
 
-import static me.xaanit.apparatus.GlobalVars.logger;
 import static me.xaanit.apparatus.util.Util.*;
 
 /**
  * Created by Jacob on 5/15/2017.
  */
 public class Save implements ICommand {
+
+    private SimpleLogger logger = SimpleLogger.getLoggerByClass(Database.class);
+
     @Override
     public String getName() {
         return "save";
@@ -59,10 +61,10 @@ public class Save implements ICommand {
             int f = 0;
             for (long key : GlobalVars.guilds.keySet()) {
                 if (Database.saveGuild(GlobalVars.guilds.get(key))) {
-                    logger.log("Saved guild [" + key + "]!", Level.INFO);
+                    logger.info("Saved guild [" + key + "]!");
                     s++;
                 } else {
-                    logger.log("Failed to save guild [" + key + "]!", Level.CRITICAL);
+                    logger.critical("Failed to save guild [" + key + "]!");
                     f++;
                 }
             }

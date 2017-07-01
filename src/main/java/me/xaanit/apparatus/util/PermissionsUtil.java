@@ -3,9 +3,9 @@ package me.xaanit.apparatus.util;
 import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
-import me.xaanit.apparatus.objects.enums.Level;
 import me.xaanit.apparatus.objects.exceptions.PermissionsException;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
+import me.xaanit.simplelogger.SimpleLogger;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.EmbedBuilder;
 
@@ -18,6 +18,8 @@ import java.util.List;
 public class PermissionsUtil extends MessageUtil {
 
     private static IGuild devGuild = null;
+
+    private static SimpleLogger logger = new SimpleLogger(Permissions.class);
 
     public static EnumSet<Permissions> makePermissions(EnumSet<Permissions> basic, Permissions... p) {
         Collections.addAll(basic, p);
@@ -107,10 +109,10 @@ public class PermissionsUtil extends MessageUtil {
 
 
     public static void allChecks(IUser user, IGuild guild, ICommand command, IChannel channel) {
-        logger.log("Doing all checks on command [" + command.getName()
+        logger.info("Doing all checks on command [" + command.getName()
                 + "] from user [" + Util.getNameAndDescrim(user)
                 + "] in guild [" + guild.getName()
-                + "] in channel [" + channel.getName() + "]", Level.INFO);
+                + "] in channel [" + channel.getName() + "]");
         if (!hasPerms(guild, command)) {
             EmbedBuilder em = new EmbedBuilder();
             em.withColor(hexToColor(CColors.BASIC));
@@ -118,7 +120,7 @@ public class PermissionsUtil extends MessageUtil {
             em.withAuthorName("Missing permissions");
             em.withAuthorIcon(Util.botAva());
             MessageUtil.sendMessage(user.getOrCreatePMChannel(), em.build());
-            logger.log("Missing permissions for command [" + command.getName() + "] on guild [" + guild.getName() + "]", Level.LOW);
+            logger.low("Missing permissions for command [" + command.getName() + "] on guild [" + guild.getName() + "]");
             throw new PermissionsException();
         }
 
@@ -128,7 +130,7 @@ public class PermissionsUtil extends MessageUtil {
         if (!checkUserPerm(user, guild, command)) {
 
             if (command.getType() == CmdType.DEV) {
-                logger.log("User [" + Util.getNameAndDescrim(user) + "] tried to use developer command [" + command.getName() + "] on guild [" + guild.getName() + "]", Level.MEDIUM);
+                logger.medium("User [" + Util.getNameAndDescrim(user) + "] tried to use developer command [" + command.getName() + "] on guild [" + guild.getName() + "]");
                 EmbedBuilder em = new EmbedBuilder();
                 em.withTitle("Error!");
                 em.withDesc("This is a developer command, it can only be run by a developer.");
@@ -151,7 +153,7 @@ public class PermissionsUtil extends MessageUtil {
             }
 
 
-            logger.log("User [" + user.getName() + "] doesn't have correct permissions or role for command [" + command.getName() + "] in guild [" + guild.getName() + "]", Level.LOW);
+            logger.low("User [" + user.getName() + "] doesn't have correct permissions or role for command [" + command.getName() + "] in guild [" + guild.getName() + "]");
             EmbedBuilder em = new EmbedBuilder();
             em.withTitle("Error!");
             em.withDesc("You either need a specific permission, or a specific role to run this command. Please contact the server admins if you think this is in error.");
@@ -173,6 +175,6 @@ public class PermissionsUtil extends MessageUtil {
             throw new PermissionsException();
         }
 
-        logger.log("User [" + user.getName() + "] passed all checks.", Level.INFO);
+        logger.info("User [" + user.getName() + "] passed all checks.");
     }
 }

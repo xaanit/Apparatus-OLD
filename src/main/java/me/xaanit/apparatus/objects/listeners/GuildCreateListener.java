@@ -5,6 +5,7 @@ import me.xaanit.apparatus.database.Database;
 import me.xaanit.apparatus.internal.json.JsonGuild;
 import me.xaanit.apparatus.objects.interfaces.IListener;
 import me.xaanit.apparatus.util.Util;
+import me.xaanit.simplelogger.SimpleLogger;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.guild.GuildCreateEvent;
 import sx.blah.discord.handle.obj.IGuild;
@@ -15,9 +16,22 @@ import sx.blah.discord.util.RequestBuffer;
  */
 public class GuildCreateListener implements IListener {
 
+    private static int curr = 0;
+    private static SimpleLogger logger = SimpleLogger.getLoggerByClass(Database.class);
+    private boolean sent = false;
+    private boolean sent1 = false;
+
     @EventSubscriber
     public void onGuildCreate(GuildCreateEvent event) {
         boolean left = false;
+        if (curr == 0 && !sent1) {
+            sent1 = true;
+            logger.info("Loading guilds...");
+        }
+        if (curr == event.getClient().getGuilds().size() - 1 && !sent) {
+            sent = true;
+            logger.info("Guilds loaded!");
+        }
         if (ReadyListener.ready) {
             for (long l : GlobalVars.config.getBlacklistedServers()) {
                 IGuild guild = GlobalVars.client.getGuildByID(l);
@@ -37,6 +51,7 @@ public class GuildCreateListener implements IListener {
                 g.updateCommands();
                 GlobalVars.guilds.putIfAbsent(guild.getLongID(), g);
             }
+            curr++;
         }
     }
 }

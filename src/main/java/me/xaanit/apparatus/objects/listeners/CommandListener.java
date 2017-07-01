@@ -72,7 +72,7 @@ public class CommandListener implements IListener {
             String look = args[0].substring(getGuild(guild).getPrefix().length()).toLowerCase();
             if (commands.containsKey(look)) {
                 config.shardStats.get(guild.getShard().getInfo()[0]).increaseCommandsExecuted();
-
+                getGuild(guild).getStats().increaseCommandsExecuted();
                 config.getStats().increaseCommandsExecuted();
                 commands.get(look)
                         .runCommand(user, channel, guild, message, args, GlobalVars.client);

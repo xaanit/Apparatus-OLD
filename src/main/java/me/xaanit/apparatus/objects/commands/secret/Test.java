@@ -4,7 +4,6 @@ import me.xaanit.apparatus.internal.json.embeds.CustomEmbed;
 import me.xaanit.apparatus.internal.json.embeds.Field;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
-import me.xaanit.apparatus.util.Update;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
@@ -45,9 +44,6 @@ public class Test implements ICommand {
     @Override
     public void runCommand(IUser user, IChannel channel, IGuild guild, IMessage message, String[] args, IDiscordClient client) {
         allChecks(user, guild, this, channel);
-        channel.sendMessage("UPDATE WORKED.");
-        if(true) return;
-        Update.execute(user, channel, message);
         if (true) return;
         //   client.getOurUser().getVoiceStateForGuild(guild).getChannel().leave();
 

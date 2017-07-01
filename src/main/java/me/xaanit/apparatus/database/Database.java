@@ -3,7 +3,7 @@ package me.xaanit.apparatus.database;
 import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.internal.json.JsonConfig;
 import me.xaanit.apparatus.internal.json.JsonGuild;
-import me.xaanit.apparatus.objects.enums.Level;
+import me.xaanit.simplelogger.SimpleLogger;
 import sx.blah.discord.handle.obj.IGuild;
 
 import java.io.File;
@@ -11,12 +11,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 
 import static me.xaanit.apparatus.GlobalVars.guilds;
-import static me.xaanit.apparatus.GlobalVars.logger;
 
 /**
  * Created by Jacob on 5/13/2017.
  */
 public class Database {
+
+    private static SimpleLogger logger = new SimpleLogger(Database.class);
 
     public static JsonConfig loadConfig() {
         try {
@@ -78,11 +79,8 @@ public class Database {
             String path = GlobalVars.PATH + "guilds";
             File file = new File(path + "\\" + guild.getStringID() + ".json");
             if (!file.exists()) {
-                logger.log("Creating new Guild object for guild [ " + guild.getName() + " ] with ID [ " + guild.getStringID() + " ]", Level.INFO);
                 return new JsonGuild(guild);
             }
-            logger.log("Loading guild object for guild [ " + guild.getName() + " ] with ID [ " + guild.getStringID() + " ]", Level.INFO);
-
             return GlobalVars.gson.fromJson(new FileReader(file), JsonGuild.class);
         } catch (Exception ex) {
             return null;

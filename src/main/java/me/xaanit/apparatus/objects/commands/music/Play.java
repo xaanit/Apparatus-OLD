@@ -3,8 +3,8 @@ package me.xaanit.apparatus.objects.commands.music;
 
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
-import me.xaanit.apparatus.objects.enums.Level;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
+import me.xaanit.simplelogger.SimpleLogger;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.*;
@@ -16,8 +16,9 @@ import java.util.EnumSet;
 
 import static me.xaanit.apparatus.util.Util.*;
 
-public class Play extends MusicVariables implements ICommand {
+public class Play extends Music implements ICommand {
 
+    private static SimpleLogger logger = SimpleLogger.getLoggerByClass(Music.class);
 
     @Override
     public String getName() {
@@ -79,7 +80,7 @@ public class Play extends MusicVariables implements ICommand {
         if (!channels.containsKey(guild.getLongID())) {
             RequestBuffer.request(() -> vChannel.join());
             channels.put(guild.getLongID(), vChannel);
-            logger.log("Joining voice channel [ " + vChannel.getName() + " ] in guild [ " + guild.getName() + " ] due to request by [ " + getNameAndDescrim(user) + " ]", Level.INFO);
+            logger.info("Joining voice channel [ " + vChannel.getName() + " ] in guild [ " + guild.getName() + " ] due to request by [ " + getNameAndDescrim(user) + " ]");
         }
 
         String info = combineArgs(args, 1, -1);
