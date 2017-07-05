@@ -41,13 +41,16 @@ public class MessageUtil extends GuildUtil {
      * @param em      The {@link EmbedObject} to send
      * @return The message
      */
-    private static IMessage sendMessage(IChannel channel, String str, EmbedObject em) {
+    public static IMessage sendMessage(IChannel channel, String str, EmbedObject em) {
         return RequestBuffer.request(() -> {
 
             try {
                 return channel.sendMessage(str, em);
             } catch (DiscordException ex) {
-                ex.printStackTrace();
+                if (ex.getMessage().contains("didn't return a response"))
+                    sendMessage(channel, str, em);
+                else
+                    ex.printStackTrace();
             }
             return null;
         }).get();
@@ -58,7 +61,10 @@ public class MessageUtil extends GuildUtil {
             try {
                 return channel.sendFile(str, file);
             } catch (DiscordException | FileNotFoundException ex) {
-                ex.printStackTrace();
+                if (ex.getMessage().contains("didn't return a response"))
+                    sendMessage(channel, file, str);
+                else
+                    ex.printStackTrace();
             }
             return null;
         }).get();

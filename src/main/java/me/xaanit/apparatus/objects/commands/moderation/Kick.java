@@ -79,7 +79,7 @@ public class Kick implements ICommand {
 
         kickCheck(user, u, guild, channel);
 
-        //  kickUser(u, guild);
+          kickUser(u, guild);
         client.getDispatcher().dispatch(new KickEvent(guild, u, user, channel, reason));
     }
 

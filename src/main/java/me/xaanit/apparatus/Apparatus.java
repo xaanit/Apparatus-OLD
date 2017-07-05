@@ -33,7 +33,11 @@ public class Apparatus extends GlobalVars {
         Reflections reflections = new Reflections("me.xaanit.apparatus.objects.listeners");
         reflections.getSubTypesOf(IListener.class).forEach(subclass -> {
             try {
-                client.getDispatcher().registerListener(subclass.newInstance());
+                IListener instance = subclass.newInstance();
+                if (!instance.isTemp())
+                    client.getDispatcher().registerListener(instance);
+                else
+                    client.getDispatcher().registerTemporaryListener(instance);
             } catch (InstantiationException | IllegalAccessException e) {
                 logger.critical("Could not register listener " + subclass.getSimpleName());
             }

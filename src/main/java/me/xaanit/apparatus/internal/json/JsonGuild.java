@@ -4,6 +4,7 @@ import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.internal.json.embeds.CustomEmbed;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
+import me.xaanit.apparatus.objects.listeners.ReadyListener;
 import sx.blah.discord.handle.obj.IGuild;
 
 import java.util.ArrayList;
@@ -69,6 +70,12 @@ public class JsonGuild {
             if (GlobalVars.commands.get(key).getType() != CmdType.DEV)
                 addCommand(GlobalVars.commands.get(key));
         }
+        if (ReadyListener.ready) {
+            getCommands().forEach(m -> {
+                if (!GlobalVars.commands.containsKey(m))
+                    removeCommand(m.getName());
+            });
+        }
     }
 
     public void setPrefix(String prefix) {
@@ -94,8 +101,12 @@ public class JsonGuild {
     }
 
     public void removeCommand(ICommand command) {
+        removeCommand(command.getName());
+    }
+
+    public void removeCommand(String command) {
         for (int i = 0; i < commands.size(); i++) {
-            if (commands.get(i).getName().equalsIgnoreCase(command.getName())) {
+            if (commands.get(i).getName().equalsIgnoreCase(command)) {
                 commands.remove(i);
                 return;
             }

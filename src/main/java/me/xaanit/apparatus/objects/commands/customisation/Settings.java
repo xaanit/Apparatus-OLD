@@ -20,7 +20,7 @@ public class Settings implements ICommand {
 
     @Override
     public String[] getAliases() {
-        return new String[]{getName(), "guildsettings", "guild", "gs"};
+        return new String[]{getName(), "gs"};
     }
 
     @Override

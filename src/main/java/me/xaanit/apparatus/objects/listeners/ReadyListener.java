@@ -31,6 +31,11 @@ public class ReadyListener implements IListener {
     public static boolean ready = false;
     static SimpleLogger logger = SimpleLogger.getLoggerByClass(Apparatus.class);
 
+    @Override
+    public boolean isTemp() {
+        return true;
+    }
+
     @EventSubscriber
     public void onReady(ReadyEvent event) {
         logger.info("Ready event start...");
@@ -53,7 +58,7 @@ public class ReadyListener implements IListener {
     }
 
     public static void initMusicManagers() {
-SimpleLogger logger = SimpleLogger.getLoggerByClass(Music.class);
+        SimpleLogger logger = SimpleLogger.getLoggerByClass(Music.class);
         for (JsonGuild g : guilds.values()) {
             if (g.whitelistedGuild) {
                 if (!Music.managers.containsKey(g.getId())) {

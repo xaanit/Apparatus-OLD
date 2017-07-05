@@ -1,5 +1,6 @@
 package me.xaanit.apparatus.objects.interfaces;
 
+import me.xaanit.apparatus.objects.PlaceInCommand;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.util.Util;
 import sx.blah.discord.api.IDiscordClient;
@@ -46,7 +47,7 @@ public interface ICommand {
         return Util.basicPermissions();
     }
 
-    default Map<Long, Integer> getPlaceInCommand(IUser user) {
+    default Map<Long, PlaceInCommand> getPlaceInCommand(IUser user) {
         return null;
     }
 

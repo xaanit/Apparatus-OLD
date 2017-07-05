@@ -1,4 +1,4 @@
-package me.xaanit.apparatus.objects.listeners;
+package me.xaanit.apparatus.objects.listeners.modlog;
 
 import me.xaanit.apparatus.objects.interfaces.IListener;
 import me.xaanit.simplelogger.SimpleLogger;

@@ -14,6 +14,7 @@ public class JsonCommand {
     private boolean modRole = false;
     private boolean whitelist = true;
     private boolean channelsWhitelist = false;
+    private boolean andUp = false;
     private List<Long> channels = new ArrayList<>();
     private List<Long> roles = new ArrayList<>();
     private List<Long> modRoles = new ArrayList<>();
@@ -112,5 +113,13 @@ public class JsonCommand {
 
     public void setModRole(boolean modRole) {
         this.modRole = modRole;
+    }
+
+    public boolean isAndUp() {
+        return andUp;
+    }
+
+    public void setAndUp(boolean andUp) {
+        this.andUp = andUp;
     }
 }

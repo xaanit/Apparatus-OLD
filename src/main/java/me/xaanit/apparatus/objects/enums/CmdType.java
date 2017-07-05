@@ -11,6 +11,7 @@ public enum CmdType {
     CUSTOMISATION,
     SECRET,
     MUSIC,
+    CUTE,
     BOT_INFO;
 
 
