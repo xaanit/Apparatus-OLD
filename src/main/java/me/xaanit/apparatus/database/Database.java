@@ -79,6 +79,7 @@ public class Database {
             String path = GlobalVars.PATH + "guilds";
             File file = new File(path + "\\" + guild.getStringID() + ".json");
             if (!file.exists()) {
+                logger.info("Creating a new guild for " + guild.getName());
                 return new JsonGuild(guild);
             }
             return GlobalVars.gson.fromJson(new FileReader(file), JsonGuild.class);

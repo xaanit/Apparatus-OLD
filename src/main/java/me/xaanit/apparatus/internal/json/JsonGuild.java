@@ -168,7 +168,7 @@ public class JsonGuild {
     }
 
     public JsonModlog getModlog(String name) {
-        JsonModlog command = null;
+        JsonModlog command;
         List<JsonModlog> cs = modlogs.stream().filter(c -> c.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
         if (cs.isEmpty()) {
             command = new JsonModlog(name);

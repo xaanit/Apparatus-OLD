@@ -12,13 +12,13 @@ public class JsonModlog {
 
     private String name;
 
-    private CustomEmbed embed = new CustomEmbed();
+    public CustomEmbed embed = new CustomEmbed();
 
     private boolean useEmbed = true;
 
     private String stringLog = "";
 
-    private List<Long> channels;
+    private List<Long> channels = new ArrayList<>();
 
     private boolean useDefault = true;
 
@@ -27,7 +27,6 @@ public class JsonModlog {
 
     public JsonModlog(String name) {
         this.name = name;
-        channels = new ArrayList<>();
     }
 
 
@@ -77,5 +76,43 @@ public class JsonModlog {
             if(channels.get(i) == l1)
                 channels.remove(i);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "JsonModlog{" +
+                "name='" + name + '\'' +
+                ", embed=" + embed +
+                ", useEmbed=" + useEmbed +
+                ", stringLog='" + stringLog + '\'' +
+                ", channels=" + channels +
+                ", useDefault=" + useDefault +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof JsonModlog)) return false;
+
+        JsonModlog that = (JsonModlog) o;
+
+        if (useEmbed != that.useEmbed) return false;
+        if (useDefault != that.useDefault) return false;
+        if (!name.equals(that.name)) return false;
+        if (!embed.equals(that.embed)) return false;
+        if (!stringLog.equals(that.stringLog)) return false;
+        return channels.equals(that.channels);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + embed.hashCode();
+        result = 31 * result + (useEmbed ? 1 : 0);
+        result = 31 * result + stringLog.hashCode();
+        result = 31 * result + channels.hashCode();
+        result = 31 * result + (useDefault ? 1 : 0);
+        return result;
     }
 }

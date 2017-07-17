@@ -74,18 +74,16 @@ public class Ban implements ICommand {
         }
 
         String reason;
-        if (args.length == 2) {
-            reason = "None provided";
-        } else {
-            reason = combineArgs(args, 2, args.length);
-        }
+        if (args.length == 2) reason = "None provided";
+        else reason = combineArgs(args, 2, args.length);
+
 
         IUser u = getUser(args[1], message);
 
 
         banCheck(user, u, guild, channel);
 
-          banUser(u, guild);
+        banUser(u, guild);
         client.getDispatcher().dispatch(new BanEvent(guild, u, user, channel, reason));
     }
 

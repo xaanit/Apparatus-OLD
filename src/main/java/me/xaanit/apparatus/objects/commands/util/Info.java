@@ -83,7 +83,7 @@ public class Info implements ICommand {
             return;
         }
         String look = combineArgs(args, 1, -1);
-        IUser u = getUser(look, message, guild);
+        IUser u = getUser(look, guild);
         IRole r = getRole(look, message, guild);
         IChannel c = getChannel(look, message);
         if (u != null) {
@@ -221,13 +221,14 @@ public class Info implements ICommand {
         em.withColor(hexToColor(CColors.BASIC));
         em.withAuthorName("Bot info");
         em.withAuthorIcon(botAva());
-        em.withDesc("Hey there! I'm Apparatus. I'm made by <@!233611560545812480>.\n\nMy version is **" + GlobalVars.VERISON + "**\nI run on [Discord4J, version 2.8.4](https://github.com/austinv11/Discord4J)\n\nI am on " + GlobalVars.client.getGuilds().size() + " guild(s).\nI serve " + GlobalVars.client.getUsers().size() + " user(s).\nIn " + channels + " channel(s).\nI have a total of " + totalCommands + " command(s).\n\nYou can invite me with [this](" + invite + "}) link [BROKEN ATM]\nYou can join my support server [here.](https://discord.gg/SHTbdnJ)");
+        em.withDesc("Hey there! I'm Apparatus. I'm made by <@!233611560545812480>.\n\nMy version is **" + GlobalVars.VERISON + "**\nI run on [Discord4J, version 2.8.4](https://github.com/austinv11/Discord4J)\n\nI am on " + GlobalVars.client.getGuilds().size() + " guild(s).\nI serve " + GlobalVars.client.getUsers().size() + " user(s).\nIn " + channels + " channel(s).\nI have a total of " + totalCommands + " command(s).\n\nYou can invite me with [this](" + invite + "}) link [BROKEN ATM]\nYou can join my support server [here.](https://discord.gg/SHTbdnJ)\nMy source can be found [here.](https://github.com/xaanit/Apparatus)");
         em.appendField("Special Thanks", "I have gotten so much inspiration from Tatsumaki. Thank you.", false);
         em.withFooterIcon(user.getAvatarURL());
         em.withFooterText("Requested by: " + getNameAndDescrim(user));
         IMessage m = sendMessage(channel, em.build());
         return m;
     }
+
 
     private IMessage moduleGuild(IUser user, IChannel channel, IGuild guild) {
         EmbedBuilder em = new EmbedBuilder();

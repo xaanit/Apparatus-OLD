@@ -1,6 +1,7 @@
 package me.xaanit.apparatus.util;
 
 import me.xaanit.apparatus.GlobalVars;
+import me.xaanit.apparatus.objects.interfaces.ICommand;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 
@@ -12,6 +13,14 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class Util extends UserUtil {
     
+
+    public static boolean hasPlaceholder(IUser user) {
+        for(ICommand command : commands.values()) {
+            if(command.getPlaceInCommand(user) != null)
+                return true;
+        }
+        return false;
+    }
 
     /**
      * Gets the current time in UTC

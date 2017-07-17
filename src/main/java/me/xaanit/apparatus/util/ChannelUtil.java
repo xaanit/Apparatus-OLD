@@ -25,12 +25,9 @@ public class ChannelUtil extends MusicUtil {
         IGuild guild = message.getGuild();
         toLookFor = toLookFor.trim();
         final String lower = toLookFor.toLowerCase();
-        if (!message.getChannelMentions().isEmpty()) {
-            return message.getChannelMentions().get(0);
-        }
 
-        if (toLookFor.replaceAll("[0-9]", "").isEmpty()) {
-            IChannel exists = guild.getChannelByID(Long.parseLong(toLookFor));
+        if (toLookFor.matches("<#[0-9]+>")) {
+            IChannel exists = guild.getChannelByID(Long.parseLong(toLookFor.replaceAll("[<>#]", "")));
             if (exists != null) {
                 return exists;
             }
@@ -43,7 +40,7 @@ public class ChannelUtil extends MusicUtil {
         if (!channels.isEmpty()) {
             return channels.get(0);
         }
-
+        
         return null;
     }
 }

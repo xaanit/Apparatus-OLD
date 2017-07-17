@@ -47,9 +47,15 @@ public interface ICommand {
         return Util.basicPermissions();
     }
 
-    default Map<Long, PlaceInCommand> getPlaceInCommand(IUser user) {
+    default PlaceInCommand getPlaceInCommand(IUser user) {
         return null;
     }
+
+    default Map<Long, PlaceInCommand> getMap() {
+        return null;
+    }
+
+
 
     /**
      * Gets the needed permissions for the user

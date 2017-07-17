@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 public class EmbedUtil extends ChannelUtil {
 
 
-    public static final String BASIC_USAGE = "Usage: %s%s";
+    public static final String BASIC_USAGE = "Usage: %s %s";
     public static final String BASIC_ALIAS = "Aliases: %s";
 
     /**

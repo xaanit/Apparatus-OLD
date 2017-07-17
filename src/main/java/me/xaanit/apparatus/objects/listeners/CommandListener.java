@@ -1,12 +1,14 @@
 package me.xaanit.apparatus.objects.listeners;
 
 import com.michaelwflaherty.cleverbotapi.CleverBotQuery;
-import me.xaanit.apparatus.GlobalVars;
 import me.xaanit.apparatus.database.Database;
+import me.xaanit.apparatus.objects.commands.customisation.Modlog;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.exceptions.PermissionsException;
+import me.xaanit.apparatus.objects.interfaces.ICommand;
 import me.xaanit.apparatus.objects.interfaces.IListener;
 import me.xaanit.apparatus.util.Util;
+import me.xaanit.simplelogger.SimpleLogger;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MentionEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
@@ -22,7 +24,8 @@ import static me.xaanit.apparatus.util.Util.*;
 public class CommandListener implements IListener {
 
     private CleverBotQuery query = null;
-    private String key = GlobalVars.config.getApiKey("cleverbot").split(":::")[1];
+    private String key = config.getApiKey("cleverbot").split(":::")[1];
+    private SimpleLogger logger = new SimpleLogger();
 
 
     @EventSubscriber
@@ -42,8 +45,9 @@ public class CommandListener implements IListener {
 
         if (user.isBot()) return;
 
+        if (config.getBlacklistedUsers().contains(user.getLongID())) return;
 
-        if (GlobalVars.config.getBlacklistedUsers().contains(user.getLongID())) return;
+        if (hasPlaceholder(user)) return;
 
         if (content.startsWith("❌")) {
             if (!Util.isDev(user))
@@ -75,7 +79,7 @@ public class CommandListener implements IListener {
                 getGuild(guild).getStats().increaseCommandsExecuted();
                 config.getStats().increaseCommandsExecuted();
                 commands.get(look)
-                        .runCommand(user, channel, guild, message, args, GlobalVars.client);
+                        .runCommand(user, channel, guild, message, args, client);
             }
         } catch (PermissionsException ex) {
             config.shardStats.get(guild.getShard().getInfo()[0]).decreaseCommandsExecuted();
@@ -98,11 +102,15 @@ public class CommandListener implements IListener {
 
         if (channel.isPrivate()) return;
 
+        if (hasPlaceholder(user)) return;
+
+        if (config.getBlacklistedUsers().contains(user.getLongID())) return;
+
         String[] oldArgs = content.split("\\s");
-        if (!channel.getModifiedPermissions(GlobalVars.client.getOurUser()).contains(Permissions.SEND_MESSAGES)) return;
+        if (!channel.getModifiedPermissions(client.getOurUser()).contains(Permissions.SEND_MESSAGES)) return;
         if (!oldArgs[0].replaceAll("<@!?305407264099926016>", "").isEmpty()) return;
         if (oldArgs.length == 1) return;
-        if (GlobalVars.config.getBlacklistedUsers().contains(user.getLongID())) return;
+        if (config.getBlacklistedUsers().contains(user.getLongID())) return;
         String[] args = copy(oldArgs, 1);
 
         if (args[0].equalsIgnoreCase("prefix")) {
@@ -111,12 +119,12 @@ public class CommandListener implements IListener {
         }
 
         try {
-            if (GlobalVars.commands.containsKey(args[0].toLowerCase())) {
+            if (commands.containsKey(args[0].toLowerCase())) {
                 config.shardStats.get(guild.getShard().getInfo()[0]).increaseCommandsExecuted();
                 getGuild(guild).getStats().increaseCommandsExecuted();
                 config.getStats().increaseCommandsExecuted();
-                GlobalVars.commands.get(args[0].toLowerCase())
-                        .runCommand(user, channel, guild, message, args, GlobalVars.client);
+                commands.get(args[0].toLowerCase())
+                        .runCommand(user, channel, guild, message, args, client);
             } else {
                 if (isPatron(user)) {
                     sendMessage(channel, user.mention() + " | " + getCleverbotResponse(Util.combineArgs(args, 0, args.length)));
@@ -126,6 +134,31 @@ public class CommandListener implements IListener {
             config.shardStats.get(guild.getShard().getInfo()[0]).decreaseCommandsExecuted();
             getGuild(guild).getStats().decreaseCommandsExecuted();
             config.getStats().decreaseCommandsExecuted();
+        }
+    }
+
+    @EventSubscriber
+    public void onPlaceholder(MessageReceivedEvent event) {
+        IUser user = event.getAuthor();
+        IMessage message = event.getMessage();
+        IChannel channel = event.getChannel();
+        IGuild guild = event.getGuild();
+        String content = message.getContent();
+
+        if (content.isEmpty()) return;
+
+        if (!hasPlaceholder(user)) return;
+
+        for (ICommand command : commands.values()) {
+            if (command.getPlaceInCommand(user) != null) {
+                logger.critical(command.getPlaceInCommand(user).toString());
+                switch (command.getName().toUpperCase()) {
+                    case "MODLOG":
+                        Modlog.place(user, message);
+                        break;
+                }
+                break;
+            }
         }
     }
 
@@ -149,12 +182,12 @@ public class CommandListener implements IListener {
 
 
     public String getCleverbotResponse(String str) {
-        int calls = GlobalVars.config.getCleverbotCalls();
+        int calls = config.getCleverbotCalls();
         if (calls >= 4980) {
             return "Sorry! I have hit my maximum cleverbot API calls for this month! Please try again next month.";
         } else {
             calls++;
-            GlobalVars.config.setCleverbotCalls(calls);
+            config.setCleverbotCalls(calls);
             Database.saveConfig();
         }
         query = new CleverBotQuery(key, str);

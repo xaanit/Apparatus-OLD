@@ -49,26 +49,25 @@ public class UserUtil extends RoleUtil {
 
     public static void removeRole(IUser user, IRole role) {
         RequestBuffer.request(() -> {
-                user.removeRole(role);
+            user.removeRole(role);
         });
     }
 
     /**
-     * Grabs a user from a string, or mention
+     * Grabs a user from a string
      *
      * @param toLookFor The String to look with
-     * @param message   The message (if mentions)
      * @param guild     The guild
      * @return The user if found, null otherwise
      */
-    public static IUser getUser(String toLookFor, IMessage message, IGuild guild) {
+    public static IUser getUser(String toLookFor, IGuild guild) {
         toLookFor = toLookFor.trim();
-        if (!message.getMentions().isEmpty()) {
-            return message.getMentions().get(0);
-        }
 
-        if (toLookFor.replaceAll("[0-9]", "").isEmpty()) {
-            IUser exists = guild.getUserByID(Long.parseLong(toLookFor));
+        List<String> lol = new ArrayList<>();
+        String k = lol.stream().filter(s -> s.length() == 4).findFirst().orElse(null);
+
+        if (toLookFor.matches("<@!?[0-9]+>")) {
+            IUser exists = guild.getUserByID(Long.parseLong(toLookFor.replaceAll("<@!>", "")));
             if (exists != null) {
                 return exists;
             }
@@ -91,7 +90,7 @@ public class UserUtil extends RoleUtil {
     }
 
     public static IUser getUser(String toLookFor, IMessage message) {
-        return getUser(toLookFor, message, message.getGuild());
+        return getUser(toLookFor, message.getGuild());
     }
 
 

@@ -147,6 +147,16 @@
             <version>1.45b</version>
         </dependency>
         <dependency>
+            <groupId>com.jakewharton.fliptables</groupId>
+            <artifactId>fliptables</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mashape.unirest</groupId>
+            <artifactId>unirest-java</artifactId>
+            <version>1.4.9</version>
+        </dependency>
+        <dependency>
             <groupId>com.github.xaanit</groupId>
             <artifactId>SimpleLogger</artifactId>
             <version>1.0</version>

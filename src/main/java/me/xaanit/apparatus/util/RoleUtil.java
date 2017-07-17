@@ -24,12 +24,8 @@ public class RoleUtil extends PermissionsUtil {
         toLookFor = toLookFor.trim();
         final String lower = toLookFor.toLowerCase();
 
-        if (!m.getRoleMentions().isEmpty()) {
-            return m.getRoleMentions().get(0);
-        }
-
-        if (toLookFor.replaceAll("[0-9]", "").isEmpty()) {
-            IRole exists = guild.getRoleByID(Long.parseLong(toLookFor));
+        if (toLookFor.matches("<@&[0-9]+>")) {
+            IRole exists = guild.getRoleByID(Long.parseLong(toLookFor.replaceAll("[<@&>]", "")));
             if (exists != null) {
                 return exists;
             }

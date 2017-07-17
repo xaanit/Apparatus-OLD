@@ -55,6 +55,7 @@ public class ReadyListener implements IListener {
         initMusicManagers();
         logger.info("Bot ready!");
         ready = true;
+
     }
 
     public static void initMusicManagers() {

@@ -98,9 +98,10 @@ public class PermissionsUtil extends MessageUtil {
     }
 
     public static boolean isDev(IUser user) {
-        if (devGuild == null)
-            devGuild = GlobalVars.client.getGuildByID(Long.parseUnsignedLong("313732137792569344"));
-        return user.getRolesForGuild(devGuild).stream().filter(r -> r.getLongID() == Long.parseUnsignedLong("313732279258185730")).count() > 0;
+        for (long l : DEV_IDs)
+            if (l == user.getLongID())
+                return true;
+        return false;
     }
 
     public static boolean isPatron(IUser user) {
