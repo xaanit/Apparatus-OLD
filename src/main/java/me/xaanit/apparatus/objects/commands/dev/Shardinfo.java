@@ -1,14 +1,13 @@
 package me.xaanit.apparatus.objects.commands.dev;
 
-import com.google.gson.Gson;
 import com.jakewharton.fliptables.FlipTable;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
-import me.xaanit.apparatus.internal.json.github.GithubRequest;
-import me.xaanit.apparatus.internal.json.github.GithubResponse;
 import me.xaanit.apparatus.objects.enums.CColors;
 import me.xaanit.apparatus.objects.enums.CmdType;
 import me.xaanit.apparatus.objects.interfaces.ICommand;
+import org.eclipse.egit.github.core.Gist;
+import org.eclipse.egit.github.core.GistFile;
+import org.eclipse.egit.github.core.client.GitHubClient;
+import org.eclipse.egit.github.core.service.GistService;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.IShard;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
@@ -18,15 +17,15 @@ import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
 
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Locale;
 
 import static me.xaanit.apparatus.util.Util.*;
 
 public class Shardinfo implements ICommand {
-    private static final String GIST_LINK = "https://api.github.com/gists";
-    private static final Gson gson = new Gson();
 
     @Override
     public String getName() {
@@ -40,12 +39,12 @@ public class Shardinfo implements ICommand {
 
     @Override
     public CmdType getType() {
-        return CmdType.DEV;
+        return CmdType.BOT_INFO;
     }
 
     @Override
     public EmbedObject getHelp(IUser user, IGuild guild) {
-        EmbedBuilder em = addToHelpEmbed(this, user, new String[]{getGuild(guild).getPrefix(), getName()}, new String[]{Arrays.toString(getAliases())
+        EmbedBuilder em = addToHelpEmbed(this, user, new String[]{getGuild(guild).getPrefix(), getName() + " [gist]"}, new String[]{Arrays.toString(getAliases())
                 .replaceAll(getName() + ",\\s", "")});
         return em.build();
     }
@@ -69,22 +68,17 @@ public class Shardinfo implements ICommand {
             data[i][3] = format(shard.getChannels().size());
             data[i][4] = shard.isLoggedIn() + "";
         }
-        String table = FlipTable.of(headers, data);
-        if (args.length == 4) {
-            System.out.println("lol ok");
-            for (int i = 0; i < 4000; i++)
-                table += "a";
-            System.out.println("lol done");
-        }
 
-        if (table.length() < 2000) {
+        String table = FlipTable.of(headers, data);
+
+        if (table.length() < 2000 && args.length == 1) {
             em.withDesc("```java\n" + table + "\n```");
         } else {
             sendFileInstead(channel, table, user);
             return;
         }
 
-        channel.sendMessage(em.build());
+        sendMessage(channel, em.build());
 
     }
 
@@ -94,6 +88,7 @@ public class Shardinfo implements ICommand {
             em.withDesc("[Click me for shard info](" + getGistLink(table) + ")");
             sendMessage(channel, em.build());
         } catch (Exception ex) {
+            ex.printStackTrace();
             EmbedBuilder em1 = basicEmbed(user, "Error", CColors.ERROR);
             em1.withDesc(ex.getClass().getName() + " while uploading file:\n" + ex.getMessage());
             channel.sendMessage(em1.build());
@@ -102,8 +97,16 @@ public class Shardinfo implements ICommand {
 
     private String getGistLink(String table) {
         try {
-            return gson.fromJson(Unirest.post(GIST_LINK).header("Content-Type", "application/json").header("Accept", "application/vnd.github.v3+json").body(new GithubRequest(table)).asString().getBody(), GithubResponse.class).html_url;
-        } catch (UnirestException ex) {
+            GitHubClient client = new GitHubClient().setCredentials(config.getGithubUser(), config.getGithubPassword());
+            Gist gist = new Gist().setDescription("Info on Apparatus's Shards");
+            GistFile file = new GistFile().setContent(table);
+            long nano = System.nanoTime();
+            gist.setFiles(Collections.singletonMap(nano + ".txt", file));
+            gist = new GistService(client).createGist(gist);
+            System.out.println(gist.getId());
+            return gist.getFiles().get(nano + ".txt").getRawUrl();
+        } catch (IOException ex) {
+            ex.printStackTrace();
             return "";
         }
     }

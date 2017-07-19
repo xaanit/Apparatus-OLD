@@ -12,6 +12,10 @@ public class JsonConfig {
 
     private String token = "";
 
+    private String github_user;
+
+    private String github_password;
+
     private List<Long> blacklistedUsers = new ArrayList<>();
 
     private List<Long> blacklistedServers = new ArrayList<>();
@@ -86,5 +90,13 @@ public class JsonConfig {
 
     public JsonStats getStats() {
         return stats;
+    }
+
+    public String getGithubUser() {
+        return github_user;
+    }
+
+    public String getGithubPassword() {
+        return github_password;
     }
 }

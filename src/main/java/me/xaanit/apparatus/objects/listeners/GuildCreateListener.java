@@ -14,29 +14,15 @@ import sx.blah.discord.util.RequestBuffer;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by Jacob on 5/15/2017.
- */
-@SuppressWarnings("all")
 public class GuildCreateListener implements IListener {
 
     private static int curr = 0;
     private static SimpleLogger logger = SimpleLogger.getLoggerByClass(Database.class);
-    private boolean sent = false;
-    private boolean sent1 = false;
     public final static List<String> MOD_LOGS = Arrays.asList("user_ban", "user_kick", "message_delete", "message_edit", "role_update", "role_delete", "role_create", "channel_create", "channel_delete", "channel_update", "guild_update", "message_pin", "message_unpin", "user_join", "user_leave", "user_pardon", "discord_ban", "webhook_create", "webhook_delete", "webhook_update", "nickname_change", "ownership_transfer", "user_role_update", "voice_join", "voice_leave", "voice_change");
 
     @EventSubscriber
     public void onGuildCreate(GuildCreateEvent event) {
         boolean left = false;
-        if (curr == 0 && !sent1) {
-            sent1 = true;
-            logger.info("Loading guilds...");
-        }
-        if (curr == event.getClient().getGuilds().size() - 1 && !sent) {
-            sent = true;
-            logger.info("Guilds loaded!");
-        }
         if (ReadyListener.ready) {
             for (long l : GlobalVars.config.getBlacklistedServers()) {
                 IGuild guild = GlobalVars.client.getGuildByID(l);

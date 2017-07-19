@@ -16,8 +16,11 @@ public class Apparatus extends GlobalVars {
         new SimpleLogger(ICommand.class);
         new SimpleLogger(Apparatus.class);
         new SimpleLogger(Music.class);
-        ((Discord4J.Discord4JLogger) Discord4J.LOGGER).setLevel(Discord4J.Discord4JLogger.Level.NONE);
+        ((Discord4J.Discord4JLogger) Discord4J.LOGGER).setLevel(Discord4J.Discord4JLogger.Level.ERROR);
         gson = new GsonBuilder().create();
+        boolean[] array = new boolean[] {true, false};
+        boolean a = array[0]; // true
+        boolean b = array[1]; // false
         config = Database.loadConfig();
         Database.saveConfig();
         client = new ClientBuilder().withRecommendedShardCount().withToken(config.getToken()).build();

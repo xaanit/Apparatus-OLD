@@ -78,17 +78,19 @@ public class Reload implements ICommand {
             long now = System.currentTimeMillis();
             int s = 0;
             int f = 0;
-            for (long key : GlobalVars.guilds.keySet()) {
-                IGuild g = GlobalVars.client.getGuildByID(key);
-                if (g == null) {
-                    GlobalVars.guilds.remove(key);
-                    f++;
-                } else {
-                    GlobalVars.guilds.put(key, Database.loadGuild(g));
-                    s++;
+            synchronized (this) {
+                for (long key : GlobalVars.guilds.keySet()) {
+                    IGuild g = GlobalVars.client.getGuildByID(key);
+                    if (g == null) {
+                        GlobalVars.guilds.remove(key);
+                        f++;
+                    } else {
+                        GlobalVars.guilds.put(key, Database.loadGuild(g));
+                        s++;
+                    }
                 }
+                ReadyListener.initMusicManagers();
             }
-            ReadyListener.initMusicManagers();
             EmbedBuilder em = new EmbedBuilder();
             em.withColor(hexToColor(CColors.BASIC));
             em.withAuthorIcon(botAva());

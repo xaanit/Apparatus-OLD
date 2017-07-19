@@ -82,6 +82,7 @@ public class Database {
                 logger.info("Creating a new guild for " + guild.getName());
                 return new JsonGuild(guild);
             }
+            logger.info("Loading guild file for " + guild.getName());
             return GlobalVars.gson.fromJson(new FileReader(file), JsonGuild.class);
         } catch (Exception ex) {
             return null;

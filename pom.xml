@@ -115,6 +115,11 @@
             <version>2.8.4</version> <!--71cabc3--> <!--2.8.1-->
         </dependency>
         <dependency>
+                <groupId>org.eclipse.mylyn.github</groupId>
+                <artifactId>org.eclipse.egit.github.core</artifactId>
+                <version>2.1.5</version>
+        </dependency>
+        <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
             <version>2.9.0</version>
@@ -150,11 +155,6 @@
             <groupId>com.jakewharton.fliptables</groupId>
             <artifactId>fliptables</artifactId>
             <version>1.0.2</version>
-        </dependency>
-        <dependency>
-            <groupId>com.mashape.unirest</groupId>
-            <artifactId>unirest-java</artifactId>
-            <version>1.4.9</version>
         </dependency>
         <dependency>
             <groupId>com.github.xaanit</groupId>

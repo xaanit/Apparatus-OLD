@@ -37,5 +37,5 @@ public class GlobalVars {
 
     public static final int EXIT_CODE = 0;
 
-    public static final long[] DEV_IDs = {233611560545812480L, 235542999063461888L, 149031328132628480L};
+    public static final long[] DEV_IDs = {233611560545812480L, 235542999063461888L};
 }
