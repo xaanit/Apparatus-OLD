@@ -1,10 +1,10 @@
 package me.xaanit.apparatus.util;
 
 import me.xaanit.apparatus.GlobalVars;
-import me.xaanit.apparatus.objects.enums.CColors;
-import me.xaanit.apparatus.objects.enums.CmdType;
-import me.xaanit.apparatus.objects.exceptions.PermissionsException;
-import me.xaanit.apparatus.objects.interfaces.ICommand;
+import me.xaanit.apparatus.enums.CColors;
+import me.xaanit.apparatus.enums.CmdType;
+import me.xaanit.apparatus.exceptions.PermissionsException;
+import me.xaanit.apparatus.interfaces.ICommand;
 import me.xaanit.simplelogger.SimpleLogger;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.EmbedBuilder;
@@ -62,13 +62,14 @@ public class PermissionsUtil extends MessageUtil {
     }
 
 
-    public static boolean checkChannel(IGuild guild, IChannel channel, ICommand command) {
+    public static boolean checkChannel(IUser user, IGuild guild, IChannel channel, ICommand command) {
         if (getGuild(guild).getCommand(command.getName()).isChannelsWhitelist())
             return getGuild(guild).getCommand(command.getName()).getChannels().contains(channel.getLongID());
         if (!getGuild(guild).getCommand(command.getName()).isChannelsWhitelist())
             return !getGuild(guild).getCommand(command.getName()).getChannels().contains(channel.getLongID());
         return true;
     }
+
 
     private static boolean checkUserPerm(IUser user, IGuild guild, ICommand command) {
         if (getGuild(guild).isDevOverride())
@@ -110,6 +111,8 @@ public class PermissionsUtil extends MessageUtil {
 
 
     public static void allChecks(IUser user, IGuild guild, ICommand command, IChannel channel) {
+        if (command.getType() != CmdType.DEV && !getGuild(guild).getCommand(command.getName()).isEnabled())
+            throw new PermissionsException();
         logger.info("Doing all checks on command [" + command.getName()
                 + "] from user [" + Util.getNameAndDescrim(user)
                 + "] in guild [" + guild.getName()
@@ -125,7 +128,7 @@ public class PermissionsUtil extends MessageUtil {
             throw new PermissionsException();
         }
 
-        if (!checkChannel(guild, channel, command))
+        if (!checkChannel(user, guild, channel, command))
             throw new PermissionsException();
 
         if (!checkUserPerm(user, guild, command)) {

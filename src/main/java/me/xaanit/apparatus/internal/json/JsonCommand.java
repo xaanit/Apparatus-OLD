@@ -12,6 +12,7 @@ public class JsonCommand {
     private String name = "";
     private boolean role = false;
     private boolean modRole = false;
+    boolean enabled = true;
     private boolean whitelist = true;
     private boolean channelsWhitelist = false;
     private boolean andUp = false;
@@ -121,5 +122,9 @@ public class JsonCommand {
 
     public void setAndUp(boolean andUp) {
         this.andUp = andUp;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 }

@@ -10,6 +10,7 @@ public class PlaceInCommand {
 
     public IChannel currChannel = null;
     public IMessage lastMessage = null;
+    public IMessage toDelete = null;
     public int place = 0;
     public Map<String, Object> tempObjs = new HashMap<>();
 

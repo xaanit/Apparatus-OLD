@@ -1,6 +1,6 @@
 package me.xaanit.apparatus.internal.json;
 
-import me.xaanit.apparatus.objects.enums.TatsuType;
+import me.xaanit.apparatus.enums.TatsuType;
 
 /**
  * Created by Jacob on 5/19/2017.

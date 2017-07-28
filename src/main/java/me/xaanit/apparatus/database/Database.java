@@ -24,7 +24,7 @@ public class Database {
             File file = new File(GlobalVars.PATH + "config.json");
             if (!file.exists()) {
                 file.createNewFile();
-                return new JsonConfig(true);
+                return new JsonConfig();
             }
             return GlobalVars.gson.fromJson(new FileReader(file), JsonConfig.class);
         } catch (Exception ex) {
@@ -83,9 +83,13 @@ public class Database {
                 return new JsonGuild(guild);
             }
             logger.info("Loading guild file for " + guild.getName());
-            return GlobalVars.gson.fromJson(new FileReader(file), JsonGuild.class);
+
+            JsonGuild g = GlobalVars.gson.fromJson(new FileReader(file), JsonGuild.class);
+            return g;
         } catch (Exception ex) {
-            return null;
+            logger.critical("");
+            ex.printStackTrace();
+            return new JsonGuild(guild);
         }
     }
 

@@ -67,7 +67,7 @@ public class UserUtil extends RoleUtil {
         String k = lol.stream().filter(s -> s.length() == 4).findFirst().orElse(null);
 
         if (toLookFor.matches("<@!?[0-9]+>")) {
-            IUser exists = guild.getUserByID(Long.parseLong(toLookFor.replaceAll("<@!>", "")));
+            IUser exists = guild.getUserByID(Long.parseLong(toLookFor.replaceAll("[<@!>]", "")));
             if (exists != null) {
                 return exists;
             }

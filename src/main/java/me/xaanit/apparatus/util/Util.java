@@ -1,7 +1,7 @@
 package me.xaanit.apparatus.util;
 
 import me.xaanit.apparatus.GlobalVars;
-import me.xaanit.apparatus.objects.interfaces.ICommand;
+import me.xaanit.apparatus.interfaces.ICommand;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 

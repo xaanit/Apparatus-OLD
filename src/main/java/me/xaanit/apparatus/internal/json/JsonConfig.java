@@ -1,9 +1,12 @@
 package me.xaanit.apparatus.internal.json;
 
+import me.xaanit.apparatus.objects.marriage.Marriage;
+import me.xaanit.apparatus.objects.marriage.MultiHashMap;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Jacob on 4/21/2017.
@@ -12,9 +15,9 @@ public class JsonConfig {
 
     private String token = "";
 
-    private String github_user;
+    private String github_user = "";
 
-    private String github_password;
+    private String github_password = "";
 
     private List<Long> blacklistedUsers = new ArrayList<>();
 
@@ -26,17 +29,12 @@ public class JsonConfig {
 
     private JsonStats stats = new JsonStats();
 
-    public Map<Integer, JsonStats> shardStats = new HashMap<>();
+    public Map<Integer, JsonStats> shardStats = new ConcurrentHashMap<>();
+
+    public MultiHashMap<Long, Marriage> marriages = new MultiHashMap<>();
 
     public JsonConfig() {
     }
-
-    public JsonConfig(boolean val) {
-        this.token = "";
-        this.blacklistedUsers = new ArrayList<>();
-        this.blacklistedServers = new ArrayList<>();
-    }
-
 
     public String getToken() {
         return this.token;
@@ -71,9 +69,6 @@ public class JsonConfig {
             this.blacklistedServers.remove(l);
     }
 
-    public List<String> getApiKeys() {
-        return apiKeys;
-    }
 
     public String getApiKey(String type) {
         final String lower = type.toLowerCase();
@@ -88,15 +83,15 @@ public class JsonConfig {
         this.cleverbotCalls = cleverbotCalls;
     }
 
-    public JsonStats getStats() {
-        return stats;
-    }
-
     public String getGithubUser() {
         return github_user;
     }
 
     public String getGithubPassword() {
         return github_password;
+    }
+
+    public JsonStats getStats() {
+        return stats;
     }
 }

@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Jacob on 4/19/2017.
  */
-public class ChannelUtil extends MusicUtil {
+public class ChannelUtil extends MarriageUtil {
 
     /**
      * Gets a channel from mention, or from a String

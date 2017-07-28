@@ -17,7 +17,6 @@ public class Requests {
 
     public static String getCuteImage() {
         try {
-
             return GlobalVars.gson.fromJson(get("http://random.cat/meow"), Cat.class).getFile();
         } catch (Exception ex) {
             ex.printStackTrace();

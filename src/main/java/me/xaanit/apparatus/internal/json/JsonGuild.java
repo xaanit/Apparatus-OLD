@@ -1,10 +1,10 @@
 package me.xaanit.apparatus.internal.json;
 
 import me.xaanit.apparatus.GlobalVars;
+import me.xaanit.apparatus.enums.CmdType;
+import me.xaanit.apparatus.interfaces.ICommand;
 import me.xaanit.apparatus.internal.json.embeds.CustomEmbed;
-import me.xaanit.apparatus.objects.enums.CmdType;
-import me.xaanit.apparatus.objects.interfaces.ICommand;
-import me.xaanit.apparatus.objects.listeners.ReadyListener;
+import me.xaanit.apparatus.listeners.ReadyListener;
 import sx.blah.discord.handle.obj.IGuild;
 
 import java.util.ArrayList;
@@ -71,10 +71,11 @@ public class JsonGuild {
                 addCommand(GlobalVars.commands.get(key));
         }
         if (ReadyListener.ready) {
-            getCommands().forEach(m -> {
-                if (!GlobalVars.commands.containsKey(m))
+            JsonCommand[] commands = getCommands().toArray(new JsonCommand[getCommands().size()]);
+            for (JsonCommand m : commands) {
+                if (!GlobalVars.commands.containsKey((m.getName())))
                     removeCommand(m.getName());
-            });
+            }
         }
     }
 

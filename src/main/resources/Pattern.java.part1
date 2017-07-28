@@ -1,0 +1,18 @@
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.stream.*;
+import java.time.*;
+import java.math.*;
+import java.lang.*;
+import sx.blah.discord.util.*;
+import me.xaanit.apparatus.util.*;
+import me.xaanit.apparatus.database.*;
+import com.google.gson.GsonBuilder;
+import me.xaanit.simplelogger.SimpleLogger;
+import com.google.gson.Gson;
+
+
+import static me.xaanit.apparatus.util.Util.*;
+
+public class Pattern {
+	public static Object execute(IChannel channel, IDiscordClient client, IGuild guild, IMessage message) throws Exception {
