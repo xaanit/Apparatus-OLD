@@ -27,18 +27,13 @@ public class Util extends UserUtil {
      *
      * @return The current time (UTC)
      */
-    public static String getCurrentTime() {
-        LocalDateTime date = LocalDateTime.now();
-        LocalTime time = LocalTime.now(Clock.systemUTC());
-        return (date.getDayOfWeek().toString().charAt(0)
-                + date.getDayOfWeek().toString().substring(1).toLowerCase())
-                + ", "
-                + (date.getMonth().toString().charAt(0)
-                + date.getMonth().toString().substring(1).toLowerCase())
-                + " " + date.getDayOfMonth() + " " + date.getYear() + " | "
-                + (time.getHour() > 12 ? time.getHour() - 12 : time) + ":" + time.getMinute() + ":"
-                + time.getSecond() + (time.getHour() > 12 ? " PM" : " AM");
-    }
+	public static String getCurrentTime(){
+		Date date = new Date(System.currentTimeMillis());
+		SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM dd yyyy | hh:mm:ss aa",Locale.ENGLISH);
+		format.setTimeZone(TimeZone.getTimeZone("UTC"));
+		
+		return format.format(date);
+	}
 
     public static String formatRoleList(List<IRole> list) {
         StringBuilder builder = new StringBuilder();
